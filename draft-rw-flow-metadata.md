@@ -146,30 +146,48 @@ receive CIDFI metadata for that client.
 
 # Metadata exchanged
 
+
+
+
+## Loss-Tolerant
+
+Indicates the packet is loss-tolerant (that is, the application will not
+re-transmit the packet) or is not loss-tolerant (that is, the application
+will re-transmit the packet if it is lost).
+
+### JSON Syntax
+
+### UDP Options
+
+
+
+
+## Real-Time
+
+Indicates real-time or bulk.
+
+### JSON Syntax
+
+### UDP Options
+
+
+
+## Priority
+
 1. Relative priority within the same stream.  Applications running over
 UDP can indicate which packets within the same UDP 4-tuple are more
 important than other packets.
 
-2. blah blah
+### JSON syntax
 
-# Metadata Signaling
+~~~~~
+    {   "metadata" :{
+        "Priority": 3
+    }}
+~~~~~
+{: #json-priority artwork-align="center" title="JSON for Priority"}
 
-The following sections explain how metadata is exchanged between systems.
-
-## Mapped to CID
-
-As described in {{?I-D.wing-cidfi}} the QUIC or DTLS CID can be mapped
-to packet metadata. This mapping is conveyed using over an HTTPS connection
-between the CIDFI client and the CIDFI network elements.
-
-JSON syntax:
-
-  CID:
-    priority: high/medium/low
-
-
-
-## UDP Options
+### UDP Options
 
 UDP options can carry metadata in each packet as described below.
 
@@ -182,6 +200,18 @@ UDP options can carry metadata in each packet as described below.
    0b11=reserved
 
 
+# Examples
+
+Per-packet prioritization is useful for a remote desktop application, as shown in {{example}}.
+
+
+
+| traffic type    | nature    | loss-tolerant | priority | comments |
+|:---------------:|:---------:|:-------------:|:--------:|:---------|
+| Glyph critical  | real-time |               |          |          |
+| glyph smoothing | real-time |               |          |          |
+| print job       | bulk      |               |          |          |
+{: #example}
 
 # Security Considerations
 
