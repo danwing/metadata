@@ -4,8 +4,8 @@
 *.swp
 *.txt
 *.upload
-*~
 */~*
+*~
 .tags
 /*-[0-9][0-9].xml
 /.gems/
@@ -19,6 +19,7 @@
 Gemfile.lock
 archive.json
 draft-*.xml
+draft-rw-flow-metadata.xml
 package-lock.json
 report.xml
 !requirements.txt
