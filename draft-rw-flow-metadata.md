@@ -180,12 +180,14 @@ important than other packets.
 
 ### JSON syntax
 
+Low is 1, Medium is 2, High is 3.  4 is undefined.
+
+> or, do we want to use "Low", "Medium", "High" ???
+
 ~~~~~
-    {   "metadata" :{
-        "Priority": 3
-    }}
+{"metadata":{"Priority":2}}
 ~~~~~
-{: #json-priority artwork-align="center" title="JSON for Priority"}
+{: #json-priority artwork-align="left" title="JSON for Priority"}
 
 ### UDP Options
 
@@ -194,24 +196,44 @@ UDP options can carry metadata in each packet as described below.
 16 bits for magic cookie and versioning.
 
 2 bits for high/medium/low priority,
+
+~~~~~
    0b00=low
    0b01=medium
    0b10=high
    0b11=reserved
-
+~~~~~
 
 # Examples
 
+## Per-Packet Prioritization
+
 Per-packet prioritization is useful for a remote desktop application, as shown in {{example}}.
-
-
 
 | traffic type    | nature    | loss-tolerant | priority | comments |
 |:---------------:|:---------:|:-------------:|:--------:|:---------|
-| Glyph critical  | real-time |               |          |          |
+| glyph critical  | real-time |               |          |          |
 | glyph smoothing | real-time |               |          |          |
 | print job       | bulk      |               |          |          |
 {: #example}
+
+## Encoding as UDP Options
+
+A high-priority realtime loss-tolerant packet would be encoded in a UDP Option as follows:
+
+~~~~~
++---------------+
+| 1 0 0 1 0 1 0 ... |
++---------------+
+~~~~~
+
+## Encoding as JSON
+
+The same packet as above, encoded in JSON,
+
+~~~~~
+{"metadata":{"Priority":2,"Nature":"real-time","Loss-Tolerant":"yes"}}
+~~~~~
 
 # Security Considerations
 
