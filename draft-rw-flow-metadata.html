@@ -1196,6 +1196,17 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-per-packet-prioritization" class="internal xref">Per-Packet Prioritization</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-encoding-as-udp-options" class="internal xref">Encoding as UDP Options</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-encoding-as-json" class="internal xref">Encoding as JSON</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
@@ -1558,13 +1569,17 @@ important than other packets.<a href="#section-3.3-1.1.1" class="pilcrow">¶</a>
           <h4 id="name-json-syntax-3">
 <a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-json-syntax-3" class="section-name selfRef">JSON syntax</a>
           </h4>
+<p id="section-3.3.1-1">Low is 1, Medium is 2, High is 3.  4 is undefined.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3.3.1-2.1">
+              <p id="section-3.3.1-2.1.1">or, do we want to use "Low", "Medium", "High" ???<a href="#section-3.3.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 <span id="name-json-for-priority"></span><div id="json-priority">
 <figure id="figure-3">
-            <div class="alignCenter art-text artwork" id="section-3.3.1-1.1">
+            <div class="alignLeft art-text artwork" id="section-3.3.1-3.1">
 <pre>
-    {   "metadata" :{
-        "Priority": 3
-    }}
+{"metadata":{"Priority":2}}
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
@@ -1580,11 +1595,15 @@ important than other packets.<a href="#section-3.3-1.1.1" class="pilcrow">¶</a>
           </h4>
 <p id="section-3.3.2-1">UDP options can carry metadata in each packet as described below.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.3.2-2">16 bits for magic cookie and versioning.<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.3.2-3">2 bits for high/medium/low priority,
+<p id="section-3.3.2-3">2 bits for high/medium/low priority,<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.2-4">
+<pre>
    0b00=low
    0b01=medium
    0b10=high
-   0b11=reserved<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+   0b11=reserved
+</pre><a href="#section-3.3.2-4" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
@@ -1596,43 +1615,78 @@ important than other packets.<a href="#section-3.3-1.1.1" class="pilcrow">¶</a>
       <h2 id="name-examples">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
       </h2>
-<p id="section-4-1">Per-packet prioritization is useful for a remote desktop application, as shown in <a href="#example" class="auto internal xref">Table 1</a>.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="per-packet-prioritization">
+<section id="section-4.1">
+        <h3 id="name-per-packet-prioritization">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-per-packet-prioritization" class="section-name selfRef">Per-Packet Prioritization</a>
+        </h3>
+<p id="section-4.1-1">Per-packet prioritization is useful for a remote desktop application, as shown in <a href="#example" class="auto internal xref">Table 1</a>.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <div id="example">
 <table class="center" id="table-1">
-        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
-          <tr>
-            <th class="text-center" rowspan="1" colspan="1">traffic type</th>
-            <th class="text-center" rowspan="1" colspan="1">nature</th>
-            <th class="text-center" rowspan="1" colspan="1">loss-tolerant</th>
-            <th class="text-center" rowspan="1" colspan="1">priority</th>
-            <th class="text-left" rowspan="1" colspan="1">comments</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-            <td class="text-center" rowspan="1" colspan="1">real-time</td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">glyph smoothing</td>
-            <td class="text-center" rowspan="1" colspan="1">real-time</td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">print job</td>
-            <td class="text-center" rowspan="1" colspan="1">bulk</td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-center" rowspan="1" colspan="1"> </td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-        </tbody>
-      </table>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">nature</th>
+              <th class="text-center" rowspan="1" colspan="1">loss-tolerant</th>
+              <th class="text-center" rowspan="1" colspan="1">priority</th>
+              <th class="text-left" rowspan="1" colspan="1">comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">real-time</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">real-time</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">print job</td>
+              <td class="text-center" rowspan="1" colspan="1">bulk</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="encoding-as-udp-options">
+<section id="section-4.2">
+        <h3 id="name-encoding-as-udp-options">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-encoding-as-udp-options" class="section-name selfRef">Encoding as UDP Options</a>
+        </h3>
+<p id="section-4.2-1">A high-priority realtime loss-tolerant packet would be encoded in a UDP Option as follows:<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-2">
+<pre>
++---------------+
+| 1 0 0 1 0 1 0 ... |
++---------------+
+</pre><a href="#section-4.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="encoding-as-json">
+<section id="section-4.3">
+        <h3 id="name-encoding-as-json">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-encoding-as-json" class="section-name selfRef">Encoding as JSON</a>
+        </h3>
+<p id="section-4.3-1">The same packet as above, encoded in JSON,<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.3-2">
+<pre>
+{"metadata":{"Priority":2,"Nature":"real-time","Loss-Tolerant":"yes"}}
+</pre><a href="#section-4.3-2" class="pilcrow">¶</a>
+</div>
+</section>
 </div>
 </section>
 </div>
