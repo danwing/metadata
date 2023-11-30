@@ -73,15 +73,20 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Metadata exchanged
-   4.  Metadata Signaling
-     4.1.  Mapped to CID
-     4.2.  UDP Options
+     3.1.  Loss-Tolerant
+       3.1.1.  JSON Syntax
+       3.1.2.  UDP Options
+     3.2.  Real-Time
+       3.2.1.  JSON Syntax
+       3.2.2.  UDP Options
+     3.3.  Priority
+       3.3.1.  JSON syntax
+       3.3.2.  UDP Options
+   4.  Examples
    5.  Security Considerations
    6.  IANA Considerations
    Acknowledgments
-   References
-     Normative References
-     Informative References
+   Normative References
    Authors' Addresses
 
 1.  Introduction
@@ -164,28 +169,39 @@ Table of Contents
 
 3.  Metadata exchanged
 
+3.1.  Loss-Tolerant
+
+   Indicates the packet is loss-tolerant (that is, the application will
+   not re-transmit the packet) or is not loss-tolerant (that is, the
+   application will re-transmit the packet if it is lost).
+
+3.1.1.  JSON Syntax
+
+3.1.2.  UDP Options
+
+3.2.  Real-Time
+
+   Indicates real-time or bulk.
+
+3.2.1.  JSON Syntax
+
+3.2.2.  UDP Options
+
+3.3.  Priority
+
    1.  Relative priority within the same stream.  Applications running
        over UDP can indicate which packets within the same UDP 4-tuple
        are more important than other packets.
 
-   2.  blah blah
+3.3.1.  JSON syntax
 
-4.  Metadata Signaling
+                               {   "metadata" :{
+                                   "Priority": 3
+                               }}
 
-   The following sections explain how metadata is exchanged between
-   systems.
+                        Figure 3: JSON for Priority
 
-4.1.  Mapped to CID
-
-   As described in [I-D.wing-cidfi] the QUIC or DTLS CID can be mapped
-   to packet metadata.  This mapping is conveyed using over an HTTPS
-   connection between the CIDFI client and the CIDFI network elements.
-
-   JSON syntax:
-
-   CID: priority: high/medium/low
-
-4.2.  UDP Options
+3.3.2.  UDP Options
 
    UDP options can carry metadata in each packet as described below.
 
@@ -193,6 +209,24 @@ Table of Contents
 
    2 bits for high/medium/low priority, 0b00=low 0b01=medium 0b10=high
    0b11=reserved
+
+4.  Examples
+
+   Per-packet prioritization is useful for a remote desktop application,
+   as shown in Table 1.
+
+   +=================+===========+===============+==========+==========+
+   |   traffic type  |   nature  | loss-tolerant | priority | comments |
+   +=================+===========+===============+==========+==========+
+   |  Glyph critical | real-time |               |          |          |
+   +-----------------+-----------+---------------+----------+----------+
+   |      glyph      | real-time |               |          |          |
+   |    smoothing    |           |               |          |          |
+   +-----------------+-----------+---------------+----------+----------+
+   |    print job    |    bulk   |               |          |          |
+   +-----------------+-----------+---------------+----------+----------+
+
+                                  Table 1
 
 5.  Security Considerations
 
@@ -206,8 +240,6 @@ Acknowledgments
 
    To be completed.
 
-References
-
 Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -218,15 +250,6 @@ Normative References
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
-Informative References
-
-   [I-D.wing-cidfi]
-              Wing, D., Reddy.K, T., and M. Boucadair, "CID Flow
-              Indicator (CIDFI)", Work in Progress, Internet-Draft,
-              draft-wing-cidfi-02, 12 September 2023,
-              <https://datatracker.ietf.org/doc/html/draft-wing-cidfi-
-              02>.
 
 Authors' Addresses
 
