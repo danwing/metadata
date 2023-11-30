@@ -1,0 +1,242 @@
+
+
+
+
+Network Working Group                                     S. Rajagopalan
+Internet-Draft                                                   D. Wing
+Intended status: Standards Track                    Cloud Software Group
+Expires: 2 June 2024                                    30 November 2023
+
+
+                             Flow Metadata
+                     draft-rw-flow-metadata-latest
+
+Abstract
+
+   Metadata about packet importance is useful to signal to network
+   components.
+
+   This document describes how to exchange metadata in JSON which can be
+   mapped to a Connection Identifier (CID), and how that same metadata
+   can be carried in each packet as a UDP option.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://danwing.github.io/cidfi/draft-wing-cidfi.html.  Status
+   information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-rw-flow-metadata/.
+
+   Discussion of this document takes place on the TSV Area Working Group
+   mailing list (mailto:tsvwg@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/tsvwg/.  Subscribe at
+   https://www.ietf.org/mailman/listinfo/tsvwg/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/danwing/cidfi.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 2 June 2024.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Metadata exchanged
+   4.  Metadata Signaling
+     4.1.  Mapped to CID
+     4.2.  UDP Options
+   5.  Security Considerations
+   6.  IANA Considerations
+   Acknowledgments
+   References
+     Normative References
+     Informative References
+   Authors' Addresses
+
+1.  Introduction
+
+   blah blah
+
+   (1)  Proxied Connection
+                          .--------------.                   +------+
+                         |                |                +-+----+ |
+   +------+              |   Network(s)   |              +-+----+ +-+
+   |Client+--------------)----------------(--------------+Server+-+
+   +---+--+              |                |              +---+--+
+       |                  '-------+------'                   |
+       |                          |                          |
+       +<===User Data+Metadata=========User Data+Metadata===>+
+       |                          |                          |
+
+   (2)  Client-centric Metadata Sharing
+                             .--------------.                  +------+
+                            |                |               +-+----+ |
+   +------+                 |   Network(s)   |             +-+----+ +-+
+   |Client+-----------------)----------------(-------------+Server+-+
+   +---+--+                 |                |             +---+--+
+       |                     '-------+------'                  |
+       |                             |                         |
+       +<--------- Metadata -------->+                         |
+       |        Secure Connection    |                         |
+       |                             |                         |
+       +<== End-to-End Secure Connection User Data with CID ==>+
+       |                             |                         |
+
+                   Figure 1: Candidate Design Approaches
+
+   Figure 2 provides a sample network diagram of a CIDFI system showing
+   two bandwidth-constrained networks (or links) depicted by "B" and
+   CIDFI-aware devices immediately upstream of those links, and another
+   bandwidth-constrained link between a smartphone handset and its Radio
+   Access Network (RAN).  This diagram shows the same protocol and same
+   mechanism can operate with or without 5G, and can operate with
+   different administrative domains such as Wi-Fi, an ISP edge router,
+   and a 5G RAN.
+
+   For the sake of illustration, Figure 2 simplifies the representation
+   of the various involved network segments.  It also assumes that
+   multiple server instances are enabled in the server network but the
+   document does not make any assumption about the internal structure of
+   the service nor how a flow is processed by or steered to a service
+   instance.  However, CIDFI includes provisions to ensure that the
+   service instance that is selected to service a client request is the
+   same instance that will receive CIDFI metadata for that client.
+
+                       |                     |          |
+   +------+   +------+ | +------+            |          |
+   |CIDFI-|   |CIDFI-| | |CIDFI-|            |          |
+   |aware |   |aware | | |aware |  +------+  |          |   +----------+
+   |client+-B-+Wi-Fi +-B-+edge  +--+router+------+      |  +---------+ |
+   +------+   |access| | |router|  +------+  |   |      | +--------+ | |
+              |point | | +------+            |   |      | | CIDFI- | | |
+              +------+ |                     | +-+----+ | | aware  | | |
+                       |                     | |router+---+ QUIC or| | |
+   +---------+         | +------+            | +-+----+ | | DTLS   | |-+
+   | CIDFI-  |         | |CIDFI-|            |   |      | | server |-+
+   | aware   |         | |aware |  +------+  |   |      | +--------+
+   | client  +-----B-----+RAN   +--+router+------+      |
+   |(handset)|         | |router|  +------+  |          |
+   +---------+         | +------+            |          |
+                       |                     |          |
+                       |                     | Transit  |  Server
+      User Network     |    ISP Network      | Network  |  Network
+
+                         Figure 2: Network Diagram
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  Metadata exchanged
+
+   1.  Relative priority within the same stream.  Applications running
+       over UDP can indicate which packets within the same UDP 4-tuple
+       are more important than other packets.
+
+   2.  blah blah
+
+4.  Metadata Signaling
+
+   The following sections explain how metadata is exchanged between
+   systems.
+
+4.1.  Mapped to CID
+
+   As described in [I-D.wing-cidfi] the QUIC or DTLS CID can be mapped
+   to packet metadata.  This mapping is conveyed using over an HTTPS
+   connection between the CIDFI client and the CIDFI network elements.
+
+   JSON syntax:
+
+   CID: priority: high/medium/low
+
+4.2.  UDP Options
+
+   UDP options can carry metadata in each packet as described below.
+
+   16 bits for magic cookie and versioning.
+
+   2 bits for high/medium/low priority, 0b00=low 0b01=medium 0b10=high
+   0b11=reserved
+
+5.  Security Considerations
+
+   To be completed.
+
+6.  IANA Considerations
+
+   None.
+
+Acknowledgments
+
+   To be completed.
+
+References
+
+Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+Informative References
+
+   [I-D.wing-cidfi]
+              Wing, D., Reddy.K, T., and M. Boucadair, "CID Flow
+              Indicator (CIDFI)", Work in Progress, Internet-Draft,
+              draft-wing-cidfi-02, 12 September 2023,
+              <https://datatracker.ietf.org/doc/html/draft-wing-cidfi-
+              02>.
+
+Authors' Addresses
+
+   Sridharan Rajagopalan
+   Cloud Software Group Holdings, Inc.
+   United States of America
+   Email: sridharan.rajagopalan@cloud.com
+
+
+   Dan Wing
+   Cloud Software Group Holdings, Inc.
+   United States of America
+   Email: danwing@gmail.com
