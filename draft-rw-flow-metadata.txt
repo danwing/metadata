@@ -85,6 +85,8 @@ Table of Contents
    7.  Metadata exchanged
      7.1.  Metadata Hanshake
      7.2.  Metadata structure for different types of traffic
+       7.2.1.  Reliable
+       7.2.2.  Loss-Tolerant
    8.  Industrial Application of Flow Metadata
    9.  Metadata Encoding
      9.1.  User typing
@@ -403,7 +405,7 @@ Table of Contents
    The packets can be broadly classified as 2 types – loss tolerant
    (lossy) and reliable (lossless).
 
-   1.  Reliable
+7.2.1.  Reliable
 
    Lossless/Reliable packets cannot afford to be lost and hence, every
    packet needs to be treated important (that is, the application will
@@ -417,7 +419,7 @@ Table of Contents
     |     1     |       0       |      W       |   X X    | Y Y ... Y |
     +-----------+---------------+--------------+----------+-----------+
 
-                                  Table 1
+                           Table 1: Network-Bits
 
    When there is loss detected between 2 nodes, using the above QoS
    measurement, the network will endeavor to deliver the packet reliably
@@ -426,7 +428,7 @@ Table of Contents
    decide).  If the traffic is real-time, then the PDB is taken into
    account and packet is handled accordingly.
 
-   1.  Loss-Tolerant
+7.2.2.  Loss-Tolerant
 
    Loss-Tolerant packets have the luxury of being dropped (that is, the
    application will not re-transmit the packet).
@@ -447,7 +449,7 @@ Table of Contents
     |     1     |       1       |      W       |   1 1    | Y Y ... Y |
     +-----------+---------------+--------------+----------+-----------+
 
-                                  Table 2
+                           Table 2: Network-Bits
 
    When the loss tolerant packet is marked with higher priority
    (implementation decided by the network node), the packet can be
@@ -455,11 +457,11 @@ Table of Contents
    times to increase the probability of delivery (implementation decided
    by the network node).
 
-   *  Non-Key Loss-Tolerant packets: If the application decides the
-      packet is loss-tolerant and not too important to be transmitted
-      reliably, the packet will just be transmitted once irrespective of
-      the loss between the 2 nodes.  The QUIC metadata in network bits
-      will look like
+   *  Loss-Tolerant packets: If the application decides the packet is
+      loss-tolerant and not too important to be transmitted reliably,
+      the packet will just be transmitted once irrespective of the loss
+      between the 2 nodes.  The QUIC metadata in network bits will look
+      like
 
     +===========+===============+==============+==========+===========+
     | MD Enable | Loss-Tolerant | Real-Time Tx | Priority |    CID    |
@@ -467,7 +469,7 @@ Table of Contents
     |     1     |       1       |      W       |   0 0    | Y Y ... Y |
     +-----------+---------------+--------------+----------+-----------+
 
-                                  Table 3
+                           Table 3: Network-Bits
 
    For a real-time example of the above proposal, let's consider a
    desktop virtualization use case that comprises of a server (VDA) and

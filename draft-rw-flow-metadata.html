@@ -1176,6 +1176,14 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
                 <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-metadata-structure-for-diff" class="internal xref">Metadata structure for different types of traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-reliable" class="internal xref">Reliable</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-loss-tolerant" class="internal xref">Loss-Tolerant</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1694,113 +1702,132 @@ appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶<
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-metadata-structure-for-diff" class="section-name selfRef">Metadata structure for different types of traffic</a>
         </h3>
 <p id="section-7.2-1">The packets can be broadly classified as 2 types – loss tolerant (lossy) and reliable (lossless).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-7.2-2">
-<li id="section-7.2-2.1">
-            <p id="section-7.2-2.1.1">Reliable<a href="#section-7.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<p id="section-7.2-3">Lossless/Reliable packets cannot afford to be lost and hence, every packet needs to be treated important (that is, the application
-will re-transmit the packet if it is lost). Based on the traffic, the Real-Time Tx bit is set. The QUIC metadata in network bits will look like<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<div id="reliable">
+<section id="section-7.2.1">
+          <h4 id="name-reliable">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-reliable" class="section-name selfRef">Reliable</a>
+          </h4>
+<p id="section-7.2.1-1">Lossless/Reliable packets cannot afford to be lost and hence, every packet needs to be treated important (that is, the application
+will re-transmit the packet if it is lost). Based on the traffic, the Real-Time Tx bit is set. The QUIC metadata in network bits will look like<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<span id="name-network-bits"></span><div id="Reliable-network-bits">
 <table class="center" id="table-1">
-          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+            <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-network-bits" class="selfRef">Network-Bits</a>
+            </caption>
 <thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
-              <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
-              <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
-              <th class="text-center" rowspan="1" colspan="1">Priority</th>
-              <th class="text-center" rowspan="1" colspan="1">CID</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
-              <td class="text-center" rowspan="1" colspan="1">W</td>
-              <td class="text-center" rowspan="1" colspan="1">X X</td>
-              <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
-            </tr>
-          </tbody>
-        </table>
-<p id="section-7.2-5">When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-7.2-6">
-<li id="section-7.2-6.1">
-            <p id="section-7.2-6.1.1">Loss-Tolerant<a href="#section-7.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ol>
-<p id="section-7.2-7">Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
-re-transmit the packet).<a href="#section-7.2-7" class="pilcrow">¶</a></p>
+              <tr>
+                <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
+                <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
+                <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
+                <th class="text-center" rowspan="1" colspan="1">Priority</th>
+                <th class="text-center" rowspan="1" colspan="1">CID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">0</td>
+                <td class="text-center" rowspan="1" colspan="1">W</td>
+                <td class="text-center" rowspan="1" colspan="1">X X</td>
+                <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-7.2.1-3">When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="loss-tolerant">
+<section id="section-7.2.2">
+          <h4 id="name-loss-tolerant">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-loss-tolerant" class="section-name selfRef">Loss-Tolerant</a>
+          </h4>
+<p id="section-7.2.2-1">Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
+re-transmit the packet).<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2-8.1">
-            <p id="section-7.2-8.1.1">Key Loss-Tolerant packets:
- If the application decides that any loss tolerant packet needs to be delivered reliably for some reason, the application can choose to send that specific packet as reliable so that the network will know to deliver it reliably. This is the same as reliable scenario. The QUIC metadata in network bits will look same as reliable (shown above). The application can also choose to assign high-priority to the loss-tolerant packet as well. The QUIC metadata in network bits will look like<a href="#section-7.2-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2.2-2.1">
+              <p id="section-7.2.2-2.1.1">Key Loss-Tolerant packets:
+ If the application decides that any loss tolerant packet needs to be delivered reliably for some reason, the application can choose to send that specific packet as reliable so that the network will know to deliver it reliably. This is the same as reliable scenario. The QUIC metadata in network bits will look same as reliable (shown above). The application can also choose to assign high-priority to the loss-tolerant packet as well. The QUIC metadata in network bits will look like<a href="#section-7.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+          </ul>
+<span id="name-network-bits-2"></span><div id="key-loss-tolerant-network-bits">
 <table class="center" id="table-2">
-          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+            <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-network-bits-2" class="selfRef">Network-Bits</a>
+            </caption>
 <thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
-              <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
-              <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
-              <th class="text-center" rowspan="1" colspan="1">Priority</th>
-              <th class="text-center" rowspan="1" colspan="1">CID</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">W</td>
-              <td class="text-center" rowspan="1" colspan="1">1 1</td>
-              <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
-            </tr>
-          </tbody>
-        </table>
-<p id="section-7.2-10">When the loss tolerant packet is marked with higher priority (implementation decided by the network node), the packet can be transmitted with corresponding loss avoidance mechanism multiple times to increase the probability of delivery (implementation decided by the network node).<a href="#section-7.2-10" class="pilcrow">¶</a></p>
+              <tr>
+                <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
+                <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
+                <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
+                <th class="text-center" rowspan="1" colspan="1">Priority</th>
+                <th class="text-center" rowspan="1" colspan="1">CID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">W</td>
+                <td class="text-center" rowspan="1" colspan="1">1 1</td>
+                <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-7.2.2-4">When the loss tolerant packet is marked with higher priority (implementation decided by the network node), the packet can be transmitted with corresponding loss avoidance mechanism multiple times to increase the probability of delivery (implementation decided by the network node).<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2-11.1">
-            <p id="section-7.2-11.1.1">Non-Key Loss-Tolerant packets:
- If the application decides the packet is loss-tolerant and not too important to be transmitted reliably, the packet will just be transmitted once irrespective of the loss between the 2 nodes. The QUIC metadata in network bits will look like<a href="#section-7.2-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2.2-5.1">
+              <p id="section-7.2.2-5.1.1">Loss-Tolerant packets:
+ If the application decides the packet is loss-tolerant and not too important to be transmitted reliably, the packet will just be transmitted once irrespective of the loss between the 2 nodes. The QUIC metadata in network bits will look like<a href="#section-7.2.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+          </ul>
+<span id="name-network-bits-3"></span><div id="Loss-Tolerant">
 <table class="center" id="table-3">
-          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+            <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-network-bits-3" class="selfRef">Network-Bits</a>
+            </caption>
 <thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
-              <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
-              <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
-              <th class="text-center" rowspan="1" colspan="1">Priority</th>
-              <th class="text-center" rowspan="1" colspan="1">CID</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">1</td>
-              <td class="text-center" rowspan="1" colspan="1">W</td>
-              <td class="text-center" rowspan="1" colspan="1">0 0</td>
-              <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
-            </tr>
-          </tbody>
-        </table>
-<p id="section-7.2-13">For a real-time example of the above proposal, let's consider a desktop virtualization use case that comprises of a server (VDA) and a client connected over the internet, which has mixed traffic – interactive traffic (graphics updates, mouse and keyboard activity), bulk data transfer traffic (file copy and printing), and video streaming (interactive video – VR, gaming) and VoIP remoting (MS Teams) - interactive. The application can identify the type of traffic through various methods – type of virtual channel, use of hooks to identify operations, heuristics that detect keyboard and mouse activity etc. and based on the heuristics and nature of the channel, the application can send the packets through loss tolerant or reliable channels and determine the priority.<a href="#section-7.2-13" class="pilcrow">¶</a></p>
+              <tr>
+                <th class="text-center" rowspan="1" colspan="1">MD Enable</th>
+                <th class="text-center" rowspan="1" colspan="1">Loss-Tolerant</th>
+                <th class="text-center" rowspan="1" colspan="1">Real-Time Tx</th>
+                <th class="text-center" rowspan="1" colspan="1">Priority</th>
+                <th class="text-center" rowspan="1" colspan="1">CID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">1</td>
+                <td class="text-center" rowspan="1" colspan="1">W</td>
+                <td class="text-center" rowspan="1" colspan="1">0 0</td>
+                <td class="text-center" rowspan="1" colspan="1">Y Y ... Y</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-7.2.2-7">For a real-time example of the above proposal, let's consider a desktop virtualization use case that comprises of a server (VDA) and a client connected over the internet, which has mixed traffic – interactive traffic (graphics updates, mouse and keyboard activity), bulk data transfer traffic (file copy and printing), and video streaming (interactive video – VR, gaming) and VoIP remoting (MS Teams) - interactive. The application can identify the type of traffic through various methods – type of virtual channel, use of hooks to identify operations, heuristics that detect keyboard and mouse activity etc. and based on the heuristics and nature of the channel, the application can send the packets through loss tolerant or reliable channels and determine the priority.<a href="#section-7.2.2-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2-14.1">
-            <p id="section-7.2-14.1.1">Real-time traffic:
-Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time Tx bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.<a href="#section-7.2-14.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2.2-8.1">
+              <p id="section-7.2.2-8.1.1">Real-time traffic:
+Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time Tx bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.<a href="#section-7.2.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.2-14.2">
-            <p id="section-7.2-14.2.1">Bulk transfer:
-Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.<a href="#section-7.2-14.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.2.2-8.2">
+              <p id="section-7.2.2-8.2.1">Bulk transfer:
+Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.<a href="#section-7.2.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
-<p id="section-7.2-15">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., FEC [7]) or below as well [14], up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in [14] as well. This provides means and data required for achieving that.<a href="#section-7.2-15" class="pilcrow">¶</a></p>
-<p id="section-7.2-16">In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-7.2-16" class="pilcrow">¶</a></p>
-<p id="section-7.2-17">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-7.2-17" class="pilcrow">¶</a></p>
-<p id="section-7.2-18">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-7.2-18" class="pilcrow">¶</a></p>
-<p id="section-7.2-19">A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.<a href="#section-7.2-19" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-7.2.2-9">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., FEC [7]) or below as well [14], up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in [14] as well. This provides means and data required for achieving that.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-10">In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-7.2.2-10" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-11">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-7.2.2-11" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-12">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-7.2.2-12" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-13">A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.<a href="#section-7.2.2-13" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -1921,7 +1948,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
             <p id="section-9.1-1.1.1">Network bits<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-network-bits"></span><div id="user-typing-network-bits">
+<span id="name-network-bits-4"></span><div id="user-typing-network-bits">
 <figure id="figure-3">
           <div class="alignLeft art-text artwork" id="section-9.1-2.1">
 <pre>
@@ -1931,7 +1958,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </pre>
 </div>
 <figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-network-bits" class="selfRef">Network-Bits</a>
+<a href="#name-network-bits-4" class="selfRef">Network-Bits</a>
           </figcaption></figure>
 </div>
 <ul class="normal">
@@ -1962,7 +1989,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
             <p id="section-9.2-1.1.1">Network bits<a href="#section-9.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-network-bits-2"></span><div id="glyph-smoothing-network-bits">
+<span id="name-network-bits-5"></span><div id="glyph-smoothing-network-bits">
 <figure id="figure-5">
           <div class="alignLeft art-text artwork" id="section-9.2-2.1">
 <pre>
@@ -1972,7 +1999,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-network-bits-2" class="selfRef">Network-Bits</a>
+<a href="#name-network-bits-5" class="selfRef">Network-Bits</a>
           </figcaption></figure>
 </div>
 <ul class="normal">
@@ -2003,7 +2030,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
             <p id="section-9.3-1.1.1">Network bits<a href="#section-9.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-network-bits-3"></span><div id="print-job-network-bits">
+<span id="name-network-bits-6"></span><div id="print-job-network-bits">
 <figure id="figure-7">
           <div class="alignLeft art-text artwork" id="section-9.3-2.1">
 <pre>
@@ -2013,7 +2040,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </pre>
 </div>
 <figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-network-bits-3" class="selfRef">Network-Bits</a>
+<a href="#name-network-bits-6" class="selfRef">Network-Bits</a>
           </figcaption></figure>
 </div>
 <ul class="normal">
@@ -2044,7 +2071,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
             <p id="section-9.4-1.1.1">Network bits<a href="#section-9.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-network-bits-4"></span><div id="file-transfer-network-bits">
+<span id="name-network-bits-7"></span><div id="file-transfer-network-bits">
 <figure id="figure-9">
           <div class="alignLeft art-text artwork" id="section-9.4-2.1">
 <pre>
@@ -2054,7 +2081,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </pre>
 </div>
 <figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
-<a href="#name-network-bits-4" class="selfRef">Network-Bits</a>
+<a href="#name-network-bits-7" class="selfRef">Network-Bits</a>
           </figcaption></figure>
 </div>
 <ul class="normal">
@@ -2085,7 +2112,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
             <p id="section-9.5-1.1.1">Network bits<a href="#section-9.5-1.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<span id="name-network-bits-5"></span><div id="VoIP-network-bits">
+<span id="name-network-bits-8"></span><div id="VoIP-network-bits">
 <figure id="figure-11">
           <div class="alignLeft art-text artwork" id="section-9.5-2.1">
 <pre>
@@ -2095,7 +2122,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </pre>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
-<a href="#name-network-bits-5" class="selfRef">Network-Bits</a>
+<a href="#name-network-bits-8" class="selfRef">Network-Bits</a>
           </figcaption></figure>
 </div>
 <ul class="normal">
