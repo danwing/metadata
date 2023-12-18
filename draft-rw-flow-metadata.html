@@ -1046,7 +1046,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 18 June 2024</td>
+<td class="center">Expires 20 June 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1059,12 +1059,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-12-16" class="published">16 December 2023</time>
+<time datetime="2023-12-18" class="published">18 December 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-06-18">18 June 2024</time></dd>
+<dd class="expires"><time datetime="2024-06-20">20 June 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1121,7 +1121,7 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1236,16 +1236,21 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
             <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.16.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1563,16 +1568,16 @@ appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶<
 <p id="section-4-1">QoS measurement between 2 (or more) nodes without relying on transport layer: (QoS – Latency, Loss, MTU, BDP etc)<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-2.1">
-          <p id="section-4-2.1.1">In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in [5] and [6].<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.1.1">In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in <span>[<a href="#RFC7456" class="cite xref">RFC7456</a>]</span> and <span>[<a href="#RFC8321" class="cite xref">RFC8321</a>]</span>.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1">A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose [4].<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.2.1">A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose <span>[<a href="#RFC862" class="cite xref">RFC862</a>]</span>.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.3">
-          <p id="section-4-2.3.1">For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service [4] and measure the by sending synthetically generated packets.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.3.1">For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service <span>[<a href="#RFC862" class="cite xref">RFC862</a>]</span> and measure the by sending synthetically generated packets.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed [1].<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1">We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed <span>[<a href="#I-D.templin-intarea-ipid-ext" class="cite xref">I-D.templin-intarea-ipid-ext</a>]</span><a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.5">
           <p id="section-4-2.5.1">We can leverage both OOB and IB, based on the heuristics, to measure QoS between 2 nodes.<a href="#section-4-2.5.1" class="pilcrow">¶</a></p>
@@ -1591,7 +1596,7 @@ appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶<
 <p id="section-5-1">Using QUIC CID to pass metadata required to route the packets effectively.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1">
-          <p id="section-5-2.1.1">Metadata can have a handshake in the first packet with a short header [13]. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.1.1">Metadata can have a handshake in the first packet with a short header <span>[<a href="#RFC8999" class="cite xref">RFC8999</a>]</span>. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1.2.1">
               <p id="section-5-2.1.2.1.1">Encryption information for the Metadata (refer encryption below for more details).<a href="#section-5-2.1.2.1.1" class="pilcrow">¶</a></p>
@@ -1821,7 +1826,7 @@ Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets do
 Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.<a href="#section-7.2.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.2.2-9">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., FEC [7]) or below as well [14], up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in [14] as well. This provides means and data required for achieving that.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-9">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., <span>[<a href="#FEC" class="cite xref">FEC</a>]</span>) or below as well <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span>, up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span> as well. This provides means and data required for achieving that.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-10">In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-7.2.2-10" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-11">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-7.2.2-11" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-12">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-7.2.2-12" class="pilcrow">¶</a></p>
@@ -2150,18 +2155,18 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
       <h2 id="name-ease-of-adaptation-and-indu">
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-ease-of-adaptation-and-indu" class="section-name selfRef">Ease of adaptation and Industrial significance:</a>
       </h2>
-<p id="section-10-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references [8] and [9] can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references <span>[<a href="#ctx-aware" class="cite xref">ctx-aware</a>]</span> and <span>[<a href="#wifi-ll" class="cite xref">wifi-ll</a>]</span> can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <p id="section-10-2">The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:<a href="#section-10-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-3.1">
           <p id="section-10-3.1.1">Explicit signals can help in deciding how to handle packets – queuing, routing etc.
-*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference [10]. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-10-3.1.1" class="pilcrow">¶</a></p>
+*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference <span>[<a href="#docsis-ll" class="cite xref">docsis-ll</a>]</span>. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-10-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-3.2">
-          <p id="section-10-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to L4S [11].<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
+          <p id="section-10-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to <span>[<a href="#L4S" class="cite xref">L4S</a>]</span>.<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-3.3">
-          <p id="section-10-3.3.1">L4S [11] CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication [12] can be added to the QUIC CID.<a href="#section-10-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-10-3.3.1"><span>[<a href="#L4S" class="cite xref">L4S</a>]</span> CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication <span>[<a href="#RFC9331" class="cite xref">RFC9331</a>]</span> can be added to the QUIC CID.<a href="#section-10-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -2279,82 +2284,93 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 <p id="section-13-1">None.<a href="#section-13-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="references">
-<section id="section-14">
-      <h2 id="name-references">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-references" class="section-name selfRef">References</a>
-      </h2>
-<ol start="1" type="1" class="normal type-1" id="section-14-1">
-<li id="section-14-1.1">
-          <p id="section-14-1.1.1">draft-templin-intarea-ipid-ext-12 - Identification Extension for the Internet Protocol (ietf.org)<a href="#section-14-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.2">
-          <p id="section-14-1.2.1">CID Flow Indicator (CIDFI) (ietf.org)<a href="#section-14-1.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.3">
-          <p id="section-14-1.3.1">draft-shi-quic-structured-connection-id-01 - Structured Connection ID Carrying Metadata (ietf.org)<a href="#section-14-1.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.4">
-          <p id="section-14-1.4.1">RFC 862 - Echo Protocol (rfc-editor.org)<a href="#section-14-1.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.5">
-          <p id="section-14-1.5.1">RFC 7456 - Loss and Delay Measurement in Transparent Interconnection of Lots of Links (TRILL) (ietf.org)<a href="#section-14-1.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.6">
-          <p id="section-14-1.6.1">RFC 8321 - Alternate-Marking Method for Passive and Hybrid Performance Monitoring (ietf.org)<a href="#section-14-1.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.7">
-          <p id="section-14-1.7.1">https://datatracker.ietf.org/doc/rfc6363<a href="#section-14-1.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.8">
-          <p id="section-14-1.8.1">https://www.etsi.org/deliver/etsi_tr/136900_136999/136933/14.00.00_60/tr_136933v140000p.pdf<a href="#section-14-1.8.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.9">
-          <p id="section-14-1.9.1">https://www.usenix.org/conference/atc17/technical-sessions/presentation/hoilan-jorgesen<a href="#section-14-1.9.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.10">
-          <p id="section-14-1.10.1">Low Latency DOCSIS® - CableLabs<a href="#section-14-1.10.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.11">
-          <p id="section-14-1.11.1">RFC 9330 - Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service - Architecture (ietf.org)<a href="#section-14-1.11.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.12">
-          <p id="section-14-1.12.1">RFC 9331 - The Explicit Congestion Notification (ECN) Protocol for Low Latency, Low Loss, and Scalable Throughput (L4S) (ietf.org)<a href="#section-14-1.12.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.13">
-          <p id="section-14-1.13.1">RFC 8999 - Version-Independent Properties of QUIC (rfc-editor.org)<a href="#section-14-1.13.1" class="pilcrow">¶</a></p>
-</li>
-        <li id="section-14-1.14">
-          <p id="section-14-1.14.1">draft-meng-tsvwg-wireless-collaboration-00 (ietf.org)<a href="#section-14-1.14.1" class="pilcrow">¶</a></p>
-</li>
-      </ol>
-</section>
-</div>
 <div id="acknowledgments">
-<section id="section-15">
+<section id="section-14">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-15-1">To be completed.<a href="#section-15-1" class="pilcrow">¶</a></p>
+<p id="section-14-1">To be completed.<a href="#section-14-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sec-normative-references">
-<section id="section-16">
-      <h2 id="name-normative-references">
-<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<section id="section-15">
+      <h2 id="name-references">
+<a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-15.1">
+        <h3 id="name-normative-references">
+<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
+<div id="sec-informative-references">
+<section id="section-15.2">
+        <h3 id="name-informative-references">
+<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="ctx-aware">[ctx-aware]</dt>
+        <dd>
+<span class="refTitle">"Study on Context Aware Service Delivery in RAN for LTE"</span>, <time datetime="2017-04" class="refDate">April 2017</time>, <span>&lt;<a href="https://www.etsi.org/deliver/etsi_tr/136900_136999/136933/14.00.00_60/tr_136933v140000p.pdf">https://www.etsi.org/deliver/etsi_tr/136900_136999/136933/14.00.00_60/tr_136933v140000p.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="docsis-ll">[docsis-ll]</dt>
+        <dd>
+<span class="refAuthor">CableLabs</span>, <span class="refTitle">"Low Latency DOCSIS®"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.cablelabs.com/technologies/low-latency-docsis">https://www.cablelabs.com/technologies/low-latency-docsis</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="FEC">[FEC]</dt>
+        <dd>
+<span class="refAuthor">Watson, M.</span>, <span class="refAuthor">Begen, A.</span>, and <span class="refAuthor">V. Roca</span>, <span class="refTitle">"Forward Error Correction (FEC) Framework"</span>, <span class="seriesInfo">RFC 6363</span>, <span class="seriesInfo">DOI 10.17487/RFC6363</span>, <time datetime="2011-10" class="refDate">October 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6363">https://www.rfc-editor.org/rfc/rfc6363</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.meng-tsvwg-wireless-collaboration">[I-D.meng-tsvwg-wireless-collaboration]</dt>
+        <dd>
+<span class="refAuthor">Meng, T.</span> and <span class="refAuthor">H. Shi</span>, <span class="refTitle">"Necessity of Application-Network Collaboration in Wireless Access Scenarios"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-meng-tsvwg-wireless-collaboration-00</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-meng-tsvwg-wireless-collaboration-00">https://datatracker.ietf.org/doc/html/draft-meng-tsvwg-wireless-collaboration-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.templin-intarea-ipid-ext">[I-D.templin-intarea-ipid-ext]</dt>
+        <dd>
+<span class="refAuthor">Templin, F.</span>, <span class="refTitle">"IPv6 Extended Fragment Header for IPv4"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-templin-intarea-ipid-ext-32</span>, <time datetime="2023-12-14" class="refDate">14 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-templin-intarea-ipid-ext-32">https://datatracker.ietf.org/doc/html/draft-templin-intarea-ipid-ext-32</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="L4S">[L4S]</dt>
+        <dd>
+<span class="refAuthor">Briscoe, B., Ed.</span>, <span class="refAuthor">De Schepper, K.</span>, <span class="refAuthor">Bagnulo, M.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service: Architecture"</span>, <span class="seriesInfo">RFC 9330</span>, <span class="seriesInfo">DOI 10.17487/RFC9330</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9330">https://www.rfc-editor.org/rfc/rfc9330</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7456">[RFC7456]</dt>
+        <dd>
+<span class="refAuthor">Mizrahi, T.</span>, <span class="refAuthor">Senevirathne, T.</span>, <span class="refAuthor">Salam, S.</span>, <span class="refAuthor">Kumar, D.</span>, and <span class="refAuthor">D. Eastlake 3rd</span>, <span class="refTitle">"Loss and Delay Measurement in Transparent Interconnection of Lots of Links (TRILL)"</span>, <span class="seriesInfo">RFC 7456</span>, <span class="seriesInfo">DOI 10.17487/RFC7456</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7456">https://www.rfc-editor.org/rfc/rfc7456</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8321">[RFC8321]</dt>
+        <dd>
+<span class="refAuthor">Fioccola, G., Ed.</span>, <span class="refAuthor">Capello, A.</span>, <span class="refAuthor">Cociglio, M.</span>, <span class="refAuthor">Castaldelli, L.</span>, <span class="refAuthor">Chen, M.</span>, <span class="refAuthor">Zheng, L.</span>, <span class="refAuthor">Mirsky, G.</span>, and <span class="refAuthor">T. Mizrahi</span>, <span class="refTitle">"Alternate-Marking Method for Passive and Hybrid Performance Monitoring"</span>, <span class="seriesInfo">RFC 8321</span>, <span class="seriesInfo">DOI 10.17487/RFC8321</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8321">https://www.rfc-editor.org/rfc/rfc8321</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC862">[RFC862]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Echo Protocol"</span>, <span class="seriesInfo">STD 20</span>, <span class="seriesInfo">RFC 862</span>, <span class="seriesInfo">DOI 10.17487/RFC0862</span>, <time datetime="1983-05" class="refDate">May 1983</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc862">https://www.rfc-editor.org/rfc/rfc862</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8999">[RFC8999]</dt>
+        <dd>
+<span class="refAuthor">Thomson, M.</span>, <span class="refTitle">"Version-Independent Properties of QUIC"</span>, <span class="seriesInfo">RFC 8999</span>, <span class="seriesInfo">DOI 10.17487/RFC8999</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8999">https://www.rfc-editor.org/rfc/rfc8999</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9331">[RFC9331]</dt>
+        <dd>
+<span class="refAuthor">De Schepper, K.</span> and <span class="refAuthor">B. Briscoe, Ed.</span>, <span class="refTitle">"The Explicit Congestion Notification (ECN) Protocol for Low Latency, Low Loss, and Scalable Throughput (L4S)"</span>, <span class="seriesInfo">RFC 9331</span>, <span class="seriesInfo">DOI 10.17487/RFC9331</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9331">https://www.rfc-editor.org/rfc/rfc9331</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="wifi-ll">[wifi-ll]</dt>
+      <dd>
+<span class="refAuthor">H{\o}iland-J{\o}rgensen, T.</span>, <span class="refAuthor">Kazior, M.</span>, <span class="refAuthor">T{\"a}ht, D.</span>, <span class="refAuthor">Hurtig, P.</span>, and <span class="refAuthor">A. Brunstrom</span>, <span class="refTitle">"Ending the Anomaly: Achieving Low Latency and Airtime Fairness in WiFi"</span>, <time datetime="2017-07-12" class="refDate">12 July 2017</time>, <span>&lt;<a href="https://www.usenix.org/system/files/conference/atc17/atc17-hoiland-jorgensen.pdf">https://www.usenix.org/system/files/conference/atc17/atc17-hoiland-jorgensen.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
 <div id="authors-addresses">
 <section id="appendix-A">
       <h2 id="name-authors-addresses">
