@@ -56,6 +56,27 @@ normative:
 
 informative:
 
+  ctx-aware:
+    title: "Study on Context Aware Service Delivery in RAN for LTE"
+    target: https://www.etsi.org/deliver/etsi_tr/136900_136999/136933/14.00.00_60/tr_136933v140000p.pdf
+    date: 2017-04
+
+  wifi-ll:
+    title: "Ending the Anomaly: Achieving Low Latency and Airtime Fairness in WiFi"
+    target: https://www.usenix.org/system/files/conference/atc17/atc17-hoiland-jorgensen.pdf
+    author:
+      - name: Toke H{\o}iland-J{\o}rgensen
+      - name: Micha{\l} Kazior
+      - name: Dave T{\"a}ht
+      - name: Per Hurtig
+      - name: Anna Brunstrom
+    date: 2017-07-12
+
+  docsis-ll:
+    title: "Low Latency DOCSIS®"
+    target: https://www.cablelabs.com/technologies/low-latency-docsis
+    author:
+      - name: "CableLabs"
 
 --- abstract
 
@@ -161,10 +182,10 @@ receive CIDFI metadata for that client.
 
 QoS measurement between 2 (or more) nodes without relying on transport layer: (QoS – Latency, Loss, MTU, BDP etc)
 
-* In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in [5] and [6].
-* A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose [4].
-* For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service [4] and measure the by sending synthetically generated packets.
-* We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed [1].
+* In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in {{?RFC7456}} and {{?RFC8321}}.
+* A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose {{?RFC862}}.
+* For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service {{?RFC862}} and measure the by sending synthetically generated packets.
+* We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed {{?I-D.templin-intarea-ipid-ext}}
 * We can leverage both OOB and IB, based on the heuristics, to measure QoS between 2 nodes.
 * One can even modify the TTL accordingly and decide between which nodes, the QoS needs to be measured. QoS measurement happens only for the nodes where the packet's TTL is 255. The 2nd node (in this case, B) can decide to reset the TTL or leave it as it is before sending it to the next node.
 
@@ -172,7 +193,7 @@ QoS measurement between 2 (or more) nodes without relying on transport layer: (Q
 
 Using QUIC CID to pass metadata required to route the packets effectively.
 
-* Metadata can have a handshake in the first packet with a short header [13]. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:
+* Metadata can have a handshake in the first packet with a short header {{?RFC8999}}. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:
    * Encryption information for the Metadata (refer encryption below for more details).
    * Information related to utilizing Metadata (refer ISP section below for more details).
 * A bit to indicate whether the metadata needs to be processed or ignored. This bit will decide whether a particular traffic needs to be optimized or not. If this bit is set to 0, the metadata is ignored, and the traffic is just treated as it is today.
@@ -252,7 +273,7 @@ Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets do
 * Bulk transfer:
 Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.
 
-Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., FEC [7]) or below as well [14], up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in [14] as well. This provides means and data required for achieving that.
+Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., {{?FEC=RFC6363}}) or below as well {{?I-D.meng-tsvwg-wireless-collaboration}}, up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in {{?I-D.meng-tsvwg-wireless-collaboration}} as well. This provides means and data required for achieving that.
 
 In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.
 
@@ -378,14 +399,14 @@ Priority scaling: Low is 0, Medium is 1, Medium-High is 2. High is 3.
 
 # Ease of adaptation and Industrial significance:
 
-The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references [8] and [9] can get all the required information for their respective optimizations from the CID metadata that is being proposed.
+The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references {{ctx-aware}} and {{wifi-ll}} can get all the required information for their respective optimizations from the CID metadata that is being proposed.
 
 The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:
 
 * Explicit signals can help in deciding how to handle packets – queuing, routing etc.
-*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference [10]. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).
-* The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to L4S [11].
-* L4S [11] CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication [12] can be added to the QUIC CID.
+*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference {{docsis-ll}}. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).
+* The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to {{?L4S=RFC9330}}.
+* {{?L4S=RFC9330}} CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication {{?RFC9331}} can be added to the QUIC CID.
 
 # ISP implementation of Metadata based optimization:
 
@@ -426,22 +447,6 @@ Encryption/Obfuscation of metadata is vital to prevent attackers from knowing th
 
 None.
 
-# References
-
-1. draft-templin-intarea-ipid-ext-12 - Identification Extension for the Internet Protocol (ietf.org)
-2. CID Flow Indicator (CIDFI) (ietf.org)
-3. draft-shi-quic-structured-connection-id-01 - Structured Connection ID Carrying Metadata (ietf.org)
-4. RFC 862 - Echo Protocol (rfc-editor.org)
-5. RFC 7456 - Loss and Delay Measurement in Transparent Interconnection of Lots of Links (TRILL) (ietf.org)
-6. RFC 8321 - Alternate-Marking Method for Passive and Hybrid Performance Monitoring (ietf.org)
-7. https://datatracker.ietf.org/doc/rfc6363
-8. https://www.etsi.org/deliver/etsi_tr/136900_136999/136933/14.00.00_60/tr_136933v140000p.pdf
-9. https://www.usenix.org/conference/atc17/technical-sessions/presentation/hoilan-jorgesen
-10. Low Latency DOCSIS® - CableLabs
-11. RFC 9330 - Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service - Architecture (ietf.org)
-12. RFC 9331 - The Explicit Congestion Notification (ECN) Protocol for Low Latency, Low Loss, and Scalable Throughput (L4S) (ietf.org)
-13. RFC 8999 - Version-Independent Properties of QUIC (rfc-editor.org)
-14. draft-meng-tsvwg-wireless-collaboration-00 (ietf.org)
 
 # Acknowledgments
 {:numbered="false"}
