@@ -65,18 +65,24 @@ informative:
     title: "Ending the Anomaly: Achieving Low Latency and Airtime Fairness in WiFi"
     target: https://www.usenix.org/system/files/conference/atc17/atc17-hoiland-jorgensen.pdf
     author:
-      - name: Toke H{\o}iland-J{\o}rgensen
-      - name: Micha{\l} Kazior
-      - name: Dave T{\"a}ht
-      - name: Per Hurtig
-      - name: Anna Brunstrom
+      -
+        name: Toke Høiland-Jørgensen
+      -
+        name: Michał Kazior
+      -
+        name: Dave Täht
+      -
+        name: Per Hurtig
+      -
+        name: Anna Brunstrom
     date: 2017-07-12
 
   docsis-ll:
     title: "Low Latency DOCSIS®"
     target: https://www.cablelabs.com/technologies/low-latency-docsis
     author:
-      - name: "CableLabs"
+      -
+        name: "CableLabs"
 
 --- abstract
 
