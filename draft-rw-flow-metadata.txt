@@ -1044,10 +1044,9 @@ Informative References
               DOI 10.17487/RFC9331, January 2023,
               <https://www.rfc-editor.org/rfc/rfc9331>.
 
-   [wifi-ll]  H{\o}iland-J{\o}rgensen, T., Kazior, M., T{\"a}ht, D.,
-              Hurtig, P., and A. Brunstrom, "Ending the Anomaly:
-              Achieving Low Latency and Airtime Fairness in WiFi", 12
-              July 2017,
+   [wifi-ll]  Høiland-Jørgensen, T., Kazior, M., Täht, D., Hurtig, P.,
+              and A. Brunstrom, "Ending the Anomaly: Achieving Low
+              Latency and Airtime Fairness in WiFi", 12 July 2017,
               <https://www.usenix.org/system/files/conference/atc17/
               atc17-hoiland-jorgensen.pdf>.
 
