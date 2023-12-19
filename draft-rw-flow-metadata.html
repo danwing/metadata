@@ -10,10 +10,13 @@
 <meta content="
        As part of host-to-network signaling, an entire flow can share the same
 metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata tha can be exchangd in such
-host-to-network signaling. 
+packets.  This document describes the metadata exchangd in a
+host-to-network signaling protocol in both binary and JSON. 
+       As part of network-to-host signaling, network metadata can be communicated
+to the host, allowing the host to modulate its requests to conform to
+the available network resources. 
     " name="description">
-<meta content="xml2rfc 3.18.2" name="generator">
+<meta content="xml2rfc 3.19.0" name="generator">
 <meta content="user experience" name="keyword">
 <meta content="bandwidth" name="keyword">
 <meta content="priority" name="keyword">
@@ -30,7 +33,7 @@ host-to-network signaling.
 <meta content="QUIC" name="keyword">
 <meta content="draft-rw-flow-metadata-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.2
+  xml2rfc 3.19.0
     Python 3.11.6
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -1083,8 +1086,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">As part of host-to-network signaling, an entire flow can share the same
 metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata tha can be exchangd in such
-host-to-network signaling.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+packets.  This document describes the metadata exchangd in a
+host-to-network signaling protocol in both binary and JSON.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">As part of network-to-host signaling, network metadata can be communicated
+to the host, allowing the host to modulate its requests to conform to
+the available network resources.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1160,7 +1166,7 @@ host-to-network signaling.<a href="#section-abstract-1" class="pilcrow">¶</a></
             <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-metadata-interpretation" class="internal xref">Metadata Interpretation</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-metadata-exchanged" class="internal xref">Metadata Exchanged</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-host-to-network-metadata" class="internal xref">Host to Network Metadata</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-priority" class="internal xref">Priority</a></p>
@@ -1185,66 +1191,69 @@ host-to-network signaling.<a href="#section-abstract-1" class="pilcrow">¶</a></
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-industrial-application-of-f" class="internal xref">Industrial Application of Flow Metadata</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-ease-of-adaptation-and-indu" class="internal xref">Ease of adaptation and Industrial significance:</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-network-to-host-metadata" class="internal xref">Network to Host Metadata</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-isp-implementation-of-metad" class="internal xref">ISP implementation of Metadata based optimization:</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-metadata-subscription" class="internal xref">Metadata Subscription</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-handling-preventing-misuse-" class="internal xref">Handling/Preventing misuse of metadata optimization:</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-ease-of-adaptation-and-indu" class="internal xref">Ease of adaptation and Industrial significance:</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-isp-implementation-of-metad" class="internal xref">ISP implementation of Metadata based optimization:</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-metadata-encryption" class="internal xref">Metadata Encryption</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-metadata-subscription" class="internal xref">Metadata Subscription</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-handling-preventing-misuse-" class="internal xref">Handling/Preventing misuse of metadata optimization:</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-metadata-encryption" class="internal xref">Metadata Encryption</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example-metadata-encoding" class="internal xref">Example Metadata Encoding</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-user-typing" class="internal xref">User typing</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-glyph-smoothing" class="internal xref">Glyph smoothing</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-print-job" class="internal xref">Print job</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-file-transfer" class="internal xref">File Transfer</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
-                <p id="section-toc.1-1.12.2.5.1"><a href="#appendix-A.5" class="auto internal xref">A.5</a>.  <a href="#name-voip" class="internal xref">VoIP</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example-metadata-encoding" class="internal xref">Example Metadata Encoding</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-user-typing" class="internal xref">User typing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-glyph-smoothing" class="internal xref">Glyph smoothing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
+                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-print-job" class="internal xref">Print job</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.4">
+                <p id="section-toc.1-1.13.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-file-transfer" class="internal xref">File Transfer</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.5">
+                <p id="section-toc.1-1.13.2.5.1"><a href="#appendix-A.5" class="auto internal xref">A.5</a>.  <a href="#name-voip" class="internal xref">VoIP</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1255,13 +1264,33 @@ host-to-network signaling.<a href="#section-abstract-1" class="pilcrow">¶</a></
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The advantages of both reliable <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and unreliable QUIC <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>
+<p id="section-1-1">Host-to-network metadata signaling has historically been performed by the sender setting
+DSCP bits ((add reference)).  While DSCP can express high priority (Expedited Forwarding <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>)
+and low priority (<span>[<a href="#RFC3662" class="cite xref">RFC3662</a>]</span>), DSCP bits are frequently ignored at congestion
+points or lost (stripped) during a packet's lifetime across the Internet.  Also, DSCP
+attempts influences the packet's treatment compared to all other packets from other
+hosts.  In contrast, the metadata desscribed by this document influences the treatment
+of all the packets in a flow (UDP 4-tuple) or individual packets within a single flow
+(UDP 4-tuple), rather than influencing treatment between flows belonging to different
+hosts.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Network-to-host metadata signaling has historically been performed by dropping packets or
+setting the ECN bit on packets.  Both of these techniques work well to consume
+the network's available bandwidth.  However, it is wasteful for the host to download
+streaming video at the full available bandwidth.  If the user abandons the video
+that downloaded data is wasted and it counts against the user's monthly data allotment.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">((need introductory text explaining the value and purpose of realtim/bulk and
+reliable/unreliable.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Is the separation of 'realtime/bulk' useful for a router?  What do we want it to
+do differently, considering we have priority??<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Is the separation of reliable/unreliable useful for a router?  What do we want it
+to do differently, considering we have priority??))<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">The advantages of both reliable <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and unreliable QUIC <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>
 will bring QUIC to displace TCP and bespoke UDP applications. Network elements
 have long been able to identify reliable flows between hosts as those are
 usually TCP flows; unreliable flows have been carried over UDP (e.g., VoIP,
 SIP signaling, NTP, DNS) and frequently use application-level retransmission to
-achieve some amount of reliability.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">There are several advatanges to an application using a single 5-tuple for
+achieve some amount of reliability.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">There are several advatanges to an application using a single 5-tuple for
 its communications with another host.  Multiplexing RTP and RTCP <span>[<a href="#RFC5761" class="cite xref">RFC5761</a>]</span>) was
 found advantageous, but fortunately those protocols are both realtime and have
 nearly-identical network scheduling requirements.  Another advantage is shared
@@ -1271,16 +1300,16 @@ from the sender across the Internet to the receiver's access network.  In the
 event the DSCP bits do survive, the sender's intended interpretation may not
 align with the receiving network's interpretation, or the receiving network
 may not honor those bits because the sender is (perceived) to lack authorization
-to influence the receiver's network treatment.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This document describes both per-flow and per-packet host-to-network signaling of
+to influence the receiver's network treatment.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">This document describes both per-flow and per-packet host-to-network signaling of
 packet metadata.  The metadata is carried in a host-to-network protocol that
 effectively creates a "pointer" (mapping) to the metadata such as <span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>
 or carries the metadata directly in the packet itself
-<span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">By providing a signaling mechanism that survives across the Internet,
+<span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">By providing a signaling mechanism that survives across the Internet,
 intermediaries can identify the nature of the packet without
-decryption and without understanding the application protocol.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">Data between two endpoints can be broadly classified into interactive
+decryption and without understanding the application protocol.<a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-10">Data between two endpoints can be broadly classified into interactive
 and non-interactive classes.  These are often in conflict, especially
 when carried in the same 5-tuple.  A network with constrained
 resources will have need to ECN-mark <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> or discard packets
@@ -1292,7 +1321,7 @@ bandwidth-consuming file transfer. By informing the network of the
 metadata of those packets, the network can discard packets belonging
 to the file transfer.  As the congestion control is affected by
 those discards, the realtime traffic can continue being sent but
-the file transfer can slow down.<a href="#section-1-5" class="pilcrow">¶</a></p>
+the file transfer can slow down.<a href="#section-1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1328,10 +1357,10 @@ a setting??<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">]]<a href="#section-3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="metadata-exchanged">
+<div id="host-to-network-metadata">
 <section id="section-4">
-      <h2 id="name-metadata-exchanged">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-metadata-exchanged" class="section-name selfRef">Metadata Exchanged</a>
+      <h2 id="name-host-to-network-metadata">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-host-to-network-metadata" class="section-name selfRef">Host to Network Metadata</a>
       </h2>
 <div id="priority">
 <section id="section-4.1">
@@ -1607,81 +1636,89 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
       </table>
 </section>
 </div>
-<div id="ease-of-adaptation-and-industrial-significance">
+<div id="network-to-host-metadata">
 <section id="section-6">
-      <h2 id="name-ease-of-adaptation-and-indu">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-ease-of-adaptation-and-indu" class="section-name selfRef">Ease of adaptation and Industrial significance:</a>
+      <h2 id="name-network-to-host-metadata">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-network-to-host-metadata" class="section-name selfRef">Network to Host Metadata</a>
       </h2>
-<p id="section-6-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references <span>[<a href="#ctx-aware" class="cite xref">ctx-aware</a>]</span> and <span>[<a href="#wifi-ll" class="cite xref">wifi-ll</a>]</span> can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-1">((video streaming bandwidth.  What else??))<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ease-of-adaptation-and-industrial-significance">
+<section id="section-7">
+      <h2 id="name-ease-of-adaptation-and-indu">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-ease-of-adaptation-and-indu" class="section-name selfRef">Ease of adaptation and Industrial significance:</a>
+      </h2>
+<p id="section-7-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references <span>[<a href="#ctx-aware" class="cite xref">ctx-aware</a>]</span> and <span>[<a href="#wifi-ll" class="cite xref">wifi-ll</a>]</span> can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:<a href="#section-7-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-3.1">
-          <p id="section-6-3.1.1">Explicit signals can help in deciding how to handle packets – queuing, routing etc.
-*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference <span>[<a href="#docsis-ll" class="cite xref">docsis-ll</a>]</span>. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7-3.1">
+          <p id="section-7-3.1.1">Explicit signals can help in deciding how to handle packets – queuing, routing etc.
+*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference <span>[<a href="#docsis-ll" class="cite xref">docsis-ll</a>]</span>. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-7-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-3.2">
-          <p id="section-6-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to <span>[<a href="#L4S" class="cite xref">L4S</a>]</span>.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-7-3.2">
+          <p id="section-7-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to <span>[<a href="#L4S" class="cite xref">L4S</a>]</span>.<a href="#section-7-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-3.3">
-          <p id="section-6-3.3.1"><span>[<a href="#L4S" class="cite xref">L4S</a>]</span> CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication <span>[<a href="#RFC9331" class="cite xref">RFC9331</a>]</span> can be added to the QUIC CID.<a href="#section-6-3.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-7-3.3">
+          <p id="section-7-3.3.1"><span>[<a href="#L4S" class="cite xref">L4S</a>]</span> CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication <span>[<a href="#RFC9331" class="cite xref">RFC9331</a>]</span> can be added to the QUIC CID.<a href="#section-7-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
 </div>
 <div id="isp-implementation-of-metadata-based-optimization">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-isp-implementation-of-metad">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-isp-implementation-of-metad" class="section-name selfRef">ISP implementation of Metadata based optimization:</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-isp-implementation-of-metad" class="section-name selfRef">ISP implementation of Metadata based optimization:</a>
       </h2>
 <div id="metadata-subscription">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-metadata-subscription">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-metadata-subscription" class="section-name selfRef">Metadata Subscription</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-metadata-subscription" class="section-name selfRef">Metadata Subscription</a>
         </h3>
-<p id="section-7.1-1">The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-7.1-2">
-<li id="section-7.1-2.1">
-            <p id="section-7.1-2.1.1">Client and ISP have token exchanges periodically. The token contains details on:<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.1-2">
+<li id="section-8.1-2.1">
+            <p id="section-8.1-2.1.1">Client and ISP have token exchanges periodically. The token contains details on:<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.1-2.1.2.1">
-                <p id="section-7.1-2.1.2.1.1">What time of traffic to be optimized.<a href="#section-7.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.1-2.1.2.1">
+                <p id="section-8.1-2.1.2.1.1">What time of traffic to be optimized.<a href="#section-8.1-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.1-2.1.2.2">
-                <p id="section-7.1-2.1.2.2.1">Optimization is to be done for how much bandwidth.<a href="#section-7.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.1.2.2">
+                <p id="section-8.1-2.1.2.2.1">Optimization is to be done for how much bandwidth.<a href="#section-8.1-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-7.1-2.2">
-            <p id="section-7.1-2.2.1">This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-8.1-2.2">
+            <p id="section-8.1-2.2.1">This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-7.1-2.3">
-            <p id="section-7.1-2.3.1">The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
+          <li id="section-8.1-2.3">
+            <p id="section-8.1-2.3.1">The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.1-2.3.2.1">
-                <p id="section-7.1-2.3.2.1.1">Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.<a href="#section-7.1-2.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.1-2.3.2.1">
+                <p id="section-8.1-2.3.2.1.1">Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.<a href="#section-8.1-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.1-2.3.2.2">
-                <p id="section-7.1-2.3.2.2.1">For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.<a href="#section-7.1-2.3.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.3.2.2">
+                <p id="section-8.1-2.3.2.2.1">For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.<a href="#section-8.1-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-7.1-2.4">
-            <p id="section-7.1-2.4.1">The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).<a href="#section-7.1-2.4.1" class="pilcrow">¶</a></p>
+          <li id="section-8.1-2.4">
+            <p id="section-8.1-2.4.1">The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
 </div>
 <div id="handlingpreventing-misuse-of-metadata-optimization">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-handling-preventing-misuse-">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-handling-preventing-misuse-" class="section-name selfRef">Handling/Preventing misuse of metadata optimization:</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-handling-preventing-misuse-" class="section-name selfRef">Handling/Preventing misuse of metadata optimization:</a>
         </h3>
-<ol start="1" type="1" class="normal type-1" id="section-7.2-1">
-<li id="section-7.2-1.1">
-            <p id="section-7.2-1.1.1">The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.<a href="#section-7.2-1.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.2-1">
+<li id="section-8.2-1.1">
+            <p id="section-8.2-1.1.1">The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.<a href="#section-8.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-7.2-1.2">
-            <p id="section-7.2-1.2.1">The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
+          <li id="section-8.2-1.2">
+            <p id="section-8.2-1.2.1">The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.<a href="#section-8.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -1689,42 +1726,42 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <div id="metadata-encryption">
-<section id="section-8.1">
+<section id="section-9.1">
         <h3 id="name-metadata-encryption">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-metadata-encryption" class="section-name selfRef">Metadata Encryption</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-metadata-encryption" class="section-name selfRef">Metadata Encryption</a>
         </h3>
-<p id="section-8.1-1">Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-8.1-2">
-<li id="section-8.1-2.1">
-            <p id="section-8.1-2.1.1">Obfuscation:<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-9.1-1">Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-9.1-2">
+<li id="section-9.1-2.1">
+            <p id="section-9.1-2.1.1">Obfuscation:<a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1-2.1.2.1">
-                <p id="section-8.1-2.1.2.1.1">Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.<a href="#section-8.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.1-2.1.2.1">
+                <p id="section-9.1-2.1.2.1.1">Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.<a href="#section-9.1-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-8.1-2.1.2.2">
-                <p id="section-8.1-2.1.2.2.1">Obfuscation mechanism can also be exchanged through the metadata handshake.<a href="#section-8.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-2.1.2.2">
+                <p id="section-9.1-2.1.2.2.1">Obfuscation mechanism can also be exchanged through the metadata handshake.<a href="#section-9.1-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-8.1-2.2">
-            <p id="section-8.1-2.2.1">Encryption:<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-9.1-2.2">
+            <p id="section-9.1-2.2.1">Encryption:<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1-2.2.2.1">
-                <p id="section-8.1-2.2.2.1.1">Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.<a href="#section-8.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.1-2.2.2.1">
+                <p id="section-9.1-2.2.2.1.1">Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.<a href="#section-9.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-8.1-2.2.2.2">
-                <p id="section-8.1-2.2.2.2.1">The standard algorithm used to derive the key can be exchanged during the metadata handshake.<a href="#section-8.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-2.2.2.2">
+                <p id="section-9.1-2.2.2.2.1">The standard algorithm used to derive the key can be exchanged during the metadata handshake.<a href="#section-9.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-8.1-2.2.2.3">
-                <p id="section-8.1-2.2.2.3.1">The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).<a href="#section-8.1-2.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-2.2.2.3">
+                <p id="section-9.1-2.2.2.3.1">The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).<a href="#section-9.1-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-8.1-2.2.2.4">
-                <p id="section-8.1-2.2.2.4.1">The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.<a href="#section-8.1-2.2.2.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-9.1-2.2.2.4">
+                <p id="section-9.1-2.2.2.4.1">The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.<a href="#section-9.1-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1734,27 +1771,27 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-9-1">None.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">None.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-10-1">To be completed.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">To be completed.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-normative-references">
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
@@ -1771,7 +1808,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-11.2">
+<section id="section-12.2">
         <h3 id="name-informative-references">
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
@@ -1811,6 +1848,14 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 <dt id="RFC3168">[RFC3168]</dt>
         <dd>
 <span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3246">[RFC3246]</dt>
+        <dd>
+<span class="refAuthor">Davie, B.</span>, <span class="refAuthor">Charny, A.</span>, <span class="refAuthor">Bennet, J.C.R.</span>, <span class="refAuthor">Benson, K.</span>, <span class="refAuthor">Le Boudec, J.Y.</span>, <span class="refAuthor">Courtney, W.</span>, <span class="refAuthor">Davari, S.</span>, <span class="refAuthor">Firoiu, V.</span>, and <span class="refAuthor">D. Stiliadis</span>, <span class="refTitle">"An Expedited Forwarding PHB (Per-Hop Behavior)"</span>, <span class="seriesInfo">RFC 3246</span>, <span class="seriesInfo">DOI 10.17487/RFC3246</span>, <time datetime="2002-03" class="refDate">March 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3246">https://www.rfc-editor.org/rfc/rfc3246</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3662">[RFC3662]</dt>
+        <dd>
+<span class="refAuthor">Bless, R.</span>, <span class="refAuthor">Nichols, K.</span>, and <span class="refAuthor">K. Wehrle</span>, <span class="refTitle">"A Lower Effort Per-Domain Behavior (PDB) for Differentiated Services"</span>, <span class="seriesInfo">RFC 3662</span>, <span class="seriesInfo">DOI 10.17487/RFC3662</span>, <time datetime="2003-12" class="refDate">December 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3662">https://www.rfc-editor.org/rfc/rfc3662</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5761">[RFC5761]</dt>
         <dd>

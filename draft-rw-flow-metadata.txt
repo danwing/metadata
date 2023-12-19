@@ -15,8 +15,12 @@ Abstract
 
    As part of host-to-network signaling, an entire flow can share the
    same metadata or certain packets can have certain metadata associated
-   with those packets.  This document describes the metadata tha can be
-   exchangd in such host-to-network signaling.
+   with those packets.  This document describes the metadata exchangd in
+   a host-to-network signaling protocol in both binary and JSON.
+
+   As part of network-to-host signaling, network metadata can be
+   communicated to the host, allowing the host to modulate its requests
+   to conform to the available network resources.
 
 About This Document
 
@@ -71,20 +75,21 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Metadata Interpretation
-   4.  Metadata Exchanged
+   4.  Host to Network Metadata
      4.1.  Priority
      4.2.  Reliable/Unreliable
      4.3.  Realtime/Bulk
        4.3.1.  Reliable Traffic
        4.3.2.  Unreliable Traffic Loss-Tolerant
    5.  Industrial Application of Flow Metadata
-   6.  Ease of adaptation and Industrial significance:
-   7.  ISP implementation of Metadata based optimization:
-     7.1.  Metadata Subscription
-     7.2.  Handling/Preventing misuse of metadata optimization:
-   8.  Security Considerations
-     8.1.  Metadata Encryption
-   9.  IANA Considerations
+   6.  Network to Host Metadata
+   7.  Ease of adaptation and Industrial significance:
+   8.  ISP implementation of Metadata based optimization:
+     8.1.  Metadata Subscription
+     8.2.  Handling/Preventing misuse of metadata optimization:
+   9.  Security Considerations
+     9.1.  Metadata Encryption
+   10. IANA Considerations
    Acknowledgments
    References
      Normative References
@@ -98,6 +103,35 @@ Table of Contents
    Authors' Addresses
 
 1.  Introduction
+
+   Host-to-network metadata signaling has historically been performed by
+   the sender setting DSCP bits ((add reference)).  While DSCP can
+   express high priority (Expedited Forwarding [RFC3246]) and low
+   priority ([RFC3662]), DSCP bits are frequently ignored at congestion
+   points or lost (stripped) during a packet's lifetime across the
+   Internet.  Also, DSCP attempts influences the packet's treatment
+   compared to all other packets from other hosts.  In contrast, the
+   metadata desscribed by this document influences the treatment of all
+   the packets in a flow (UDP 4-tuple) or individual packets within a
+   single flow (UDP 4-tuple), rather than influencing treatment between
+   flows belonging to different hosts.
+
+   Network-to-host metadata signaling has historically been performed by
+   dropping packets or setting the ECN bit on packets.  Both of these
+   techniques work well to consume the network's available bandwidth.
+   However, it is wasteful for the host to download streaming video at
+   the full available bandwidth.  If the user abandons the video that
+   downloaded data is wasted and it counts against the user's monthly
+   data allotment.
+
+   ((need introductory text explaining the value and purpose of realtim/
+   bulk and reliable/unreliable.
+
+   Is the separation of 'realtime/bulk' useful for a router?  What do we
+   want it to do differently, considering we have priority??
+
+   Is the separation of reliable/unreliable useful for a router?  What
+   do we want it to do differently, considering we have priority??))
 
    The advantages of both reliable [QUIC] and unreliable QUIC [RFC9221]
    will bring QUIC to displace TCP and bespoke UDP applications.
@@ -174,7 +208,7 @@ Table of Contents
 
    ]]
 
-4.  Metadata Exchanged
+4.  Host to Network Metadata
 
 4.1.  Priority
 
@@ -569,7 +603,11 @@ Table of Contents
 
                                   Table 4
 
-6.  Ease of adaptation and Industrial significance:
+6.  Network to Host Metadata
+
+   ((video streaming bandwidth.  What else??))
+
+7.  Ease of adaptation and Industrial significance:
 
    The current proposal can be extended to radio and WiFi protocols as
    well.  The currently provided CID metadata can be used to obtain the
@@ -603,9 +641,9 @@ Table of Contents
       network nodes.  The L4S indication [RFC9331] can be added to the
       QUIC CID.
 
-7.  ISP implementation of Metadata based optimization:
+8.  ISP implementation of Metadata based optimization:
 
-7.1.  Metadata Subscription
+8.1.  Metadata Subscription
 
    The ISP can provide the metadata optimization as an enhanced feature
    that the client can subscribe to, for a fee.
@@ -645,7 +683,7 @@ Table of Contents
        they are away from keyboard or not playing to conserve the
        allocated optimization bandwidth).
 
-7.2.  Handling/Preventing misuse of metadata optimization:
+8.2.  Handling/Preventing misuse of metadata optimization:
 
    1.  The ISP, now aware of the nature of optimization, can now look at
        the Metadata and prioritize accordingly.  If the ISP sees the
@@ -657,9 +695,9 @@ Table of Contents
    2.  The client also has the option to decline optimization through
        the handshake or at any point if it detects any misuse.
 
-8.  Security Considerations
+9.  Security Considerations
 
-8.1.  Metadata Encryption
+9.1.  Metadata Encryption
 
    Encryption/Obfuscation of metadata is vital to prevent attackers from
    knowing the nature of the packet, since CID lies outside the DTLS
@@ -692,7 +730,7 @@ Table of Contents
           used to exchange tokens) and ISP can push the token to the
           intermediary nodes through internal command protocol.
 
-9.  IANA Considerations
+10.  IANA Considerations
 
    None.
 
@@ -769,6 +807,17 @@ Informative References
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
+
+   [RFC3246]  Davie, B., Charny, A., Bennet, J.C.R., Benson, K., Le
+              Boudec, J.Y., Courtney, W., Davari, S., Firoiu, V., and D.
+              Stiliadis, "An Expedited Forwarding PHB (Per-Hop
+              Behavior)", RFC 3246, DOI 10.17487/RFC3246, March 2002,
+              <https://www.rfc-editor.org/rfc/rfc3246>.
+
+   [RFC3662]  Bless, R., Nichols, K., and K. Wehrle, "A Lower Effort
+              Per-Domain Behavior (PDB) for Differentiated Services",
+              RFC 3662, DOI 10.17487/RFC3662, December 2003,
+              <https://www.rfc-editor.org/rfc/rfc3662>.
 
    [RFC5761]  Perkins, C. and M. Westerlund, "Multiplexing RTP Data and
               Control Packets on a Single Port", RFC 5761,
