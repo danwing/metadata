@@ -88,12 +88,51 @@ informative:
 
 As part of host-to-network signaling, an entire flow can share the same
 metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata tha can be exchangd in such
-host-to-network signaling.
+packets.  This document describes the metadata exchangd in a
+host-to-network signaling protocol in both binary and JSON.
+
+As part of network-to-host signaling, network metadata can be communicated
+to the host, allowing the host to modulate its requests to conform to
+the available network resources.
 
 --- middle
 
 # Introduction
+
+Host-to-network metadata signaling has historically been performed by the sender setting
+DSCP bits ((add reference)).  While DSCP can express high priority (Expedited Forwarding {{?RFC3246}})
+and low priority ({{?RFC3662}}), DSCP bits are frequently ignored at congestion
+points or lost (stripped) during a packet's lifetime across the Internet.  Also, DSCP
+attempts influences the packet's treatment compared to all other packets from other
+hosts.  In contrast, the metadata desscribed by this document influences the treatment
+of all the packets in a flow (UDP 4-tuple) or individual packets within a single flow
+(UDP 4-tuple), rather than influencing treatment between flows belonging to different
+hosts.
+
+Network-to-host metadata signaling has historically been performed by dropping packets or
+setting the ECN bit on packets.  Both of these techniques work well to consume
+the network's available bandwidth.  However, it is wasteful for the host to download
+streaming video at the full available bandwidth.  If the user abandons the video
+that downloaded data is wasted and it counts against the user's monthly data allotment.
+
+
+
+((need introductory text explaining the value and purpose of realtim/bulk and
+reliable/unreliable.
+
+Is the separation of 'realtime/bulk' useful for a router?  What do we want it to
+do differently, considering we have priority??
+
+Is the separation of reliable/unreliable useful for a router?  What do we want it
+to do differently, considering we have priority??))
+
+
+
+
+
+
+
+
 
 The advantages of both reliable {{?QUIC=RFC9000}} and unreliable QUIC {{?RFC9221}}
 will bring QUIC to displace TCP and bespoke UDP applications. Network elements
@@ -156,7 +195,7 @@ a setting??
 
 ]]
 
-# Metadata Exchanged
+# Host to Network Metadata
 
 ## Priority
 
@@ -277,6 +316,11 @@ Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and
 | Print job | bulk | Reliable | Medium (1) |   |
 | File copy | bulk | Reliable | Low (0) |  |
 | VoIP | real-time | Loss-tolerant (loss is harmful to UX) | Medium-High (2) |   |
+
+
+# Network to Host Metadata
+
+((video streaming bandwidth.  What else??))
 
 
 
