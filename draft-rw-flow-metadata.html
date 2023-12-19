@@ -8,10 +8,10 @@
 <meta content="Sridharan Rajagopalan" name="author">
 <meta content="Dan Wing" name="author">
 <meta content="
-       Metadata about packet importance is useful to signal to network components. 
-       Including metadata (MD) in a QUIC CID, along with some heuristics and QoS measurements at the router (in-band and out-of-band) can considerably improve user experience. Appropriate data paths can be chosen based on nature of the traffic and loss can be proactively handled between the intermediary nodes avoiding end-to-end retransmissions as much as possible. This document describes how to exchange metadata in JSON which can be
-mapped to a Connection Identifier (CID), and how that same metadata can
-be carried in each packet as a UDP option. 
+       As part of host-to-network signaling, an entire flow can share the same
+metadata or certain packets can have certain metadata associated with those
+packets.  This document describes the metadata tha can be exchangd in such
+host-to-network signaling. 
     " name="description">
 <meta content="xml2rfc 3.18.2" name="generator">
 <meta content="user experience" name="keyword">
@@ -1046,7 +1046,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 20 June 2024</td>
+<td class="center">Expires 21 June 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1059,12 +1059,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-12-18" class="published">18 December 2023</time>
+<time datetime="2023-12-19" class="published">19 December 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-06-20">20 June 2024</time></dd>
+<dd class="expires"><time datetime="2024-06-21">21 June 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1081,10 +1081,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Flow Metadata</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Metadata about packet importance is useful to signal to network components.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">Including metadata (MD) in a QUIC CID, along with some heuristics and QoS measurements at the router (in-band and out-of-band) can considerably improve user experience. Appropriate data paths can be chosen based on nature of the traffic and loss can be proactively handled between the intermediary nodes avoiding end-to-end retransmissions as much as possible. This document describes how to exchange metadata in JSON which can be
-mapped to a Connection Identifier (CID), and how that same metadata can
-be carried in each packet as a UDP option.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">As part of host-to-network signaling, an entire flow can share the same
+metadata or certain packets can have certain metadata associated with those
+packets.  This document describes the metadata tha can be exchangd in such
+host-to-network signaling.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1121,7 +1121,7 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 June 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1154,103 +1154,97 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
             <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-metadata-interpretation" class="internal xref">Metadata Interpretation</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-qos-measurement" class="internal xref">QoS Measurement</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-metadata-design" class="internal xref">Metadata Design</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-metadata-interpretation" class="internal xref">Metadata Interpretation</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-metadata-exchanged" class="internal xref">Metadata exchanged</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-metadata-exchanged" class="internal xref">Metadata Exchanged</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-metadata-hanshake" class="internal xref">Metadata Hanshake</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-priority" class="internal xref">Priority</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-metadata-structure-for-diff" class="internal xref">Metadata structure for different types of traffic</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-reliable-unreliable" class="internal xref">Reliable/Unreliable</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-realtime-bulk" class="internal xref">Realtime/Bulk</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
-                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-reliable" class="internal xref">Reliable</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.1">
+                    <p id="section-toc.1-1.4.2.3.2.1.1"><a href="#section-4.3.1" class="auto internal xref">4.3.1</a>.  <a href="#name-reliable-traffic" class="internal xref">Reliable Traffic</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-loss-tolerant" class="internal xref">Loss-Tolerant</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.2">
+                    <p id="section-toc.1-1.4.2.3.2.2.1"><a href="#section-4.3.2" class="auto internal xref">4.3.2</a>.  <a href="#name-unreliable-traffic-loss-tol" class="internal xref">Unreliable Traffic Loss-Tolerant</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-industrial-application-of-f" class="internal xref">Industrial Application of Flow Metadata</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-industrial-application-of-f" class="internal xref">Industrial Application of Flow Metadata</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-metadata-encoding" class="internal xref">Metadata Encoding</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-ease-of-adaptation-and-indu" class="internal xref">Ease of adaptation and Industrial significance:</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-isp-implementation-of-metad" class="internal xref">ISP implementation of Metadata based optimization:</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-user-typing" class="internal xref">User typing</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-metadata-subscription" class="internal xref">Metadata Subscription</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-glyph-smoothing" class="internal xref">Glyph smoothing</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-print-job" class="internal xref">Print job</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-file-transfer" class="internal xref">File Transfer</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.5">
-                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="auto internal xref">9.5</a>.  <a href="#name-voip" class="internal xref">VoIP</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-handling-preventing-misuse-" class="internal xref">Handling/Preventing misuse of metadata optimization:</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-metadata-encryption" class="internal xref">Metadata Encryption</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-ease-of-adaptation-and-indu" class="internal xref">Ease of adaptation and Industrial significance:</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-isp-implementation-of-metad" class="internal xref">ISP implementation of Metadata based optimization:</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-metadata-subscription" class="internal xref">Metadata Subscription</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-handling-preventing-misuse-" class="internal xref">Handling/Preventing misuse of metadata optimization:</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example-metadata-encoding" class="internal xref">Example Metadata Encoding</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-metadata-encryption" class="internal xref">Metadata Encryption</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-user-typing" class="internal xref">User typing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-glyph-smoothing" class="internal xref">Glyph smoothing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
+                <p id="section-toc.1-1.12.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-print-job" class="internal xref">Print job</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
+                <p id="section-toc.1-1.12.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-file-transfer" class="internal xref">File Transfer</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
+                <p id="section-toc.1-1.12.2.5.1"><a href="#appendix-A.5" class="auto internal xref">A.5</a>.  <a href="#name-voip" class="internal xref">VoIP</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
-                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
-                <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
-</li>
-            </ul>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1261,459 +1255,136 @@ be carried in each packet as a UDP option.<a href="#section-abstract-2" class="p
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">In today's network, packet prioritization and proactive loss management is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.<a href="#section-1-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="overview">
-<section id="section-2">
-      <h2 id="name-overview">
-<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
-      </h2>
-<p id="section-2-1">This document briefs over items that can work together to improve network performance drastically. Although this need not necessarily be confined to QUIC, we want to discuss how QUIC has the capability to make it more efficient and effective. The broad items:<a href="#section-2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2-2.1">
-          <p id="section-2-2.1.1">Measuring QoS between two network nodes (at least one of it being "cid-aware"). QoS measurement at IP layer with minimal interface to transport layer, leaving an option to make it transport agnostic.<a href="#section-2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.2">
-          <p id="section-2-2.2.1">QoS can be in-band, for "cid-aware" nodes, and out-of-band using loopback protocols if one of the nodes is not "cid-aware".<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.3">
-          <p id="section-2-2.3.1">Explicit signaling is vital since there is no way to know the nature of a packet today – if it's a key frame or if it's part of a lossy subchannel. The intermediaries more often can't make an informed, intelligent and a useful decision without the metadata, even after having all the QoS measurements and heuristics in place.<a href="#section-2-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.4">
-          <p id="section-2-2.4.1">QUIC CIDs lying outside of DTLS encryption is an added advantage - gives ease of access.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.5">
-          <p id="section-2-2.5.1">Using the above information to successfully identify loss prone nodes in a network and come up with efficient heuristics to handle packet transmission between these nodes themselves, instead of propagating it end to end, to achieve better network performance with minimal impact on processing and bandwidth.<a href="#section-2-2.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.6">
-          <p id="section-2-2.6.1">The computation is simple and can be confined to the link cards and not required to go to the CPU.<a href="#section-2-2.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-2-2.7">
-          <p id="section-2-2.7.1">Not all the network elements will be intelligent (cid-aware) but even if we have a few of them, we could still achieve better performance by proactively avoiding end-to-end retransmissions between the "cid-aware" nodes.<a href="#section-2-2.7.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<span id="name-candidate-design-approaches"></span><div id="design-approaches">
-<figure id="figure-1">
-        <div id="section-2-3.1">
-          <div class="alignCenter art-svg artwork" id="section-2-3.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="432" width="552" viewBox="0 0 552 432" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 8,80 L 8,112" fill="none" stroke="black"></path>
-              <path d="M 8,256 L 8,288" fill="none" stroke="black"></path>
-              <path d="M 40,112 L 40,176" fill="none" stroke="black"></path>
-              <path d="M 40,288 L 40,416" fill="none" stroke="black"></path>
-              <path d="M 64,80 L 64,112" fill="none" stroke="black"></path>
-              <path d="M 64,256 L 64,288" fill="none" stroke="black"></path>
-              <path d="M 184,64 L 184,88" fill="none" stroke="black"></path>
-              <path d="M 184,104 L 184,112" fill="none" stroke="black"></path>
-              <path d="M 208,240 L 208,264" fill="none" stroke="black"></path>
-              <path d="M 208,280 L 208,288" fill="none" stroke="black"></path>
-              <path d="M 256,128 L 256,144" fill="none" stroke="black"></path>
-              <path d="M 280,304 L 280,368" fill="none" stroke="black"></path>
-              <path d="M 320,64 L 320,88" fill="none" stroke="black"></path>
-              <path d="M 320,104 L 320,112" fill="none" stroke="black"></path>
-              <path d="M 344,240 L 344,264" fill="none" stroke="black"></path>
-              <path d="M 344,280 L 344,288" fill="none" stroke="black"></path>
-              <path d="M 440,80 L 440,112" fill="none" stroke="black"></path>
-              <path d="M 456,64 L 456,80" fill="none" stroke="black"></path>
-              <path d="M 456,256 L 456,288" fill="none" stroke="black"></path>
-              <path d="M 472,48 L 472,64" fill="none" stroke="black"></path>
-              <path d="M 472,112 L 472,176" fill="none" stroke="black"></path>
-              <path d="M 472,240 L 472,256" fill="none" stroke="black"></path>
-              <path d="M 488,224 L 488,240" fill="none" stroke="black"></path>
-              <path d="M 488,288 L 488,416" fill="none" stroke="black"></path>
-              <path d="M 496,80 L 496,112" fill="none" stroke="black"></path>
-              <path d="M 512,64 L 512,96" fill="none" stroke="black"></path>
-              <path d="M 512,256 L 512,288" fill="none" stroke="black"></path>
-              <path d="M 528,48 L 528,80" fill="none" stroke="black"></path>
-              <path d="M 528,240 L 528,272" fill="none" stroke="black"></path>
-              <path d="M 544,224 L 544,256" fill="none" stroke="black"></path>
-              <path d="M 200,48 L 304,48" fill="none" stroke="black"></path>
-              <path d="M 472,48 L 528,48" fill="none" stroke="black"></path>
-              <path d="M 456,64 L 512,64" fill="none" stroke="black"></path>
-              <path d="M 8,80 L 64,80" fill="none" stroke="black"></path>
-              <path d="M 440,80 L 496,80" fill="none" stroke="black"></path>
-              <path d="M 512,80 L 528,80" fill="none" stroke="black"></path>
-              <path d="M 64,96 L 440,96" fill="none" stroke="black"></path>
-              <path d="M 496,96 L 512,96" fill="none" stroke="black"></path>
-              <path d="M 8,112 L 64,112" fill="none" stroke="black"></path>
-              <path d="M 440,112 L 496,112" fill="none" stroke="black"></path>
-              <path d="M 200,128 L 304,128" fill="none" stroke="black"></path>
-              <path d="M 48,158 L 72,158" fill="none" stroke="black"></path>
-              <path d="M 48,162 L 72,162" fill="none" stroke="black"></path>
-              <path d="M 224,158 L 288,158" fill="none" stroke="black"></path>
-              <path d="M 224,162 L 288,162" fill="none" stroke="black"></path>
-              <path d="M 440,158 L 464,158" fill="none" stroke="black"></path>
-              <path d="M 440,162 L 464,162" fill="none" stroke="black"></path>
-              <path d="M 224,224 L 328,224" fill="none" stroke="black"></path>
-              <path d="M 488,224 L 544,224" fill="none" stroke="black"></path>
-              <path d="M 472,240 L 528,240" fill="none" stroke="black"></path>
-              <path d="M 8,256 L 64,256" fill="none" stroke="black"></path>
-              <path d="M 456,256 L 512,256" fill="none" stroke="black"></path>
-              <path d="M 528,256 L 544,256" fill="none" stroke="black"></path>
-              <path d="M 64,272 L 456,272" fill="none" stroke="black"></path>
-              <path d="M 512,272 L 528,272" fill="none" stroke="black"></path>
-              <path d="M 8,288 L 64,288" fill="none" stroke="black"></path>
-              <path d="M 456,288 L 512,288" fill="none" stroke="black"></path>
-              <path d="M 224,304 L 328,304" fill="none" stroke="black"></path>
-              <path d="M 48,336 L 120,336" fill="none" stroke="black"></path>
-              <path d="M 208,336 L 272,336" fill="none" stroke="black"></path>
-              <path d="M 48,382 L 64,382" fill="none" stroke="black"></path>
-              <path d="M 48,386 L 64,386" fill="none" stroke="black"></path>
-              <path d="M 464,382 L 480,382" fill="none" stroke="black"></path>
-              <path d="M 464,386 L 480,386" fill="none" stroke="black"></path>
-              <path d="M 200,48 C 191.16936,48 184,55.16936 184,64" fill="none" stroke="black"></path>
-              <path d="M 304,48 C 312.83064,48 320,55.16936 320,64" fill="none" stroke="black"></path>
-              <path d="M 200,128 C 191.16936,128 184,120.83064 184,112" fill="none" stroke="black"></path>
-              <path d="M 304,128 C 312.83064,128 320,120.83064 320,112" fill="none" stroke="black"></path>
-              <path d="M 224,224 C 215.16936,224 208,231.16936 208,240" fill="none" stroke="black"></path>
-              <path d="M 328,224 C 336.83064,224 344,231.16936 344,240" fill="none" stroke="black"></path>
-              <path d="M 224,304 C 215.16936,304 208,296.83064 208,288" fill="none" stroke="black"></path>
-              <path d="M 328,304 C 336.83064,304 344,296.83064 344,288" fill="none" stroke="black"></path>
-              <polygon class="arrowhead" points="488,384 476,378.4 476,389.6" fill="black" transform="rotate(0,480,384)"></polygon>
-              <polygon class="arrowhead" points="472,160 460,154.4 460,165.6" fill="black" transform="rotate(0,464,160)"></polygon>
-              <path class="jump" d="M 344,280 C 338,280 338,264 344,264" fill="none" stroke="black"></path>
-              <path class="jump" d="M 320,104 C 314,104 314,88 320,88" fill="none" stroke="black"></path>
-              <polygon class="arrowhead" points="280,336 268,330.4 268,341.6" fill="black" transform="rotate(0,272,336)"></polygon>
-              <path class="jump" d="M 208,280 C 214,280 214,264 208,264" fill="none" stroke="black"></path>
-              <path class="jump" d="M 184,104 C 190,104 190,88 184,88" fill="none" stroke="black"></path>
-              <polygon class="arrowhead" points="56,384 44,378.4 44,389.6" fill="black" transform="rotate(180,48,384)"></polygon>
-              <polygon class="arrowhead" points="56,336 44,330.4 44,341.6" fill="black" transform="rotate(180,48,336)"></polygon>
-              <polygon class="arrowhead" points="56,160 44,154.4 44,165.6" fill="black" transform="rotate(180,48,160)"></polygon>
-              <g class="text">
-                <text x="16" y="36">(1)</text>
-                <text x="72" y="36">Proxied</text>
-                <text x="148" y="36">Connection</text>
-                <text x="252" y="84">Network(s)</text>
-                <text x="36" y="100">Client</text>
-                <text x="468" y="100">Server</text>
-                <text x="92" y="164">User</text>
-                <text x="168" y="164">Data+Metadata</text>
-                <text x="308" y="164">User</text>
-                <text x="384" y="164">Data+Metadata</text>
-                <text x="256" y="180">|</text>
-                <text x="16" y="212">(2)</text>
-                <text x="100" y="212">Client-centric</text>
-                <text x="196" y="212">Metadata</text>
-                <text x="264" y="212">Sharing</text>
-                <text x="276" y="260">Network(s)</text>
-                <text x="36" y="276">Client</text>
-                <text x="484" y="276">Server</text>
-                <text x="164" y="340">Metadata</text>
-                <text x="132" y="356">Secure</text>
-                <text x="204" y="356">Connection</text>
-                <text x="116" y="388">End-to-End</text>
-                <text x="188" y="388">Secure</text>
-                <text x="260" y="388">Connection</text>
-                <text x="324" y="388">User</text>
-                <text x="364" y="388">Data</text>
-                <text x="404" y="388">with</text>
-                <text x="284" y="404">Metadata</text>
-                <text x="280" y="420">|</text>
-              </g>
-            </svg><a href="#section-2-3.1.1" class="pilcrow">¶</a>
-</div>
-</div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-candidate-design-approaches" class="selfRef">Candidate Design Approaches</a>
-        </figcaption></figure>
-</div>
-<p id="section-2-4"><a href="#fig-arch" class="auto internal xref">Figure 2</a> provides a sample network diagram of a Metadata system showing two bandwidth-constrained networks (or links) depicted by "B" and Metadata-aware devices immediately upstream of those links, and another bandwidth-constrained link between a smartphone handset and its Radio Access Network (RAN).  This diagram shows the same protocol and same mechanism can operate with or without 5G, and can operate with different administrative domains such as Wi-Fi, an ISP edge router, and a 5G RAN.<a href="#section-2-4" class="pilcrow">¶</a></p>
-<p id="section-2-5">For the sake of illustration, <a href="#fig-arch" class="auto internal xref">Figure 2</a> simplifies the representation
-of the various involved network segments. It also assumes that multiple
-server instances are enabled in the server network but the document
-does not make any assumption about the internal structure of the service
-nor how a flow is processed by or steered to a service instance. However,
-CIDFI includes provisions to ensure that the service instance that is
-selected to service a client request is the same instance that will
-receive CIDFI metadata for that client.<a href="#section-2-5" class="pilcrow">¶</a></p>
-<span id="name-network-diagram"></span><div id="fig-arch">
-<figure id="figure-2">
-        <div id="section-2-6.1">
-          <div class="alignCenter art-svg artwork" id="section-2-6.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="336" width="584" viewBox="0 0 584 336" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-              <path d="M 8,48 L 8,128" fill="none" stroke="black"></path>
-              <path d="M 8,192 L 8,272" fill="none" stroke="black"></path>
-              <path d="M 72,48 L 72,128" fill="none" stroke="black"></path>
-              <path d="M 104,48 L 104,160" fill="none" stroke="black"></path>
-              <path d="M 104,192 L 104,272" fill="none" stroke="black"></path>
-              <path d="M 176,48 L 176,160" fill="none" stroke="black"></path>
-              <path d="M 192,32 L 192,80" fill="none" stroke="black"></path>
-              <path d="M 192,112 L 192,232" fill="none" stroke="black"></path>
-              <path d="M 192,248 L 192,320" fill="none" stroke="black"></path>
-              <path d="M 208,48 L 208,144" fill="none" stroke="black"></path>
-              <path d="M 208,192 L 208,272" fill="none" stroke="black"></path>
-              <path d="M 280,48 L 280,144" fill="none" stroke="black"></path>
-              <path d="M 280,192 L 280,272" fill="none" stroke="black"></path>
-              <path d="M 296,96 L 296,128" fill="none" stroke="black"></path>
-              <path d="M 296,224 L 296,256" fill="none" stroke="black"></path>
-              <path d="M 352,96 L 352,128" fill="none" stroke="black"></path>
-              <path d="M 352,224 L 352,256" fill="none" stroke="black"></path>
-              <path d="M 368,32 L 368,104" fill="none" stroke="black"></path>
-              <path d="M 368,120 L 368,232" fill="none" stroke="black"></path>
-              <path d="M 368,248 L 368,320" fill="none" stroke="black"></path>
-              <path d="M 384,160 L 384,192" fill="none" stroke="black"></path>
-              <path d="M 400,112 L 400,160" fill="none" stroke="black"></path>
-              <path d="M 400,192 L 400,240" fill="none" stroke="black"></path>
-              <path d="M 440,160 L 440,192" fill="none" stroke="black"></path>
-              <path d="M 456,32 L 456,168" fill="none" stroke="black"></path>
-              <path d="M 456,184 L 456,320" fill="none" stroke="black"></path>
-              <path d="M 472,128 L 472,224" fill="none" stroke="black"></path>
-              <path d="M 544,128 L 544,224" fill="none" stroke="black"></path>
-              <path d="M 560,112 L 560,208" fill="none" stroke="black"></path>
-              <path d="M 576,96 L 576,192" fill="none" stroke="black"></path>
-              <path d="M 8,48 L 72,48" fill="none" stroke="black"></path>
-              <path d="M 104,48 L 176,48" fill="none" stroke="black"></path>
-              <path d="M 208,48 L 280,48" fill="none" stroke="black"></path>
-              <path d="M 296,96 L 352,96" fill="none" stroke="black"></path>
-              <path d="M 496,96 L 576,96" fill="none" stroke="black"></path>
-              <path d="M 280,112 L 296,112" fill="none" stroke="black"></path>
-              <path d="M 352,112 L 400,112" fill="none" stroke="black"></path>
-              <path d="M 488,112 L 560,112" fill="none" stroke="black"></path>
-              <path d="M 8,128 L 72,128" fill="none" stroke="black"></path>
-              <path d="M 296,128 L 352,128" fill="none" stroke="black"></path>
-              <path d="M 472,128 L 544,128" fill="none" stroke="black"></path>
-              <path d="M 208,144 L 280,144" fill="none" stroke="black"></path>
-              <path d="M 104,160 L 176,160" fill="none" stroke="black"></path>
-              <path d="M 384,160 L 440,160" fill="none" stroke="black"></path>
-              <path d="M 440,176 L 472,176" fill="none" stroke="black"></path>
-              <path d="M 8,192 L 104,192" fill="none" stroke="black"></path>
-              <path d="M 208,192 L 280,192" fill="none" stroke="black"></path>
-              <path d="M 384,192 L 440,192" fill="none" stroke="black"></path>
-              <path d="M 296,224 L 352,224" fill="none" stroke="black"></path>
-              <path d="M 472,224 L 544,224" fill="none" stroke="black"></path>
-              <path d="M 104,240 L 144,240" fill="none" stroke="black"></path>
-              <path d="M 160,240 L 208,240" fill="none" stroke="black"></path>
-              <path d="M 280,240 L 296,240" fill="none" stroke="black"></path>
-              <path d="M 352,240 L 400,240" fill="none" stroke="black"></path>
-              <path d="M 296,256 L 352,256" fill="none" stroke="black"></path>
-              <path d="M 8,272 L 104,272" fill="none" stroke="black"></path>
-              <path d="M 208,272 L 280,272" fill="none" stroke="black"></path>
-              <path d="M 496,96 C 487.16936,96 480,103.16936 480,112" fill="none" stroke="black"></path>
-              <path d="M 488,112 C 479.16936,112 472,119.16936 472,128" fill="none" stroke="black"></path>
-              <g class="text">
-                <text x="32" y="68">Meta-</text>
-                <text x="128" y="68">Meta-</text>
-                <text x="244" y="68">Metadata</text>
-                <text x="28" y="84">data</text>
-                <text x="124" y="84">data</text>
-                <text x="32" y="100">aware</text>
-                <text x="88" y="100">-B-</text>
-                <text x="128" y="100">aware</text>
-                <text x="192" y="100">-B-</text>
-                <text x="232" y="100">aware</text>
-                <text x="36" y="116">client</text>
-                <text x="128" y="116">Wi-Fi</text>
-                <text x="228" y="116">edge</text>
-                <text x="324" y="116">router</text>
-                <text x="132" y="132">access</text>
-                <text x="236" y="132">router</text>
-                <text x="128" y="148">point</text>
-                <text x="508" y="148">Metadata</text>
-                <text x="496" y="164">aware</text>
-                <text x="412" y="180">router</text>
-                <text x="492" y="180">QUIC</text>
-                <text x="524" y="180">or</text>
-                <text x="492" y="196">DTLS</text>
-                <text x="568" y="196">-</text>
-                <text x="52" y="212">Metadata</text>
-                <text x="244" y="212">Metadata</text>
-                <text x="500" y="212">server</text>
-                <text x="552" y="212">-</text>
-                <text x="40" y="228">aware</text>
-                <text x="232" y="228">aware</text>
-                <text x="44" y="244">client</text>
-                <text x="152" y="244">B</text>
-                <text x="224" y="244">RAN</text>
-                <text x="324" y="244">router</text>
-                <text x="48" y="260">(handset)</text>
-                <text x="236" y="260">router</text>
-                <text x="408" y="308">Transit</text>
-                <text x="492" y="308">Server</text>
-                <text x="60" y="324">User</text>
-                <text x="112" y="324">Network</text>
-                <text x="256" y="324">ISP</text>
-                <text x="304" y="324">Network</text>
-                <text x="408" y="324">Network</text>
-                <text x="496" y="324">Network</text>
-              </g>
-            </svg><a href="#section-2-6.1.1" class="pilcrow">¶</a>
-</div>
-</div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-network-diagram" class="selfRef">Network Diagram</a>
-        </figcaption></figure>
-</div>
+<p id="section-1-1">The advantages of both reliable <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and unreliable QUIC <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>
+will bring QUIC to displace TCP and bespoke UDP applications. Network elements
+have long been able to identify reliable flows between hosts as those are
+usually TCP flows; unreliable flows have been carried over UDP (e.g., VoIP,
+SIP signaling, NTP, DNS) and frequently use application-level retransmission to
+achieve some amount of reliability.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">There are several advatanges to an application using a single 5-tuple for
+its communications with another host.  Multiplexing RTP and RTCP <span>[<a href="#RFC5761" class="cite xref">RFC5761</a>]</span>) was
+found advantageous, but fortunately those protocols are both realtime and have
+nearly-identical network scheduling requirements.  Another advantage is shared
+congestion control state.  Applications wanting to use a single 5-tuple have
+been constrained to signal packet metadata using DSCP bits which don't survive
+from the sender across the Internet to the receiver's access network.  In the
+event the DSCP bits do survive, the sender's intended interpretation may not
+align with the receiving network's interpretation, or the receiving network
+may not honor those bits because the sender is (perceived) to lack authorization
+to influence the receiver's network treatment.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document describes both per-flow and per-packet host-to-network signaling of
+packet metadata.  The metadata is carried in a host-to-network protocol that
+effectively creates a "pointer" (mapping) to the metadata such as <span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>
+or carries the metadata directly in the packet itself
+<span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">By providing a signaling mechanism that survives across the Internet,
+intermediaries can identify the nature of the packet without
+decryption and without understanding the application protocol.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Data between two endpoints can be broadly classified into interactive
+and non-interactive classes.  These are often in conflict, especially
+when carried in the same 5-tuple.  A network with constrained
+resources will have need to ECN-mark <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> or discard packets
+of that flow.  If the packet's metadata can be communicated to the
+network, the network can make a more informed decision on which
+packets to discard.  For example, an application might have a single
+5-tuple connection that carries both realtime audio and a
+bandwidth-consuming file transfer. By informing the network of the
+metadata of those packets, the network can discard packets belonging
+to the file transfer.  As the congestion control is affected by
+those discards, the realtime traffic can continue being sent but
+the file transfer can slow down.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
-<section id="section-3">
+<section id="section-2">
       <h2 id="name-conventions-and-definitions">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
       </h2>
-<p id="section-3-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
-appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="qos-measurement">
-<section id="section-4">
-      <h2 id="name-qos-measurement">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-qos-measurement" class="section-name selfRef">QoS Measurement</a>
-      </h2>
-<p id="section-4-1">QoS measurement between 2 (or more) nodes without relying on transport layer: (QoS – Latency, Loss, MTU, BDP etc)<a href="#section-4-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4-2.1">
-          <p id="section-4-2.1.1">In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in <span>[<a href="#RFC7456" class="cite xref">RFC7456</a>]</span> and <span>[<a href="#RFC8321" class="cite xref">RFC8321</a>]</span>.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1">A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose <span>[<a href="#RFC862" class="cite xref">RFC862</a>]</span>.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.3">
-          <p id="section-4-2.3.1">For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service <span>[<a href="#RFC862" class="cite xref">RFC862</a>]</span> and measure the by sending synthetically generated packets.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed <span>[<a href="#I-D.templin-intarea-ipid-ext" class="cite xref">I-D.templin-intarea-ipid-ext</a>]</span><a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.5">
-          <p id="section-4-2.5.1">We can leverage both OOB and IB, based on the heuristics, to measure QoS between 2 nodes.<a href="#section-4-2.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-4-2.6">
-          <p id="section-4-2.6.1">One can even modify the TTL accordingly and decide between which nodes, the QoS needs to be measured. QoS measurement happens only for the nodes where the packet's TTL is 255. The 2nd node (in this case, B) can decide to reset the TTL or leave it as it is before sending it to the next node.<a href="#section-4-2.6.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-</section>
-</div>
-<div id="metadata-design">
-<section id="section-5">
-      <h2 id="name-metadata-design">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-metadata-design" class="section-name selfRef">Metadata Design</a>
-      </h2>
-<p id="section-5-1">Using QUIC CID to pass metadata required to route the packets effectively.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5-2.1">
-          <p id="section-5-2.1.1">Metadata can have a handshake in the first packet with a short header <span>[<a href="#RFC8999" class="cite xref">RFC8999</a>]</span>. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5-2.1.2.1">
-              <p id="section-5-2.1.2.1.1">Encryption information for the Metadata (refer encryption below for more details).<a href="#section-5-2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5-2.1.2.2">
-              <p id="section-5-2.1.2.2.1">Information related to utilizing Metadata (refer ISP section below for more details).<a href="#section-5-2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</li>
-        <li class="normal" id="section-5-2.2">
-          <p id="section-5-2.2.1">A bit to indicate whether the metadata needs to be processed or ignored. This bit will decide whether a particular traffic needs to be optimized or not. If this bit is set to 0, the metadata is ignored, and the traffic is just treated as it is today.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-5-2.3">
-          <p id="section-5-2.3.1">The packet information:<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5-2.3.2.1">
-              <p id="section-5-2.3.2.1.1">One bit to say if the packet belongs to loss-tolerant or reliable stream.<a href="#section-5-2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5-2.3.2.2">
-              <p id="section-5-2.3.2.2.1">One bit to signify whether the traffic is real-time or bulk transfer.<a href="#section-5-2.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-5-2.3.2.3">
-              <p id="section-5-2.3.2.3.1">2 bits indicating the priority based on the nature of traffic. This helps in determining not only the ideal route but also determine type of loss avoidance mechanism and resources to be deployed.<a href="#section-5-2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</li>
-        <li class="normal" id="section-5-2.4">
-          <p id="section-5-2.4.1">Rest of the bits are reserved for now. We can use them to determine heuristics or for determining versions etc. Other data that are good to have but not necessary data can be included in an optional metadata extension, indicated by a bit, for future extension.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="metadata-interpretation">
-<section id="section-6">
+<section id="section-3">
       <h2 id="name-metadata-interpretation">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-metadata-interpretation" class="section-name selfRef">Metadata Interpretation</a>
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-metadata-interpretation" class="section-name selfRef">Metadata Interpretation</a>
       </h2>
+<p id="section-3-1">[[<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-1.1">
-          <p id="section-6-1.1.1">Reliable subchannel packets that are loss-intolerant can be transmitted using proactive measures to avoid loss (eg. double retransmission, FEC) based on the priority bits.<a href="#section-6-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3-2.1">
+          <p id="section-3-2.1.1">Reliable subchannel packets that are loss-intolerant can be transmitted using proactive measures to avoid loss (eg. double retransmission, FEC) based on the priority bits.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.2">
-          <p id="section-6-1.2.1">Loss-tolerant packets can be forwarded or sent duplicates based on the priority flags – for key frames in graphics/Multimedia.<a href="#section-6-1.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-3-2.2">
+          <p id="section-3-2.2.1">Loss-tolerant packets can be forwarded or sent duplicates based on the priority flags – for key frames in graphics/Multimedia.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-6-1.3">
-          <p id="section-6-1.3.1">These packets can contain the same CID but different sequence numbers (listed in 1 – either IP ID or custom sequence numbers) and can be used to update the QoS measurement for each multiple transmits.<a href="#section-6-1.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-3-2.3">
+          <p id="section-3-2.3.1">These packets can contain the same CID but different sequence numbers (listed in 1 – either IP ID or custom sequence numbers) and can be used to update the QoS measurement for each multiple transmits.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
+<p id="section-3-3">Dan wonders: Why signal "Metadata = 1/0" at all, if we never signal MD=0?  Or is MD=0 how one would 'clear'
+a setting??<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">]]<a href="#section-3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="metadata-exchanged">
-<section id="section-7">
+<section id="section-4">
       <h2 id="name-metadata-exchanged">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-metadata-exchanged" class="section-name selfRef">Metadata exchanged</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-metadata-exchanged" class="section-name selfRef">Metadata Exchanged</a>
       </h2>
-<div id="metadata-hanshake">
-<section id="section-7.1">
-        <h3 id="name-metadata-hanshake">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-metadata-hanshake" class="section-name selfRef">Metadata Hanshake</a>
+<div id="priority">
+<section id="section-4.1">
+        <h3 id="name-priority">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-priority" class="section-name selfRef">Priority</a>
         </h3>
-<p id="section-7.1-1">Metadata handshake is done at the first QUIC packet that goes out with short header. The handshake metadata packet contains information on<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-7.1-2">
-<li id="section-7.1-2.1">
-            <p id="section-7.1-2.1.1">Information for metadata support<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.1-2.1.2.1">
-                <p id="section-7.1-2.1.2.1.1">Authorize/reject metadata optimization.<a href="#section-7.1-2.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.1-2.1.2.2">
-                <p id="section-7.1-2.1.2.2.1">Support for optimization.<a href="#section-7.1-2.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li id="section-7.1-2.2">
-            <p id="section-7.1-2.2.1">Information for encryption of metadata<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.1-2.2.2.1">
-                <p id="section-7.1-2.2.2.1.1">Obfuscation/Encryption mechanism.<a href="#section-7.1-2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.1-2.2.2.2">
-                <p id="section-7.1-2.2.2.2.1">Rotation Mechanism.<a href="#section-7.1-2.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.1-2.2.2.3">
-                <p id="section-7.1-2.2.2.3.1">Obfuscation/Encryption specific data.<a href="#section-7.1-2.2.2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li id="section-7.1-2.3">
-            <p id="section-7.1-2.3.1">ISP token exchanged between server/client and ISP that contains data such as:<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.1-2.3.2.1">
-                <p id="section-7.1-2.3.2.1.1">Optimization - enabled/disabled.<a href="#section-7.1-2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.1-2.3.2.2">
-                <p id="section-7.1-2.3.2.2.1">Type of optimization.<a href="#section-7.1-2.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.1-2.3.2.3">
-                <p id="section-7.1-2.3.2.3.1">Extent of optimization.<a href="#section-7.1-2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ol>
+<p id="section-4.1-1">Priority indicates the relative importance of this packet, within that UDP 4-tuple.  The 'low priority'
+means 'worse than non-signaled packets', which allows signaling only those packets which need to be
+prioritized below un-signaled packets.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">When signaled in binary, the Priority bit is 0 for low priority, 1 for normal priority, 2 for
+medium priority, and 2 for high priority.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">When signaled in JSON, it is encoded as name "priority" and one of the
+values "low", "normal", "medium" or "high".<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="metadata-structure-for-different-types-of-traffic">
-<section id="section-7.2">
-        <h3 id="name-metadata-structure-for-diff">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-metadata-structure-for-diff" class="section-name selfRef">Metadata structure for different types of traffic</a>
+<div id="reliableunreliable">
+<section id="section-4.2">
+        <h3 id="name-reliable-unreliable">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
         </h3>
-<p id="section-7.2-1">The packets can be broadly classified as 2 types – loss tolerant (lossy) and reliable (lossless).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<div id="reliable">
-<section id="section-7.2.1">
-          <h4 id="name-reliable">
-<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-reliable" class="section-name selfRef">Reliable</a>
+<p id="section-4.2-1">Reliable packets are intended to be treated like TCP packets:  the host will re-transmit the packet until
+it is successfully received or the sender gives up, typically many seconds or minutes later.  Thus the
+network <span class="bcp14">SHOULD</span> make attempts to deliver this packet, otherwise the end-host will send it again, incurring
+additional delay for the end user (harming end user experience) and causing more traffic on the network
+overall.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">When signaled in binary, the Reliable bit is set (1).<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">When signaled in JSON, it is encoded as name "reliable" and value "true".<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">Unreliable packets are expected to experience some loss, and are not re-transmitted by the application
+because a re-transmission would take too long to be useful for the receiver.  For example if the receiver's
+playout (jitter) buffer is 60ms but a retransmission would consume 100ms, the application will endeavour
+to avoid retransmitting the packet and instead rely on the receiving application concealing the loss
+somehow (with audio, some loss of an intermediate video update, etc.).<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">When sent in binary, the Reliable bit is cleared (0).<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-6">When sent in JSON, it is encoded as name "reliable" and value "false".<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="realtimebulk">
+<section id="section-4.3">
+        <h3 id="name-realtime-bulk">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-realtime-bulk" class="section-name selfRef">Realtime/Bulk</a>
+        </h3>
+<p id="section-4.3-1">Realtime packets ... ((add words)) ...<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">When signaled in binary, the Realtime bit is set (1).<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">When signaled in JSON, it is encoded as name "realtime" and value "true".<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.3-4">Bulk packets ... ((add words)) ...<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">When signaled in binary, the Realtime bit is cleared (0).<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6">When signaled in JSON, it is encoded as name "realtime" and value "false".<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+<div id="reliable-traffic">
+<section id="section-4.3.1">
+          <h4 id="name-reliable-traffic">
+<a href="#section-4.3.1" class="section-number selfRef">4.3.1. </a><a href="#name-reliable-traffic" class="section-name selfRef">Reliable Traffic</a>
           </h4>
-<p id="section-7.2.1-1">Lossless/Reliable packets cannot afford to be lost and hence, every packet needs to be treated important (that is, the application
-will re-transmit the packet if it is lost). Based on the traffic, the Real-Time Tx bit is set. The QUIC metadata in network bits will look like<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-1">When sent in JSON, will have the<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
 <span id="name-network-bits"></span><div id="Reliable-network-bits">
 <table class="center" id="table-1">
             <caption>
@@ -1740,20 +1411,20 @@ will re-transmit the packet if it is lost). Based on the traffic, the Real-Time 
             </tbody>
           </table>
 </div>
-<p id="section-7.2.1-3">When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-3">When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.<a href="#section-4.3.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="loss-tolerant">
-<section id="section-7.2.2">
-          <h4 id="name-loss-tolerant">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-loss-tolerant" class="section-name selfRef">Loss-Tolerant</a>
+<div id="unreliable-traffic-loss-tolerant">
+<section id="section-4.3.2">
+          <h4 id="name-unreliable-traffic-loss-tol">
+<a href="#section-4.3.2" class="section-number selfRef">4.3.2. </a><a href="#name-unreliable-traffic-loss-tol" class="section-name selfRef">Unreliable Traffic Loss-Tolerant</a>
           </h4>
-<p id="section-7.2.2-1">Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
-re-transmit the packet).<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-1">Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
+re-transmit the packet).<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2.2-2.1">
-              <p id="section-7.2.2-2.1.1">Key Loss-Tolerant packets:
- If the application decides that any loss tolerant packet needs to be delivered reliably for some reason, the application can choose to send that specific packet as reliable so that the network will know to deliver it reliably. This is the same as reliable scenario. The QUIC metadata in network bits will look same as reliable (shown above). The application can also choose to assign high-priority to the loss-tolerant packet as well. The QUIC metadata in network bits will look like<a href="#section-7.2.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.3.2-2.1">
+              <p id="section-4.3.2-2.1.1">Key Loss-Tolerant packets:
+ If the application decides that any loss tolerant packet needs to be delivered reliably for some reason, the application can choose to send that specific packet as reliable so that the network will know to deliver it reliably. This is the same as reliable scenario. The QUIC metadata in network bits will look same as reliable (shown above). The application can also choose to assign high-priority to the loss-tolerant packet as well. The QUIC metadata in network bits will look like<a href="#section-4.3.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <span id="name-network-bits-2"></span><div id="key-loss-tolerant-network-bits">
@@ -1782,11 +1453,11 @@ re-transmit the packet).<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
             </tbody>
           </table>
 </div>
-<p id="section-7.2.2-4">When the loss tolerant packet is marked with higher priority (implementation decided by the network node), the packet can be transmitted with corresponding loss avoidance mechanism multiple times to increase the probability of delivery (implementation decided by the network node).<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-4">When the loss tolerant packet is marked with higher priority (implementation decided by the network node), the packet can be transmitted with corresponding loss avoidance mechanism multiple times to increase the probability of delivery (implementation decided by the network node).<a href="#section-4.3.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2.2-5.1">
-              <p id="section-7.2.2-5.1.1">Loss-Tolerant packets:
- If the application decides the packet is loss-tolerant and not too important to be transmitted reliably, the packet will just be transmitted once irrespective of the loss between the 2 nodes. The QUIC metadata in network bits will look like<a href="#section-7.2.2-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.3.2-5.1">
+              <p id="section-4.3.2-5.1.1">Loss-Tolerant packets:
+ If the application decides the packet is loss-tolerant and not too important to be transmitted reliably, the packet will just be transmitted once irrespective of the loss between the 2 nodes. The QUIC metadata in network bits will look like<a href="#section-4.3.2-5.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <span id="name-network-bits-3"></span><div id="Loss-Tolerant">
@@ -1815,22 +1486,22 @@ re-transmit the packet).<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
             </tbody>
           </table>
 </div>
-<p id="section-7.2.2-7">For a real-time example of the above proposal, let's consider a desktop virtualization use case that comprises of a server (VDA) and a client connected over the internet, which has mixed traffic – interactive traffic (graphics updates, mouse and keyboard activity), bulk data transfer traffic (file copy and printing), and video streaming (interactive video – VR, gaming) and VoIP remoting (MS Teams) - interactive. The application can identify the type of traffic through various methods – type of virtual channel, use of hooks to identify operations, heuristics that detect keyboard and mouse activity etc. and based on the heuristics and nature of the channel, the application can send the packets through loss tolerant or reliable channels and determine the priority.<a href="#section-7.2.2-7" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-7">For a real-time example of the above proposal, let's consider a desktop virtualization use case that comprises of a server (VDA) and a client connected over the internet, which has mixed traffic – interactive traffic (graphics updates, mouse and keyboard activity), bulk data transfer traffic (file copy and printing), and video streaming (interactive video – VR, gaming) and VoIP remoting (MS Teams) - interactive. The application can identify the type of traffic through various methods – type of virtual channel, use of hooks to identify operations, heuristics that detect keyboard and mouse activity etc. and based on the heuristics and nature of the channel, the application can send the packets through loss tolerant or reliable channels and determine the priority.<a href="#section-4.3.2-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.2.2-8.1">
-              <p id="section-7.2.2-8.1.1">Real-time traffic:
-Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time Tx bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.<a href="#section-7.2.2-8.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.3.2-8.1">
+              <p id="section-4.3.2-8.1.1">Real-time traffic:
+Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time Tx bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.<a href="#section-4.3.2-8.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.2.2-8.2">
-              <p id="section-7.2.2-8.2.1">Bulk transfer:
-Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.<a href="#section-7.2.2-8.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-4.3.2-8.2">
+              <p id="section-4.3.2-8.2.1">Bulk transfer:
+Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.<a href="#section-4.3.2-8.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-7.2.2-9">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., <span>[<a href="#FEC" class="cite xref">FEC</a>]</span>) or below as well <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span>, up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span> as well. This provides means and data required for achieving that.<a href="#section-7.2.2-9" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-10">In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-7.2.2-10" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-11">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-7.2.2-11" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-12">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-7.2.2-12" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-13">A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.<a href="#section-7.2.2-13" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-9">Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., <span>[<a href="#FEC" class="cite xref">FEC</a>]</span>) or below as well <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span>, up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in <span>[<a href="#I-D.meng-tsvwg-wireless-collaboration" class="cite xref">I-D.meng-tsvwg-wireless-collaboration</a>]</span> as well. This provides means and data required for achieving that.<a href="#section-4.3.2-9" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-10">In today's network, packet prioritization and proactive loss management/avoidance is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.<a href="#section-4.3.2-10" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-11">Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.<a href="#section-4.3.2-11" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-12">When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.<a href="#section-4.3.2-12" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-13">A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.<a href="#section-4.3.2-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1838,11 +1509,11 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="industrial-application-of-flow-metadata">
-<section id="section-8">
+<section id="section-5">
       <h2 id="name-industrial-application-of-f">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-industrial-application-of-f" class="section-name selfRef">Industrial Application of Flow Metadata</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-industrial-application-of-f" class="section-name selfRef">Industrial Application of Flow Metadata</a>
       </h2>
-<p id="section-8-1">Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-4">
         <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
 <thead>
@@ -1936,295 +1607,81 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
       </table>
 </section>
 </div>
-<div id="metadata-encoding">
-<section id="section-9">
-      <h2 id="name-metadata-encoding">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-metadata-encoding" class="section-name selfRef">Metadata Encoding</a>
-      </h2>
-<p id="section-9-1">This section illustrates how the QUIC CID Metadata would look like in different encoding mechanisms. For purpose of illustration, network bits and JSON format are selected as encoding mechanisms.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<p id="section-9-2">Priority scaling: Low is 0, Medium is 1, Medium-High is 2. High is 3.<a href="#section-9-2" class="pilcrow">¶</a></p>
-<div id="user-typing">
-<section id="section-9.1">
-        <h3 id="name-user-typing">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-user-typing" class="section-name selfRef">User typing</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="section-9.1-1.1">
-            <p id="section-9.1-1.1.1">Network bits<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-network-bits-4"></span><div id="user-typing-network-bits">
-<figure id="figure-3">
-          <div class="alignLeft art-text artwork" id="section-9.1-2.1">
-<pre>
-+---------------+
-| 1 0 1 1 1 1 2 3 4 5 |
-+---------------+
-</pre>
-</div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-network-bits-4" class="selfRef">Network-Bits</a>
-          </figcaption></figure>
-</div>
-<ul class="normal">
-<li class="normal" id="section-9.1-3.1">
-            <p id="section-9.1-3.1.1">JSON syntax<a href="#section-9.1-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-json"></span><div id="user-typing-json">
-<figure id="figure-4">
-          <div class="alignLeft art-text artwork" id="section-9.1-4.1">
-<pre>
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":true,"Priority":3},"CID":{"id":12345}}
-</pre>
-</div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-json" class="selfRef">JSON</a>
-          </figcaption></figure>
-</div>
-</section>
-</div>
-<div id="glyph-smoothing">
-<section id="section-9.2">
-        <h3 id="name-glyph-smoothing">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-glyph-smoothing" class="section-name selfRef">Glyph smoothing</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="section-9.2-1.1">
-            <p id="section-9.2-1.1.1">Network bits<a href="#section-9.2-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-network-bits-5"></span><div id="glyph-smoothing-network-bits">
-<figure id="figure-5">
-          <div class="alignLeft art-text artwork" id="section-9.2-2.1">
-<pre>
-+---------------+
-| 1 1 1 0 1 1 2 3 4 5 |
-+---------------+
-</pre>
-</div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-network-bits-5" class="selfRef">Network-Bits</a>
-          </figcaption></figure>
-</div>
-<ul class="normal">
-<li class="normal" id="section-9.2-3.1">
-            <p id="section-9.2-3.1.1">JSON syntax<a href="#section-9.2-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-json-2"></span><div id="glyph-smoothing-json">
-<figure id="figure-6">
-          <div class="alignLeft art-text artwork" id="section-9.2-4.1">
-<pre>
-{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":1},"CID":{"id":12345}}
-</pre>
-</div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-json-2" class="selfRef">JSON</a>
-          </figcaption></figure>
-</div>
-</section>
-</div>
-<div id="print-job">
-<section id="section-9.3">
-        <h3 id="name-print-job">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-print-job" class="section-name selfRef">Print job</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="section-9.3-1.1">
-            <p id="section-9.3-1.1.1">Network bits<a href="#section-9.3-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-network-bits-6"></span><div id="print-job-network-bits">
-<figure id="figure-7">
-          <div class="alignLeft art-text artwork" id="section-9.3-2.1">
-<pre>
-+---------------+
-| 1 0 0 0 1 1 2 3 4 5 |
-+---------------+
-</pre>
-</div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
-<a href="#name-network-bits-6" class="selfRef">Network-Bits</a>
-          </figcaption></figure>
-</div>
-<ul class="normal">
-<li class="normal" id="section-9.3-3.1">
-            <p id="section-9.3-3.1.1">JSON syntax<a href="#section-9.3-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-json-3"></span><div id="print-job-json">
-<figure id="figure-8">
-          <div class="alignLeft art-text artwork" id="section-9.3-4.1">
-<pre>
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":1},"CID":{"id":12345}}
-</pre>
-</div>
-<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
-<a href="#name-json-3" class="selfRef">JSON</a>
-          </figcaption></figure>
-</div>
-</section>
-</div>
-<div id="file-transfer">
-<section id="section-9.4">
-        <h3 id="name-file-transfer">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-file-transfer" class="section-name selfRef">File Transfer</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="section-9.4-1.1">
-            <p id="section-9.4-1.1.1">Network bits<a href="#section-9.4-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-network-bits-7"></span><div id="file-transfer-network-bits">
-<figure id="figure-9">
-          <div class="alignLeft art-text artwork" id="section-9.4-2.1">
-<pre>
-+---------------+
-| 1 0 0 0 0 1 2 3 4 5 |
-+---------------+
-</pre>
-</div>
-<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
-<a href="#name-network-bits-7" class="selfRef">Network-Bits</a>
-          </figcaption></figure>
-</div>
-<ul class="normal">
-<li class="normal" id="section-9.4-3.1">
-            <p id="section-9.4-3.1.1">JSON syntax<a href="#section-9.4-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-json-4"></span><div id="file-transfer-json">
-<figure id="figure-10">
-          <div class="alignLeft art-text artwork" id="section-9.4-4.1">
-<pre>
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":0},"CID":{"id":12345}}
-</pre>
-</div>
-<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
-<a href="#name-json-4" class="selfRef">JSON</a>
-          </figcaption></figure>
-</div>
-</section>
-</div>
-<div id="voip">
-<section id="section-9.5">
-        <h3 id="name-voip">
-<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-voip" class="section-name selfRef">VoIP</a>
-        </h3>
-<ul class="normal">
-<li class="normal" id="section-9.5-1.1">
-            <p id="section-9.5-1.1.1">Network bits<a href="#section-9.5-1.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-network-bits-8"></span><div id="VoIP-network-bits">
-<figure id="figure-11">
-          <div class="alignLeft art-text artwork" id="section-9.5-2.1">
-<pre>
-+---------------+
-| 1 1 1 1 0 1 2 3 4 5 |
-+---------------+
-</pre>
-</div>
-<figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
-<a href="#name-network-bits-8" class="selfRef">Network-Bits</a>
-          </figcaption></figure>
-</div>
-<ul class="normal">
-<li class="normal" id="section-9.5-3.1">
-            <p id="section-9.5-3.1.1">JSON syntax<a href="#section-9.5-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<span id="name-json-5"></span><div id="VoIP-json">
-<figure id="figure-12">
-          <div class="alignLeft art-text artwork" id="section-9.5-4.1">
-<pre>
-{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":2},"CID":{"id":12345}}
-</pre>
-</div>
-<figcaption><a href="#figure-12" class="selfRef">Figure 12</a>:
-<a href="#name-json-5" class="selfRef">JSON</a>
-          </figcaption></figure>
-</div>
-</section>
-</div>
-</section>
-</div>
 <div id="ease-of-adaptation-and-industrial-significance">
-<section id="section-10">
+<section id="section-6">
       <h2 id="name-ease-of-adaptation-and-indu">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-ease-of-adaptation-and-indu" class="section-name selfRef">Ease of adaptation and Industrial significance:</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-ease-of-adaptation-and-indu" class="section-name selfRef">Ease of adaptation and Industrial significance:</a>
       </h2>
-<p id="section-10-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references <span>[<a href="#ctx-aware" class="cite xref">ctx-aware</a>]</span> and <span>[<a href="#wifi-ll" class="cite xref">wifi-ll</a>]</span> can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<p id="section-10-2">The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-6-1">The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references <span>[<a href="#ctx-aware" class="cite xref">ctx-aware</a>]</span> and <span>[<a href="#wifi-ll" class="cite xref">wifi-ll</a>]</span> can get all the required information for their respective optimizations from the CID metadata that is being proposed.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:<a href="#section-6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-10-3.1">
-          <p id="section-10-3.1.1">Explicit signals can help in deciding how to handle packets – queuing, routing etc.
-*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference <span>[<a href="#docsis-ll" class="cite xref">docsis-ll</a>]</span>. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-10-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6-3.1">
+          <p id="section-6-3.1.1">Explicit signals can help in deciding how to handle packets – queuing, routing etc.
+*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference <span>[<a href="#docsis-ll" class="cite xref">docsis-ll</a>]</span>. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).<a href="#section-6-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-3.2">
-          <p id="section-10-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to <span>[<a href="#L4S" class="cite xref">L4S</a>]</span>.<a href="#section-10-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-6-3.2">
+          <p id="section-6-3.2.1">The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to <span>[<a href="#L4S" class="cite xref">L4S</a>]</span>.<a href="#section-6-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-3.3">
-          <p id="section-10-3.3.1"><span>[<a href="#L4S" class="cite xref">L4S</a>]</span> CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication <span>[<a href="#RFC9331" class="cite xref">RFC9331</a>]</span> can be added to the QUIC CID.<a href="#section-10-3.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-6-3.3">
+          <p id="section-6-3.3.1"><span>[<a href="#L4S" class="cite xref">L4S</a>]</span> CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication <span>[<a href="#RFC9331" class="cite xref">RFC9331</a>]</span> can be added to the QUIC CID.<a href="#section-6-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
 </div>
 <div id="isp-implementation-of-metadata-based-optimization">
-<section id="section-11">
+<section id="section-7">
       <h2 id="name-isp-implementation-of-metad">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-isp-implementation-of-metad" class="section-name selfRef">ISP implementation of Metadata based optimization:</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-isp-implementation-of-metad" class="section-name selfRef">ISP implementation of Metadata based optimization:</a>
       </h2>
 <div id="metadata-subscription">
-<section id="section-11.1">
+<section id="section-7.1">
         <h3 id="name-metadata-subscription">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-metadata-subscription" class="section-name selfRef">Metadata Subscription</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-metadata-subscription" class="section-name selfRef">Metadata Subscription</a>
         </h3>
-<p id="section-11.1-1">The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-11.1-2">
-<li id="section-11.1-2.1">
-            <p id="section-11.1-2.1.1">Client and ISP have token exchanges periodically. The token contains details on:<a href="#section-11.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7.1-2">
+<li id="section-7.1-2.1">
+            <p id="section-7.1-2.1.1">Client and ISP have token exchanges periodically. The token contains details on:<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11.1-2.1.2.1">
-                <p id="section-11.1-2.1.2.1.1">What time of traffic to be optimized.<a href="#section-11.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1-2.1.2.1">
+                <p id="section-7.1-2.1.2.1.1">What time of traffic to be optimized.<a href="#section-7.1-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-11.1-2.1.2.2">
-                <p id="section-11.1-2.1.2.2.1">Optimization is to be done for how much bandwidth.<a href="#section-11.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.1-2.1.2.2">
+                <p id="section-7.1-2.1.2.2.1">Optimization is to be done for how much bandwidth.<a href="#section-7.1-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-11.1-2.2">
-            <p id="section-11.1-2.2.1">This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-7.1-2.2">
+            <p id="section-7.1-2.2.1">This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.<a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-11.1-2.3">
-            <p id="section-11.1-2.3.1">The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.<a href="#section-11.1-2.3.1" class="pilcrow">¶</a></p>
+          <li id="section-7.1-2.3">
+            <p id="section-7.1-2.3.1">The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11.1-2.3.2.1">
-                <p id="section-11.1-2.3.2.1.1">Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.<a href="#section-11.1-2.3.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1-2.3.2.1">
+                <p id="section-7.1-2.3.2.1.1">Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.<a href="#section-7.1-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-11.1-2.3.2.2">
-                <p id="section-11.1-2.3.2.2.1">For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.<a href="#section-11.1-2.3.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.1-2.3.2.2">
+                <p id="section-7.1-2.3.2.2.1">For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.<a href="#section-7.1-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-11.1-2.4">
-            <p id="section-11.1-2.4.1">The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).<a href="#section-11.1-2.4.1" class="pilcrow">¶</a></p>
+          <li id="section-7.1-2.4">
+            <p id="section-7.1-2.4.1">The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).<a href="#section-7.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
 </div>
 <div id="handlingpreventing-misuse-of-metadata-optimization">
-<section id="section-11.2">
+<section id="section-7.2">
         <h3 id="name-handling-preventing-misuse-">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-handling-preventing-misuse-" class="section-name selfRef">Handling/Preventing misuse of metadata optimization:</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-handling-preventing-misuse-" class="section-name selfRef">Handling/Preventing misuse of metadata optimization:</a>
         </h3>
-<ol start="1" type="1" class="normal type-1" id="section-11.2-1">
-<li id="section-11.2-1.1">
-            <p id="section-11.2-1.1.1">The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.<a href="#section-11.2-1.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7.2-1">
+<li id="section-7.2-1.1">
+            <p id="section-7.2-1.1.1">The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.<a href="#section-7.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-11.2-1.2">
-            <p id="section-11.2-1.2.1">The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.<a href="#section-11.2-1.2.1" class="pilcrow">¶</a></p>
+          <li id="section-7.2-1.2">
+            <p id="section-7.2-1.2.1">The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
@@ -2232,42 +1689,42 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-12">
+<section id="section-8">
       <h2 id="name-security-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <div id="metadata-encryption">
-<section id="section-12.1">
+<section id="section-8.1">
         <h3 id="name-metadata-encryption">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-metadata-encryption" class="section-name selfRef">Metadata Encryption</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-metadata-encryption" class="section-name selfRef">Metadata Encryption</a>
         </h3>
-<p id="section-12.1-1">Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-12.1-2">
-<li id="section-12.1-2.1">
-            <p id="section-12.1-2.1.1">Obfuscation:<a href="#section-12.1-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.1-2">
+<li id="section-8.1-2.1">
+            <p id="section-8.1-2.1.1">Obfuscation:<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-12.1-2.1.2.1">
-                <p id="section-12.1-2.1.2.1.1">Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.<a href="#section-12.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.1-2.1.2.1">
+                <p id="section-8.1-2.1.2.1.1">Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.<a href="#section-8.1-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-12.1-2.1.2.2">
-                <p id="section-12.1-2.1.2.2.1">Obfuscation mechanism can also be exchanged through the metadata handshake.<a href="#section-12.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.1.2.2">
+                <p id="section-8.1-2.1.2.2.1">Obfuscation mechanism can also be exchanged through the metadata handshake.<a href="#section-8.1-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
-          <li id="section-12.1-2.2">
-            <p id="section-12.1-2.2.1">Encryption:<a href="#section-12.1-2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-8.1-2.2">
+            <p id="section-8.1-2.2.1">Encryption:<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-12.1-2.2.2.1">
-                <p id="section-12.1-2.2.2.1.1">Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.<a href="#section-12.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-8.1-2.2.2.1">
+                <p id="section-8.1-2.2.2.1.1">Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.<a href="#section-8.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-12.1-2.2.2.2">
-                <p id="section-12.1-2.2.2.2.1">The standard algorithm used to derive the key can be exchanged during the metadata handshake.<a href="#section-12.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.2.2.2">
+                <p id="section-8.1-2.2.2.2.1">The standard algorithm used to derive the key can be exchanged during the metadata handshake.<a href="#section-8.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-12.1-2.2.2.3">
-                <p id="section-12.1-2.2.2.3.1">The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).<a href="#section-12.1-2.2.2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.2.2.3">
+                <p id="section-8.1-2.2.2.3.1">The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).<a href="#section-8.1-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-12.1-2.2.2.4">
-                <p id="section-12.1-2.2.2.4.1">The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.<a href="#section-12.1-2.2.2.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-8.1-2.2.2.4">
+                <p id="section-8.1-2.2.2.4.1">The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.<a href="#section-8.1-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -2277,27 +1734,27 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-13">
+<section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-13-1">None.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">None.<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-14">
+<section id="section-10">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-14-1">To be completed.<a href="#section-14-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">To be completed.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-15">
+<section id="section-11">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-15.1">
+<section id="section-11.1">
         <h3 id="name-normative-references">
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
@@ -2314,7 +1771,7 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-15.2">
+<section id="section-11.2">
         <h3 id="name-informative-references">
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
@@ -2335,29 +1792,33 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
         <dd>
 <span class="refAuthor">Meng, T.</span> and <span class="refAuthor">H. Shi</span>, <span class="refTitle">"Necessity of Application-Network Collaboration in Wireless Access Scenarios"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-meng-tsvwg-wireless-collaboration-00</span>, <time datetime="2023-10-23" class="refDate">23 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-meng-tsvwg-wireless-collaboration-00">https://datatracker.ietf.org/doc/html/draft-meng-tsvwg-wireless-collaboration-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.templin-intarea-ipid-ext">[I-D.templin-intarea-ipid-ext]</dt>
+<dt id="I-D.reddy-tsvwg-explcit-signal">[I-D.reddy-tsvwg-explcit-signal]</dt>
         <dd>
-<span class="refAuthor">Templin, F.</span>, <span class="refTitle">"IPv6 Extended Fragment Header for IPv4"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-templin-intarea-ipid-ext-32</span>, <time datetime="2023-12-14" class="refDate">14 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-templin-intarea-ipid-ext-32">https://datatracker.ietf.org/doc/html/draft-templin-intarea-ipid-ext-32</a>&gt;</span>. </dd>
+<span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Wing, D.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"An Approach for Encrypted Transport Protocol Path Explicit Signals"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-reddy-tsvwg-explcit-signal-01</span>, <time datetime="2023-07-07" class="refDate">7 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01">https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.wing-cidfi">[I-D.wing-cidfi]</dt>
+        <dd>
+<span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Reddy.K, T.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"Framework for CID Flow Indicator (CIDFI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-wing-cidfi-04</span>, <time datetime="2023-12-14" class="refDate">14 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04">https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="L4S">[L4S]</dt>
         <dd>
 <span class="refAuthor">Briscoe, B., Ed.</span>, <span class="refAuthor">De Schepper, K.</span>, <span class="refAuthor">Bagnulo, M.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service: Architecture"</span>, <span class="seriesInfo">RFC 9330</span>, <span class="seriesInfo">DOI 10.17487/RFC9330</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9330">https://www.rfc-editor.org/rfc/rfc9330</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC7456">[RFC7456]</dt>
+<dt id="QUIC">[QUIC]</dt>
         <dd>
-<span class="refAuthor">Mizrahi, T.</span>, <span class="refAuthor">Senevirathne, T.</span>, <span class="refAuthor">Salam, S.</span>, <span class="refAuthor">Kumar, D.</span>, and <span class="refAuthor">D. Eastlake 3rd</span>, <span class="refTitle">"Loss and Delay Measurement in Transparent Interconnection of Lots of Links (TRILL)"</span>, <span class="seriesInfo">RFC 7456</span>, <span class="seriesInfo">DOI 10.17487/RFC7456</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7456">https://www.rfc-editor.org/rfc/rfc7456</a>&gt;</span>. </dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8321">[RFC8321]</dt>
+<dt id="RFC3168">[RFC3168]</dt>
         <dd>
-<span class="refAuthor">Fioccola, G., Ed.</span>, <span class="refAuthor">Capello, A.</span>, <span class="refAuthor">Cociglio, M.</span>, <span class="refAuthor">Castaldelli, L.</span>, <span class="refAuthor">Chen, M.</span>, <span class="refAuthor">Zheng, L.</span>, <span class="refAuthor">Mirsky, G.</span>, and <span class="refAuthor">T. Mizrahi</span>, <span class="refTitle">"Alternate-Marking Method for Passive and Hybrid Performance Monitoring"</span>, <span class="seriesInfo">RFC 8321</span>, <span class="seriesInfo">DOI 10.17487/RFC8321</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8321">https://www.rfc-editor.org/rfc/rfc8321</a>&gt;</span>. </dd>
+<span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC862">[RFC862]</dt>
+<dt id="RFC5761">[RFC5761]</dt>
         <dd>
-<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Echo Protocol"</span>, <span class="seriesInfo">STD 20</span>, <span class="seriesInfo">RFC 862</span>, <span class="seriesInfo">DOI 10.17487/RFC0862</span>, <time datetime="1983-05" class="refDate">May 1983</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc862">https://www.rfc-editor.org/rfc/rfc862</a>&gt;</span>. </dd>
+<span class="refAuthor">Perkins, C.</span> and <span class="refAuthor">M. Westerlund</span>, <span class="refTitle">"Multiplexing RTP Data and Control Packets on a Single Port"</span>, <span class="seriesInfo">RFC 5761</span>, <span class="seriesInfo">DOI 10.17487/RFC5761</span>, <time datetime="2010-04" class="refDate">April 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5761">https://www.rfc-editor.org/rfc/rfc5761</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8999">[RFC8999]</dt>
+<dt id="RFC9221">[RFC9221]</dt>
         <dd>
-<span class="refAuthor">Thomson, M.</span>, <span class="refTitle">"Version-Independent Properties of QUIC"</span>, <span class="seriesInfo">RFC 8999</span>, <span class="seriesInfo">DOI 10.17487/RFC8999</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8999">https://www.rfc-editor.org/rfc/rfc8999</a>&gt;</span>. </dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"An Unreliable Datagram Extension to QUIC"</span>, <span class="seriesInfo">RFC 9221</span>, <span class="seriesInfo">DOI 10.17487/RFC9221</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9221">https://www.rfc-editor.org/rfc/rfc9221</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9331">[RFC9331]</dt>
         <dd>
@@ -2371,8 +1832,223 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
 </section>
 </div>
 </section>
-<div id="authors-addresses">
+<div id="example-metadata-encoding">
 <section id="appendix-A">
+      <h2 id="name-example-metadata-encoding">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-example-metadata-encoding" class="section-name selfRef">Example Metadata Encoding</a>
+      </h2>
+<p id="appendix-A-1">This section illustrates how the QUIC CID Metadata would look like in
+different encoding mechanisms. For purpose of illustration, network
+bits and JSON format are selected as encoding mechanisms.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<div id="user-typing">
+<section id="appendix-A.1">
+        <h3 id="name-user-typing">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-user-typing" class="section-name selfRef">User typing</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-A.1-1.1">
+            <p id="appendix-A.1-1.1.1">Network bits<a href="#appendix-A.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-network-bits-4"></span><div id="user-typing-network-bits">
+<figure id="figure-1">
+          <div class="alignLeft art-text artwork" id="appendix-A.1-2.1">
+<pre>
++---------------+
+| 1 0 1 1 1 1 2 3 4 5 |
++---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-network-bits-4" class="selfRef">Network-Bits</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="appendix-A.1-3.1">
+            <p id="appendix-A.1-3.1.1">JSON syntax<a href="#appendix-A.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-json"></span><div id="user-typing-json">
+<figure id="figure-2">
+          <div class="alignLeft art-text artwork" id="appendix-A.1-4.1">
+<pre>
+{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":true,"Priority":3},"CID":{"id":12345}}
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-json" class="selfRef">JSON</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="glyph-smoothing">
+<section id="appendix-A.2">
+        <h3 id="name-glyph-smoothing">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-glyph-smoothing" class="section-name selfRef">Glyph smoothing</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-A.2-1.1">
+            <p id="appendix-A.2-1.1.1">Network bits<a href="#appendix-A.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-network-bits-5"></span><div id="glyph-smoothing-network-bits">
+<figure id="figure-3">
+          <div class="alignLeft art-text artwork" id="appendix-A.2-2.1">
+<pre>
++---------------+
+| 1 1 1 0 1 1 2 3 4 5 |
++---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-network-bits-5" class="selfRef">Network-Bits</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="appendix-A.2-3.1">
+            <p id="appendix-A.2-3.1.1">JSON syntax<a href="#appendix-A.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-json-2"></span><div id="glyph-smoothing-json">
+<figure id="figure-4">
+          <div class="alignLeft art-text artwork" id="appendix-A.2-4.1">
+<pre>
+{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":1},"CID":{"id":12345}}
+</pre>
+</div>
+<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
+<a href="#name-json-2" class="selfRef">JSON</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="print-job">
+<section id="appendix-A.3">
+        <h3 id="name-print-job">
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-print-job" class="section-name selfRef">Print job</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-A.3-1.1">
+            <p id="appendix-A.3-1.1.1">Network bits<a href="#appendix-A.3-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-network-bits-6"></span><div id="print-job-network-bits">
+<figure id="figure-5">
+          <div class="alignLeft art-text artwork" id="appendix-A.3-2.1">
+<pre>
++---------------+
+| 1 0 0 0 1 1 2 3 4 5 |
++---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
+<a href="#name-network-bits-6" class="selfRef">Network-Bits</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="appendix-A.3-3.1">
+            <p id="appendix-A.3-3.1.1">JSON syntax<a href="#appendix-A.3-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-json-3"></span><div id="print-job-json">
+<figure id="figure-6">
+          <div class="alignLeft art-text artwork" id="appendix-A.3-4.1">
+<pre>
+{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":1},"CID":{"id":12345}}
+</pre>
+</div>
+<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<a href="#name-json-3" class="selfRef">JSON</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="file-transfer">
+<section id="appendix-A.4">
+        <h3 id="name-file-transfer">
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-file-transfer" class="section-name selfRef">File Transfer</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-A.4-1.1">
+            <p id="appendix-A.4-1.1.1">Network bits<a href="#appendix-A.4-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-network-bits-7"></span><div id="file-transfer-network-bits">
+<figure id="figure-7">
+          <div class="alignLeft art-text artwork" id="appendix-A.4-2.1">
+<pre>
++---------------+
+| 1 0 0 0 0 1 2 3 4 5 |
++---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<a href="#name-network-bits-7" class="selfRef">Network-Bits</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="appendix-A.4-3.1">
+            <p id="appendix-A.4-3.1.1">JSON syntax<a href="#appendix-A.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-json-4"></span><div id="file-transfer-json">
+<figure id="figure-8">
+          <div class="alignLeft art-text artwork" id="appendix-A.4-4.1">
+<pre>
+{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":0},"CID":{"id":12345}}
+</pre>
+</div>
+<figcaption><a href="#figure-8" class="selfRef">Figure 8</a>:
+<a href="#name-json-4" class="selfRef">JSON</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="voip">
+<section id="appendix-A.5">
+        <h3 id="name-voip">
+<a href="#appendix-A.5" class="section-number selfRef">A.5. </a><a href="#name-voip" class="section-name selfRef">VoIP</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-A.5-1.1">
+            <p id="appendix-A.5-1.1.1">Network bits<a href="#appendix-A.5-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-network-bits-8"></span><div id="VoIP-network-bits">
+<figure id="figure-9">
+          <div class="alignLeft art-text artwork" id="appendix-A.5-2.1">
+<pre>
++---------------+
+| 1 1 1 1 0 1 2 3 4 5 |
++---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-9" class="selfRef">Figure 9</a>:
+<a href="#name-network-bits-8" class="selfRef">Network-Bits</a>
+          </figcaption></figure>
+</div>
+<ul class="normal">
+<li class="normal" id="appendix-A.5-3.1">
+            <p id="appendix-A.5-3.1.1">JSON syntax<a href="#appendix-A.5-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<span id="name-json-5"></span><div id="VoIP-json">
+<figure id="figure-10">
+          <div class="alignLeft art-text artwork" id="appendix-A.5-4.1">
+<pre>
+{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":2},"CID":{"id":12345}}
+</pre>
+</div>
+<figcaption><a href="#figure-10" class="selfRef">Figure 10</a>:
+<a href="#name-json-5" class="selfRef">JSON</a>
+          </figcaption></figure>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
