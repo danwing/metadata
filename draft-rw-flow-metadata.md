@@ -86,161 +86,132 @@ informative:
 
 --- abstract
 
-Metadata about packet importance is useful to signal to network components.
-
-Including metadata (MD) in a QUIC CID, along with some heuristics and QoS measurements at the router (in-band and out-of-band) can considerably improve user experience. Appropriate data paths can be chosen based on nature of the traffic and loss can be proactively handled between the intermediary nodes avoiding end-to-end retransmissions as much as possible. This document describes how to exchange metadata in JSON which can be
-mapped to a Connection Identifier (CID), and how that same metadata can
-be carried in each packet as a UDP option.
+As part of host-to-network signaling, an entire flow can share the same
+metadata or certain packets can have certain metadata associated with those
+packets.  This document describes the metadata tha can be exchangd in such
+host-to-network signaling.
 
 --- middle
 
 # Introduction
 
-In today's network, packet prioritization and proactive loss management is a challenge. Packet routing for reliable protocols (like TCP) has never been optimal for mixed data traffic. Retransmissions has been predominantly end-to-end with little to no room for intelligent routing, especially in reliable transports. UDP based protocols give more flexibility in having reliable and non-reliable traffic in the same connection - with different subchannels. But the existing protocols don't give an option for intermediaries to identify the nature of the packet without having to decrypt the packet, which is not a possibility, to determine the ideal route for the packet. There is no way for application to dictate which packet needs to go through which route and for the intermediaries to act upon them practically and efficiently.
+The advantages of both reliable {{?QUIC=RFC9000}} and unreliable QUIC {{?RFC9221}}
+will bring QUIC to displace TCP and bespoke UDP applications. Network elements
+have long been able to identify reliable flows between hosts as those are
+usually TCP flows; unreliable flows have been carried over UDP (e.g., VoIP,
+SIP signaling, NTP, DNS) and frequently use application-level retransmission to
+achieve some amount of reliability.
 
-Data sent between 2 endpoints can be broadly classified two types. Interactive (Real-time) data and non-interactive (bulk transfer) data. The requirements for these at times are conflicting. e.g., Interactive data needs to be time critical – any delay in delivering a packet will impact user interactivity negatively (e.g., Audio, video, graphics updates) whereas non-interactive data (e.g., File transfer, print job) can be accumulated and sent together for best throughput. One depends on how fast a data can be delivered and other depends on how effectively large data can be delivered. Based on above requirement dichotomy, performance can also be divided into two broad categories: Interactive performance, e.g., what is the click-to-photon time (the time between a user interaction such as a mouse click and the corresponding graphics update, how interactive the session is, how clear the video is and if there is a lag between action and reaction or buffering of video, and non-interactive performance, e.g., File copy speed from server to client.
+There are several advatanges to an application using a single 5-tuple for
+its communications with another host.  Multiplexing RTP and RTCP {{?RFC5761}}) was
+found advantageous, but fortunately those protocols are both realtime and have
+nearly-identical network scheduling requirements.  Another advantage is shared
+congestion control state.  Applications wanting to use a single 5-tuple have
+been constrained to signal packet metadata using DSCP bits which don't survive
+from the sender across the Internet to the receiver's access network.  In the
+event the DSCP bits do survive, the sender's intended interpretation may not
+align with the receiving network's interpretation, or the receiving network
+may not honor those bits because the sender is (perceived) to lack authorization
+to influence the receiver's network treatment.
 
-When the amount of in-flight data in the network is high, the network throughput is high (sending more data per second). This may cause delay in delivering interactive packets leading to poor perceived user experience like jitter or inconsistent UI updates but will achieve better throughput for data-oriented streams. Interactivity might suffer but non-interactive performance improves. Conversely, when the amount of in-flight data in the network is low, interactivity improves while hindering non-interactive performance.
+This document describes both per-flow and per-packet host-to-network signaling of
+packet metadata.  The metadata is carried in a host-to-network protocol that
+effectively creates a "pointer" (mapping) to the metadata such as {{?I-D.wing-cidfi}}
+or carries the metadata directly in the packet itself
+{{?I-D.reddy-tsvwg-explcit-signal}}.
 
-A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.
+By providing a signaling mechanism that survives across the Internet,
+intermediaries can identify the nature of the packet without
+decryption and without understanding the application protocol.
 
-# Overview
-
-This document briefs over items that can work together to improve network performance drastically. Although this need not necessarily be confined to QUIC, we want to discuss how QUIC has the capability to make it more efficient and effective. The broad items:
-
-* Measuring QoS between two network nodes (at least one of it being "cid-aware"). QoS measurement at IP layer with minimal interface to transport layer, leaving an option to make it transport agnostic.
-* QoS can be in-band, for "cid-aware" nodes, and out-of-band using loopback protocols if one of the nodes is not "cid-aware".
-* Explicit signaling is vital since there is no way to know the nature of a packet today – if it's a key frame or if it's part of a lossy subchannel. The intermediaries more often can't make an informed, intelligent and a useful decision without the metadata, even after having all the QoS measurements and heuristics in place.
-* QUIC CIDs lying outside of DTLS encryption is an added advantage - gives ease of access.
-* Using the above information to successfully identify loss prone nodes in a network and come up with efficient heuristics to handle packet transmission between these nodes themselves, instead of propagating it end to end, to achieve better network performance with minimal impact on processing and bandwidth.
-* The computation is simple and can be confined to the link cards and not required to go to the CPU.
-* Not all the network elements will be intelligent (cid-aware) but even if we have a few of them, we could still achieve better performance by proactively avoiding end-to-end retransmissions between the "cid-aware" nodes.
-
-~~~~~ aasvg
-(1)  Proxied Connection
-                       .--------------.                   +------+
-                      |                |                +-+----+ |
-+------+              |   Network(s)   |              +-+----+ +-+
-|Client+--------------)----------------(--------------+Server+-+
-+---+--+              |                |              +---+--+
-    |                  '-------+------'                   |
-    |                          |                          |
-    +<===User Data+Metadata=========User Data+Metadata===>+
-    |                          |                          |
-
-(2)  Client-centric Metadata Sharing
-                          .--------------.                  +------+
-                         |                |               +-+----+ |
-+------+                 |   Network(s)   |             +-+----+ +-+
-|Client+-----------------)----------------(-------------+Server+-+
-+---+--+                 |                |             +---+--+
-    |                     '-------+------'                  |
-    |                             |                         |
-    +<--------- Metadata -------->+                         |
-    |        Secure Connection    |                         |
-    |                             |                         |
-    +<== End-to-End Secure Connection User Data with     ==>+
-    |                          Metadata                     |
-    |                             |                         |
-~~~~~
-{: #design-approaches artwork-align="center" title="Candidate Design Approaches"}
-
-{{fig-arch}} provides a sample network diagram of a Metadata system showing two bandwidth-constrained networks (or links) depicted by "B" and Metadata-aware devices immediately upstream of those links, and another bandwidth-constrained link between a smartphone handset and its Radio Access Network (RAN).  This diagram shows the same protocol and same mechanism can operate with or without 5G, and can operate with different administrative domains such as Wi-Fi, an ISP edge router, and a 5G RAN.
-
-For the sake of illustration, {{fig-arch}} simplifies the representation
-of the various involved network segments. It also assumes that multiple
-server instances are enabled in the server network but the document
-does not make any assumption about the internal structure of the service
-nor how a flow is processed by or steered to a service instance. However,
-CIDFI includes provisions to ensure that the service instance that is
-selected to service a client request is the same instance that will
-receive CIDFI metadata for that client.
-
-~~~~~ aasvg
-                       |                     |          |
-+-------+   +--------+ | +--------+          |          |
-|Meta-  |   |Meta-   | | |Metadata|          |          |
-|data   |   |data    | | |        |          |          |
-|aware  +-B-+aware   +-B-+aware   | +------+ |          |   +----------+
-|client |   |Wi-Fi   | | |edge    +-+router+-----+      |  +---------+ |
-+-------+   |access  | | |router  | +------+ |   |      | +--------+ | |
-            |point   | | +--------+          |   |      | |Metadata| | |
-            +--------+ |                     | +-+----+ | |aware   | | |
-                       |                     | |router+---+QUIC or | | |
-+-----------+          | +--------+          | +-+----+ | |DTLS    | |-+
-| Metadata  |          | |Metadata|          |   |      | |server  |-+
-| aware     |          | |aware   | +------+ |   |      | +--------+
-| client    +-----B------+RAN     +-+router+-----+      |
-|(handset)  |          | |router  | +------+ |          |
-+-----------+          | +--------+          |          |
-                       |                     |          |
-                       |                     | Transit  | Server
-     User Network      |      ISP Network    | Network  | Network
-~~~~~
-{: #fig-arch artwork-align="center" title="Network Diagram" :height=88}
-
+Data between two endpoints can be broadly classified into interactive
+and non-interactive classes.  These are often in conflict, especially
+when carried in the same 5-tuple.  A network with constrained
+resources will have need to ECN-mark {{?RFC3168}} or discard packets
+of that flow.  If the packet's metadata can be communicated to the
+network, the network can make a more informed decision on which
+packets to discard.  For example, an application might have a single
+5-tuple connection that carries both realtime audio and a
+bandwidth-consuming file transfer. By informing the network of the
+metadata of those packets, the network can discard packets belonging
+to the file transfer.  As the congestion control is affected by
+those discards, the realtime traffic can continue being sent but
+the file transfer can slow down.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
-# QoS Measurement
-
-QoS measurement between 2 (or more) nodes without relying on transport layer: (QoS – Latency, Loss, MTU, BDP etc)
-
-* In-band: For the example, the QoS under measurement is loss. Consider 2 routers (A and B) in the network that are having loss between them. Both routers establish a handshake between them using any given communication protocol for OOB communication. They exchange their capability to support QoS measurement and the predefined algorithm they use to measure the QoS (loss in this case).  Router A receives packet of size considerably less than the MTU of the network. Router A appends a sequence number to the packets and sends them to router B. Router B, upon receiving the packets, updates its table with the tag and strips the sequence number added and forwards it to the next hop. Upon transmission of 'n' packets, router A sends a 'fin' sequence number and router B returns the sequence numbers that were missed and hence, how much loss is there between the nodes. We can also use methods discussed in {{?RFC7456}} and {{?RFC8321}}.
-* A similar approach can be used to measure QoS out of band as well, upon demand, using synthetically generated packets and the communication protocol that the routers use to pass control information. UDP echo can also be used for this purpose {{?RFC862}}.
-* For a case where one of the routers is 'intelligent' and other one is not, any of the loopback protocols - like a UDP echo service {{?RFC862}} and measure the by sending synthetically generated packets.
-* We can also leverage using IP ID extn for passing sequence numbers and more metadata if needed {{?I-D.templin-intarea-ipid-ext}}
-* We can leverage both OOB and IB, based on the heuristics, to measure QoS between 2 nodes.
-* One can even modify the TTL accordingly and decide between which nodes, the QoS needs to be measured. QoS measurement happens only for the nodes where the packet's TTL is 255. The 2nd node (in this case, B) can decide to reset the TTL or leave it as it is before sending it to the next node.
-
-# Metadata Design
-
-Using QUIC CID to pass metadata required to route the packets effectively.
-
-* Metadata can have a handshake in the first packet with a short header {{?RFC8999}}. It can be a 2-way or a 3-way handshake. The handshake will contain various information related to:
-   * Encryption information for the Metadata (refer encryption below for more details).
-   * Information related to utilizing Metadata (refer ISP section below for more details).
-* A bit to indicate whether the metadata needs to be processed or ignored. This bit will decide whether a particular traffic needs to be optimized or not. If this bit is set to 0, the metadata is ignored, and the traffic is just treated as it is today.
-* The packet information:
-   * One bit to say if the packet belongs to loss-tolerant or reliable stream.
-   * One bit to signify whether the traffic is real-time or bulk transfer.
-   * 2 bits indicating the priority based on the nature of traffic. This helps in determining not only the ideal route but also determine type of loss avoidance mechanism and resources to be deployed.
-* Rest of the bits are reserved for now. We can use them to determine heuristics or for determining versions etc. Other data that are good to have but not necessary data can be included in an optional metadata extension, indicated by a bit, for future extension.
-
 # Metadata Interpretation
+
+[[
 
 * Reliable subchannel packets that are loss-intolerant can be transmitted using proactive measures to avoid loss (eg. double retransmission, FEC) based on the priority bits.
 * Loss-tolerant packets can be forwarded or sent duplicates based on the priority flags – for key frames in graphics/Multimedia.
 * These packets can contain the same CID but different sequence numbers (listed in 1 – either IP ID or custom sequence numbers) and can be used to update the QoS measurement for each multiple transmits.
 
-# Metadata exchanged
 
-## Metadata Hanshake
+Dan wonders: Why signal "Metadata = 1/0" at all, if we never signal MD=0?  Or is MD=0 how one would 'clear'
+a setting??
 
-Metadata handshake is done at the first QUIC packet that goes out with short header. The handshake metadata packet contains information on
+]]
 
-1. Information for metadata support
-   * Authorize/reject metadata optimization.
-   * Support for optimization.
-2. Information for encryption of metadata
-   * Obfuscation/Encryption mechanism.
-   * Rotation Mechanism.
-   * Obfuscation/Encryption specific data.
-3. ISP token exchanged between server/client and ISP that contains data such as:
-   * Optimization - enabled/disabled.
-   * Type of optimization.
-   * Extent of optimization.
+# Metadata Exchanged
 
-## Metadata structure for different types of traffic
+## Priority
 
-The packets can be broadly classified as 2 types – loss tolerant (lossy) and reliable (lossless).
+Priority indicates the relative importance of this packet, within that UDP 4-tuple.  The 'low priority'
+means 'worse than non-signaled packets', which allows signaling only those packets which need to be
+prioritized below un-signaled packets.
 
-### Reliable
+When signaled in binary, the Priority bit is 0 for low priority, 1 for normal priority, 2 for
+medium priority, and 2 for high priority.
 
-Lossless/Reliable packets cannot afford to be lost and hence, every packet needs to be treated important (that is, the application
-will re-transmit the packet if it is lost). Based on the traffic, the Real-Time Tx bit is set. The QUIC metadata in network bits will look like
+When signaled in JSON, it is encoded as name "priority" and one of the
+values "low", "normal", "medium" or "high".
+
+## Reliable/Unreliable
+
+Reliable packets are intended to be treated like TCP packets:  the host will re-transmit the packet until
+it is successfully received or the sender gives up, typically many seconds or minutes later.  Thus the
+network SHOULD make attempts to deliver this packet, otherwise the end-host will send it again, incurring
+additional delay for the end user (harming end user experience) and causing more traffic on the network
+overall.
+
+When signaled in binary, the Reliable bit is set (1).
+
+When signaled in JSON, it is encoded as name "reliable" and value "true".
+
+Unreliable packets are expected to experience some loss, and are not re-transmitted by the application
+because a re-transmission would take too long to be useful for the receiver.  For example if the receiver's
+playout (jitter) buffer is 60ms but a retransmission would consume 100ms, the application will endeavour
+to avoid retransmitting the packet and instead rely on the receiving application concealing the loss
+somehow (with audio, some loss of an intermediate video update, etc.).
+
+When sent in binary, the Reliable bit is cleared (0).
+
+When sent in JSON, it is encoded as name "reliable" and value "false".
+
+## Realtime/Bulk
+
+Realtime packets ... ((add words)) ...
+
+When signaled in binary, the Realtime bit is set (1).
+
+When signaled in JSON, it is encoded as name "realtime" and value "true".
+
+Bulk packets ... ((add words)) ...
+
+When signaled in binary, the Realtime bit is cleared (0).
+
+When signaled in JSON, it is encoded as name "realtime" and value "false".
+
+
+### Reliable Traffic
+
+
+
+When sent in JSON, will have the
 
 | MD Enable | Loss-Tolerant | Real-Time Tx | Priority | CID |
 |:---------:|:-------------:|:------------:|:--------:|:---:|
@@ -248,7 +219,7 @@ will re-transmit the packet if it is lost). Based on the traffic, the Real-Time 
 {: #Reliable-network-bits title="Network-Bits"}
 When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.
 
-### Loss-Tolerant
+### Unreliable Traffic Loss-Tolerant
 
 Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
 re-transmit the packet).
@@ -307,11 +278,73 @@ Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and
 | File copy | bulk | Reliable | Low (0) |  |
 | VoIP | real-time | Loss-tolerant (loss is harmful to UX) | Medium-High (2) |   |
 
-# Metadata Encoding
 
-This section illustrates how the QUIC CID Metadata would look like in different encoding mechanisms. For purpose of illustration, network bits and JSON format are selected as encoding mechanisms.
 
-Priority scaling: Low is 0, Medium is 1, Medium-High is 2. High is 3.
+# Ease of adaptation and Industrial significance:
+
+The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references {{ctx-aware}} and {{wifi-ll}} can get all the required information for their respective optimizations from the CID metadata that is being proposed.
+
+The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:
+
+* Explicit signals can help in deciding how to handle packets – queuing, routing etc.
+*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference {{docsis-ll}}. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).
+* The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to {{?L4S=RFC9330}}.
+* {{?L4S=RFC9330}} CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication {{?RFC9331}} can be added to the QUIC CID.
+
+# ISP implementation of Metadata based optimization:
+
+## Metadata Subscription
+The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.
+
+1. Client and ISP have token exchanges periodically. The token contains details on:
+   * What time of traffic to be optimized.
+   * Optimization is to be done for how much bandwidth.
+2. This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.
+3. The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.
+   * Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.
+   * For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.
+4. The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).
+
+## Handling/Preventing misuse of metadata optimization:
+
+1. The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.
+2. The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.
+
+# Security Considerations
+
+## Metadata Encryption
+
+Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.
+
+1. Obfuscation:
+   * Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.
+   * Obfuscation mechanism can also be exchanged through the metadata handshake.
+
+2. Encryption:
+   * Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.
+   * The standard algorithm used to derive the key can be exchanged during the metadata handshake.
+   * The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).
+   * The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.
+
+# IANA Considerations
+
+None.
+
+
+
+
+# Acknowledgments
+{:numbered="false"}
+
+To be completed.
+
+--- back
+
+# Example Metadata Encoding
+
+This section illustrates how the QUIC CID Metadata would look like in
+different encoding mechanisms. For purpose of illustration, network
+bits and JSON format are selected as encoding mechanisms.
 
 ## User typing
 
@@ -402,61 +435,5 @@ Priority scaling: Low is 0, Medium is 1, Medium-High is 2. High is 3.
 {"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":2},"CID":{"id":12345}}
 ~~~~~
 {: #VoIP-json artwork-align="left" title="JSON"}
-
-# Ease of adaptation and Industrial significance:
-
-The current proposal can be extended to radio and WiFi protocols as well. The currently provided CID metadata can be used to obtain the necessary information about the nature of the packet for the radio and wireless protocols to make more intelligent and informed decisions. For example, references {{ctx-aware}} and {{wifi-ll}} can get all the required information for their respective optimizations from the CID metadata that is being proposed.
-
-The explicit signaling through QUIC CID will be of immense benefits for various applications and corporations. These are a few which would benefit from the current proposal:
-
-* Explicit signals can help in deciding how to handle packets – queuing, routing etc.
-*It can also help reduce the queueing for streaming protocols – taking more proactive approach of delivering key frames and reliable packets, and not having to queue every packet being exchanged, thereby further reducing queueing delays, eliminating them in some cases (the explicit signal on whether the packet is loss tolerant or not makes a big impact on deciding whether to queue the packet or not). It will be useful in cases mentioned in reference {{docsis-ll}}. Non-queue building (NQB) mentioned in the overview can be signaled in the QUIC CID, as well (eg. if QUIC CID=12345, treat it same as DiffServ NQB PHB).
-* The inclusion of vital metadata in QUIC CID and improving the performance through it is a step closer to {{?L4S=RFC9330}}.
-* {{?L4S=RFC9330}} CC information can also be explicitly signaled in the metadata, possibly simplifying handling of the queues in the network nodes. The L4S indication {{?RFC9331}} can be added to the QUIC CID.
-
-# ISP implementation of Metadata based optimization:
-
-## Metadata Subscription
-The ISP can provide the metadata optimization as an enhanced feature that the client can subscribe to, for a fee.
-
-1. Client and ISP have token exchanges periodically. The token contains details on:
-   * What time of traffic to be optimized.
-   * Optimization is to be done for how much bandwidth.
-2. This token is exchanged with the server as part of the Metadata handshake (explained above) and the server shares this token with the ISP. The ISP is aware of what is subscribed by both server and client through the token.
-3. The client/server now, will tag each packet to indicate whether the packet needs to be optimized/processed via Metadata Enable bit. When the bit is set to 1, further information about the packet is populated in the CID metadata.
-   * Application protocol can have more information exchanged between client and server that helps the server to decide which packets to prioritize.
-   * For example, in application virtualization, the client can send information about what window/app is in the foreground (say video player) and what is in the background (say webpage with animated advertisements) server can prioritize only packets containing data from that particular application (video player in this case). This intelligence can be added to the application's protocol.
-4. The option to pause optimization can be made available to server, ISP and client at any point. Users can also pause the optimization based on their need (e.g. a gamer can pause it when they are away from keyboard or not playing to conserve the allocated optimization bandwidth).
-
-## Handling/Preventing misuse of metadata optimization:
-
-1. The ISP, now aware of the nature of optimization, can now look at the Metadata and prioritize accordingly. If the ISP sees the server is misusing the metadata optimization (e.g. tagging every packet as important packet so all of them are optimized), the ISP can police or punish the client/server for misusing - can either charge extra or disable optimization for the server/client.
-2. The client also has the option to decline optimization through the handshake or at any point if it detects any misuse.
-
-# Security Considerations
-
-## Metadata Encryption
-
-Encryption/Obfuscation of metadata is vital to prevent attackers from knowing the nature of the packet, since CID lies outside the DTLS encryption.
-
-1. Obfuscation:
-   * Exchange the Meta data format in Handshake. Handshake can also include the signal that indicates rotation of obfuscation mechanism.
-   * Obfuscation mechanism can also be exchanged through the metadata handshake.
-
-2. Encryption:
-   * Encryption key can be derived using a standard algorithm, from the DTLS key exchanged.
-   * The standard algorithm used to derive the key can be exchanged during the metadata handshake.
-   * The derived key can be communicated to the nodes through secure protocol (application protocol or any secure protocol between the nodes).
-   * The derived key can also be sent to the nodes through the ISP token exchanged. Client/Server can send the key to the ISP through secure protocol (same or different from the protocol used to exchange tokens) and ISP can push the token to the intermediary nodes through internal command protocol.
-
-# IANA Considerations
-
-None.
-
-
-# Acknowledgments
-{:numbered="false"}
-
-To be completed.
 
 
