@@ -130,35 +130,32 @@ Table of Contents
    In a network, if the routers can tell apart different types of
    traffic, like real-time (like video calls) and bulk (like file
    downloads), or reliable (TCP) and unreliable (UDP), it can help the
-   network perform more efficiently.  For example, Reliable traffic,
-   which needs all its data packets to reach their destination, might
-   get more bandwidth.  Unreliable traffic, which can afford to lose
-   some packets, might get less.  This way, the network can handle more
-   traffic and provide a better user experience.  Plus, Unreliable
-   traffic can sometimes be associated with network attacks.
-   Identifying this traffic can help in implementing security measures.
-   It can help spot potential security threats.  In cases where network
-   has high losses, it can help the router handle reliable traffic more
-   effectively as well.  Understanding the mix of reliable and
-   unreliable traffic can aid in network troubleshooting and future
-   network planning.
+   network perform more efficiently.
 
-   On the other hand, identifying real-time and bulk traffic also has
-   it's advantages.  Real-time data packets must be delivered in a
-   timely and consistent manner to ensure a smooth, uninterrupted user
-   experience.  On the other hand, bulk traffic involves the transfer of
-   large amounts of data, such as file downloads, where the focus is on
-   throughput rather than speed.  While it’s still important for data to
-   be delivered reliably, it’s less critical for this to happen in real-
-   time.  Once traffic is classified, routers can use Quality of Service
-   (QoS) mechanisms to prioritize certain types of traffic over
-   others([RFC4594]).  Furthermore, routers can employ traffic shaping
-   techniques ([RFC7640]) to control the rate at which packets are sent.
-   By differentiating and appropriately managing real-time and bulk
-   traffic, routers can optimize network performance, improve user
-   experience, and ensure efficient utilization of network resources.
-   This is particularly valuable in networks with diverse traffic
-   patterns and varying performance requirements.
+   For example, Reliable traffic, which needs all its data packets to
+   reach their destination, might get more bandwidth.  Unreliable
+   traffic, which can afford to lose some packets, might get less.  This
+   way, the network can handle more traffic and provide a better user
+   experience.  Unreliable traffic can sometimes be associated with
+   network attacks.  Identifying this traffic can help in implementing
+   security measures and spot potential security threats.  Understanding
+   the mix of reliable and unreliable traffic can aid in network
+   troubleshooting and future network planning.
+
+   Real-time data packets must be delivered in a timely and consistent
+   manner to ensure a smooth, uninterrupted user experience.  Bulk
+   traffic involves the transfer of large amounts of data, such as file
+   downloads, where the focus is on throughput rather than speed.  While
+   it’s still important for data to be delivered reliably, it’s less
+   critical for this to happen in real-time.  Once traffic is
+   classified, routers can use Quality of Service (QoS) mechanisms to
+   prioritize certain types of traffic over others([RFC4594]).
+   Furthermore, routers can employ traffic shaping techniques
+   ([RFC7640]) to control the rate at which packets are sent.
+   Differentiating and appropriately managing real-time and bulk traffic
+   optimizes network performance, improve user experience and is
+   particularly valuable in networks with diverse traffic patterns and
+   varying performance requirements.
 
    The advantages of both reliable [QUIC] and unreliable QUIC [RFC9221]
    will bring QUIC to displace TCP and bespoke UDP applications.
@@ -267,15 +264,15 @@ Table of Contents
 
    Don't care bit (DC) indicates if the sender expects the packet to be
    delivered as reliably as possible or if the packet can be dropped
-   without significant impact to the experience.  Unreliable packet with
-   don't care bit is different from reliable/loss-tolerant nature.  The
-   application would function when an unreliable packet with don't care
-   bit set is lost (will not require retransmission of the packet) but
-   there would be a considerable impact to experience.  In this case,
-   don't care bit would be cleared(0).  When the nature of a packet is
-   reliable, packet not being delivered will cause the application to
-   fail (will require retransmission of the packet).  An example for
-   this distinction is discussed in Section 5 section.
+   without significant impact to the experience.  Setting/Clearing don't
+   care bit is not the same as tagging a traffic reliable/loss-tolerant.
+   The application would function when an unreliable packet with don't
+   care bit set is lost (will not require retransmission of the packet)
+   but there would be a considerable impact to experience.  On the other
+   hand, when the nature of a packet is reliable, packet not being
+   delivered will cause the application to fail (will require
+   retransmission of the packet).  An example for this distinction is
+   discussed in Section 5 section.
 
    *  When signaled in binary, the don't care bit is 0 or a 1.
 
@@ -316,7 +313,11 @@ Table of Contents
    error.  Examples include file transfers and email delivery.
 
    *  When signaled in binary, the Loss-Tolerant bit is cleared (0).
-      The QUIC metadata in network bits will look like
+
+   *  When signaled in JSON, it is incoded as "Loss-Tolerant" and value
+      "false".
+
+   *  The QUIC metadata in network bits will look like:
 
               +===============+===========+====+===========+
               | Loss-Tolerant | Real-Time | DC |    CID    |
@@ -325,9 +326,6 @@ Table of Contents
               +---------------+-----------+----+-----------+
 
                           Table 1: Network-Bits
-
-   *  When signaled in JSON, it is incoded as "Loss-Tolerant" and value
-      "false".
 
    When there is loss detected between 2 nodes, using the above QoS
    measurement, the network will endeavor to deliver the packet reliably
@@ -360,7 +358,7 @@ Table of Contents
       -  When signaled in JSON, it is indicated as "Loss-Tolerant" and
          value "true" and "DontCare" vale set to "false".
 
-      -  Network Bits will look like:
+      -  The QUIC metadata in network bits will look like:
 
               +===============+===========+====+===========+
               | Loss-Tolerant | Real-Time | DC |    CID    |
@@ -388,7 +386,7 @@ Table of Contents
       -  When signaled in JSON, it is indicated as "Loss-Tolerant" and
          value "true" and "DontCare" vale set to "true".
 
-      -  Network Bits will look like:
+      -  The QUIC metadata in network bits will look like:
 
               +===============+===========+====+===========+
               | Loss-Tolerant | Real-Time | DC |    CID    |
