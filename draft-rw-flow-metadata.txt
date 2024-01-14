@@ -108,16 +108,16 @@ Table of Contents
 1.  Introduction
 
    Host-to-network metadata signaling has historically been performed by
-   the sender setting DSCP bits ((add reference)).  While DSCP can
-   express high priority (Expedited Forwarding [RFC3246]) and low
-   priority ([RFC3662]), DSCP bits are frequently ignored at congestion
-   points or lost (stripped) during a packet's lifetime across the
-   Internet.  Also, DSCP attempts influences the packet's treatment
-   compared to all other packets from other hosts.  In contrast, the
-   metadata desscribed by this document influences the treatment of all
-   the packets in a flow (UDP 4-tuple) or individual packets within a
-   single flow (UDP 4-tuple), rather than influencing treatment between
-   flows belonging to different hosts.
+   the sender setting DSCP bits ([RFC7657])([RFC8837])([RFC2475]).
+   While DSCP can express high priority (Expedited Forwarding [RFC3246])
+   and low priority ([RFC3662]), DSCP bits are frequently ignored at
+   congestion points or lost (stripped) during a packet's lifetime
+   across the Internet.  Also, DSCP attempts influences the packet's
+   treatment compared to all other packets from other hosts.  In
+   contrast, the metadata described by this document influences the
+   treatment of all the packets in a flow (UDP 4-tuple) or individual
+   packets within a single flow (UDP 4-tuple), rather than influencing
+   treatment between flows belonging to different hosts.
 
    Network-to-host metadata signaling has historically been performed by
    dropping packets or setting the ECN bit on packets.  Both of these
@@ -127,14 +127,38 @@ Table of Contents
    downloaded data is wasted and it counts against the user's monthly
    data allotment.
 
-   ((need introductory text explaining the value and purpose of realtim/
-   bulk and reliable/unreliable.
+   In a network, if the routers can tell apart different types of
+   traffic, like real-time (like video calls) and bulk (like file
+   downloads), or reliable (TCP) and unreliable (UDP), it can help the
+   network perform more efficiently.  For example, Reliable traffic,
+   which needs all its data packets to reach their destination, might
+   get more bandwidth.  Unreliable traffic, which can afford to lose
+   some packets, might get less.  This way, the network can handle more
+   traffic and provide a better user experience.  Plus, Unreliable
+   traffic can sometimes be associated with network attacks.
+   Identifying this traffic can help in implementing security measures.
+   It can help spot potential security threats.  In cases where network
+   has high losses, it can help the router handle reliable traffic more
+   effectively as well.  Understanding the mix of reliable and
+   unreliable traffic can aid in network troubleshooting and future
+   network planning.
 
-   Is the separation of 'realtime/bulk' useful for a router?  What do we
-   want it to do differently, considering we have priority??
-
-   Is the separation of reliable/unreliable useful for a router?  What
-   do we want it to do differently, considering we have priority??))
+   On the other hand, identifying real-time and bulk traffic also has
+   it's advantages.  Real-time data packets must be delivered in a
+   timely and consistent manner to ensure a smooth, uninterrupted user
+   experience.  On the other hand, bulk traffic involves the transfer of
+   large amounts of data, such as file downloads, where the focus is on
+   throughput rather than speed.  While it’s still important for data to
+   be delivered reliably, it’s less critical for this to happen in real-
+   time.  Once traffic is classified, routers can use Quality of Service
+   (QoS) mechanisms to prioritize certain types of traffic over
+   others([RFC4594]).  Furthermore, routers can employ traffic shaping
+   techniques ([RFC7640]) to control the rate at which packets are sent.
+   By differentiating and appropriately managing real-time and bulk
+   traffic, routers can optimize network performance, improve user
+   experience, and ensure efficient utilization of network resources.
+   This is particularly valuable in networks with diverse traffic
+   patterns and varying performance requirements.
 
    The advantages of both reliable [QUIC] and unreliable QUIC [RFC9221]
    will bring QUIC to displace TCP and bespoke UDP applications.
@@ -810,6 +834,11 @@ Informative References
               DOI 10.17487/RFC9000, May 2021,
               <https://www.rfc-editor.org/rfc/rfc9000>.
 
+   [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
+              and W. Weiss, "An Architecture for Differentiated
+              Services", RFC 2475, DOI 10.17487/RFC2475, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2475>.
+
    [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
@@ -826,10 +855,29 @@ Informative References
               RFC 3662, DOI 10.17487/RFC3662, December 2003,
               <https://www.rfc-editor.org/rfc/rfc3662>.
 
+   [RFC4594]  Babiarz, J., Chan, K., and F. Baker, "Configuration
+              Guidelines for DiffServ Service Classes", RFC 4594,
+              DOI 10.17487/RFC4594, August 2006,
+              <https://www.rfc-editor.org/rfc/rfc4594>.
+
    [RFC5761]  Perkins, C. and M. Westerlund, "Multiplexing RTP Data and
               Control Packets on a Single Port", RFC 5761,
               DOI 10.17487/RFC5761, April 2010,
               <https://www.rfc-editor.org/rfc/rfc5761>.
+
+   [RFC7640]  Constantine, B. and R. Krishnan, "Traffic Management
+              Benchmarking", RFC 7640, DOI 10.17487/RFC7640, September
+              2015, <https://www.rfc-editor.org/rfc/rfc7640>.
+
+   [RFC7657]  Black, D., Ed. and P. Jones, "Differentiated Services
+              (Diffserv) and Real-Time Communication", RFC 7657,
+              DOI 10.17487/RFC7657, November 2015,
+              <https://www.rfc-editor.org/rfc/rfc7657>.
+
+   [RFC8837]  Jones, P., Dhesikan, S., Jennings, C., and D. Druta,
+              "Differentiated Services Code Point (DSCP) Packet Markings
+              for WebRTC QoS", RFC 8837, DOI 10.17487/RFC8837, January
+              2021, <https://www.rfc-editor.org/rfc/rfc8837>.
 
    [RFC9221]  Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
               Datagram Extension to QUIC", RFC 9221,

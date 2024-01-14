@@ -1274,11 +1274,11 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">Host-to-network metadata signaling has historically been performed by the sender setting
-DSCP bits ((add reference)).  While DSCP can express high priority (Expedited Forwarding <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>)
+DSCP bits (<span>[<a href="#RFC7657" class="cite xref">RFC7657</a>]</span>)(<span>[<a href="#RFC8837" class="cite xref">RFC8837</a>]</span>)(<span>[<a href="#RFC2475" class="cite xref">RFC2475</a>]</span>). While DSCP can express high priority (Expedited Forwarding <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>)
 and low priority (<span>[<a href="#RFC3662" class="cite xref">RFC3662</a>]</span>), DSCP bits are frequently ignored at congestion
 points or lost (stripped) during a packet's lifetime across the Internet.  Also, DSCP
 attempts influences the packet's treatment compared to all other packets from other
-hosts.  In contrast, the metadata desscribed by this document influences the treatment
+hosts.  In contrast, the metadata described by this document influences the treatment
 of all the packets in a flow (UDP 4-tuple) or individual packets within a single flow
 (UDP 4-tuple), rather than influencing treatment between flows belonging to different
 hosts.<a href="#section-1-1" class="pilcrow">¶</a></p>
@@ -1287,19 +1287,15 @@ setting the ECN bit on packets.  Both of these techniques work well to consume
 the network's available bandwidth.  However, it is wasteful for the host to download
 streaming video at the full available bandwidth.  If the user abandons the video
 that downloaded data is wasted and it counts against the user's monthly data allotment.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">((need introductory text explaining the value and purpose of realtim/bulk and
-reliable/unreliable.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Is the separation of 'realtime/bulk' useful for a router?  What do we want it to
-do differently, considering we have priority??<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">Is the separation of reliable/unreliable useful for a router?  What do we want it
-to do differently, considering we have priority??))<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">The advantages of both reliable <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and unreliable QUIC <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>
+<p id="section-1-3">In a network, if the routers can tell apart different types of traffic, like real-time (like video calls) and bulk (like file downloads), or reliable (TCP) and unreliable (UDP), it can help the network perform more efficiently. For example, Reliable traffic, which needs all its data packets to reach their destination, might get more bandwidth. Unreliable traffic, which can afford to lose some packets, might get less. This way, the network can handle more traffic and provide a better user experience. Plus, Unreliable traffic can sometimes be associated with network attacks. Identifying this traffic can help in implementing security measures. It can help spot potential security threats. In cases where network has high losses, it can help the router handle reliable traffic more effectively as well. Understanding the mix of reliable and unreliable traffic can aid in network troubleshooting and future network planning.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">On the other hand, identifying real-time and bulk traffic also has it's advantages. Real-time data packets must be delivered in a timely and consistent manner to ensure a smooth, uninterrupted user experience. On the other hand, bulk traffic involves the transfer of large amounts of data, such as file downloads, where the focus is on throughput rather than speed. While it’s still important for data to be delivered reliably, it’s less critical for this to happen in real-time. Once traffic is classified, routers can use Quality of Service (QoS) mechanisms to prioritize certain types of traffic over others(<span>[<a href="#RFC4594" class="cite xref">RFC4594</a>]</span>). Furthermore, routers can employ traffic shaping techniques (<span>[<a href="#RFC7640" class="cite xref">RFC7640</a>]</span>) to control the rate at which packets are sent. By differentiating and appropriately managing real-time and bulk traffic, routers can optimize network performance, improve user experience, and ensure efficient utilization of network resources. This is particularly valuable in networks with diverse traffic patterns and varying performance requirements.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The advantages of both reliable <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and unreliable QUIC <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>
 will bring QUIC to displace TCP and bespoke UDP applications. Network elements
 have long been able to identify reliable flows between hosts as those are
 usually TCP flows; unreliable flows have been carried over UDP (e.g., VoIP,
 SIP signaling, NTP, DNS) and frequently use application-level retransmission to
-achieve some amount of reliability.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">There are several advatanges to an application using a single 5-tuple for
+achieve some amount of reliability.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">There are several advatanges to an application using a single 5-tuple for
 its communications with another host.  Multiplexing RTP and RTCP <span>[<a href="#RFC5761" class="cite xref">RFC5761</a>]</span>) was
 found advantageous, but fortunately those protocols are both realtime and have
 nearly-identical network scheduling requirements.  Another advantage is shared
@@ -1309,16 +1305,16 @@ from the sender across the Internet to the receiver's access network.  In the
 event the DSCP bits do survive, the sender's intended interpretation may not
 align with the receiving network's interpretation, or the receiving network
 may not honor those bits because the sender is (perceived) to lack authorization
-to influence the receiver's network treatment.<a href="#section-1-7" class="pilcrow">¶</a></p>
-<p id="section-1-8">This document describes both per-flow and per-packet host-to-network signaling of
+to influence the receiver's network treatment.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">This document describes both per-flow and per-packet host-to-network signaling of
 packet metadata.  The metadata is carried in a host-to-network protocol that
 effectively creates a "pointer" (mapping) to the metadata such as <span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>
 or carries the metadata directly in the packet itself
-<span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
-<p id="section-1-9">By providing a signaling mechanism that survives across the Internet,
+<span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">By providing a signaling mechanism that survives across the Internet,
 intermediaries can identify the nature of the packet without
-decryption and without understanding the application protocol.<a href="#section-1-9" class="pilcrow">¶</a></p>
-<p id="section-1-10">Data between two endpoints can be broadly classified into interactive
+decryption and without understanding the application protocol.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">Data between two endpoints can be broadly classified into interactive
 and non-interactive classes.  These are often in conflict, especially
 when carried in the same 5-tuple.  A network with constrained
 resources will have need to ECN-mark <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span> or discard packets
@@ -1330,7 +1326,7 @@ bandwidth-consuming file transfer. By informing the network of the
 metadata of those packets, the network can discard packets belonging
 to the file transfer.  As the congestion control is affected by
 those discards, the realtime traffic can continue being sent but
-the file transfer can slow down.<a href="#section-1-10" class="pilcrow">¶</a></p>
+the file transfer can slow down.<a href="#section-1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1926,6 +1922,10 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
         <dd>
 <span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC2475">[RFC2475]</dt>
+        <dd>
+<span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Black, D.</span>, <span class="refAuthor">Carlson, M.</span>, <span class="refAuthor">Davies, E.</span>, <span class="refAuthor">Wang, Z.</span>, and <span class="refAuthor">W. Weiss</span>, <span class="refTitle">"An Architecture for Differentiated Services"</span>, <span class="seriesInfo">RFC 2475</span>, <span class="seriesInfo">DOI 10.17487/RFC2475</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2475">https://www.rfc-editor.org/rfc/rfc2475</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3168">[RFC3168]</dt>
         <dd>
 <span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
@@ -1938,9 +1938,25 @@ Most of the bulk transfer (file copy or printing) are reliable data with big siz
         <dd>
 <span class="refAuthor">Bless, R.</span>, <span class="refAuthor">Nichols, K.</span>, and <span class="refAuthor">K. Wehrle</span>, <span class="refTitle">"A Lower Effort Per-Domain Behavior (PDB) for Differentiated Services"</span>, <span class="seriesInfo">RFC 3662</span>, <span class="seriesInfo">DOI 10.17487/RFC3662</span>, <time datetime="2003-12" class="refDate">December 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3662">https://www.rfc-editor.org/rfc/rfc3662</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4594">[RFC4594]</dt>
+        <dd>
+<span class="refAuthor">Babiarz, J.</span>, <span class="refAuthor">Chan, K.</span>, and <span class="refAuthor">F. Baker</span>, <span class="refTitle">"Configuration Guidelines for DiffServ Service Classes"</span>, <span class="seriesInfo">RFC 4594</span>, <span class="seriesInfo">DOI 10.17487/RFC4594</span>, <time datetime="2006-08" class="refDate">August 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4594">https://www.rfc-editor.org/rfc/rfc4594</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5761">[RFC5761]</dt>
         <dd>
 <span class="refAuthor">Perkins, C.</span> and <span class="refAuthor">M. Westerlund</span>, <span class="refTitle">"Multiplexing RTP Data and Control Packets on a Single Port"</span>, <span class="seriesInfo">RFC 5761</span>, <span class="seriesInfo">DOI 10.17487/RFC5761</span>, <time datetime="2010-04" class="refDate">April 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5761">https://www.rfc-editor.org/rfc/rfc5761</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7640">[RFC7640]</dt>
+        <dd>
+<span class="refAuthor">Constantine, B.</span> and <span class="refAuthor">R. Krishnan</span>, <span class="refTitle">"Traffic Management Benchmarking"</span>, <span class="seriesInfo">RFC 7640</span>, <span class="seriesInfo">DOI 10.17487/RFC7640</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7640">https://www.rfc-editor.org/rfc/rfc7640</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7657">[RFC7657]</dt>
+        <dd>
+<span class="refAuthor">Black, D., Ed.</span> and <span class="refAuthor">P. Jones</span>, <span class="refTitle">"Differentiated Services (Diffserv) and Real-Time Communication"</span>, <span class="seriesInfo">RFC 7657</span>, <span class="seriesInfo">DOI 10.17487/RFC7657</span>, <time datetime="2015-11" class="refDate">November 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7657">https://www.rfc-editor.org/rfc/rfc7657</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8837">[RFC8837]</dt>
+        <dd>
+<span class="refAuthor">Jones, P.</span>, <span class="refAuthor">Dhesikan, S.</span>, <span class="refAuthor">Jennings, C.</span>, and <span class="refAuthor">D. Druta</span>, <span class="refTitle">"Differentiated Services Code Point (DSCP) Packet Markings for WebRTC QoS"</span>, <span class="seriesInfo">RFC 8837</span>, <span class="seriesInfo">DOI 10.17487/RFC8837</span>, <time datetime="2021-01" class="refDate">January 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8837">https://www.rfc-editor.org/rfc/rfc8837</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9221">[RFC9221]</dt>
         <dd>
