@@ -42,7 +42,7 @@ author:
     organization: Cloud Software Group Holdings, Inc.
     abbrev: Cloud Software Group
     country: United States of America
-    email: ["sridharan.rajagopalan@cloud.com"]
+    email: ["sridharan.girish@gmail.com"]
  -
     fullname: Dan Wing
     organization: Cloud Software Group Holdings, Inc.
@@ -185,41 +185,24 @@ the file transfer can slow down.
 
 [[
 
-* Reliable subchannel packets that are loss-intolerant can be transmitted using proactive measures to avoid loss (eg. double retransmission, FEC) based on the priority bits.
-* Loss-tolerant packets can be forwarded or sent duplicates based on the priority flags – for key frames in graphics/Multimedia.
+* Reliable subchannel packets that are loss-intolerant can be transmitted using proactive measures to avoid loss (eg. double retransmission, FEC).
+* Loss-tolerant packets can be forwarded or sent duplicates based on the don't care flags – for key frames in graphics/Multimedia.
 * These packets can contain the same CID but different sequence numbers (listed in 1 – either IP ID or custom sequence numbers) and can be used to update the QoS measurement for each multiple transmits.
-
-
-Dan wonders: Why signal "Metadata = 1/0" at all, if we never signal MD=0?  Or is MD=0 how one would 'clear'
-a setting??
 
 ]]
 
 # Host to Network Metadata
 
-## Priority
-
-Priority indicates the relative importance of this packet, within that UDP 4-tuple.  The 'low priority'
-means 'worse than non-signaled packets', which allows signaling only those packets which need to be
-prioritized below un-signaled packets.
-
-When signaled in binary, the Priority bit is 0 for low priority, 1 for normal priority, 2 for
-medium priority, and 2 for high priority.
-
-When signaled in JSON, it is encoded as name "priority" and one of the
-values "low", "normal", "medium" or "high".
-
 ## Reliable/Unreliable
 
-Reliable packets are intended to be treated like TCP packets:  the host will re-transmit the packet until
+Reliable packets are intended to be treated like TCP packets:  The host will re-transmit the packet until
 it is successfully received or the sender gives up, typically many seconds or minutes later.  Thus the
 network SHOULD make attempts to deliver this packet, otherwise the end-host will send it again, incurring
 additional delay for the end user (harming end user experience) and causing more traffic on the network
 overall.
 
-When signaled in binary, the Reliable bit is set (1).
-
-When signaled in JSON, it is encoded as name "reliable" and value "true".
+* When signaled in binary, the Reliable bit is set (1).
+* When signaled in JSON, it is encoded as name "reliable" and value "true".
 
 Unreliable packets are expected to experience some loss, and are not re-transmitted by the application
 because a re-transmission would take too long to be useful for the receiver.  For example if the receiver's
@@ -227,48 +210,63 @@ playout (jitter) buffer is 60ms but a retransmission would consume 100ms, the ap
 to avoid retransmitting the packet and instead rely on the receiving application concealing the loss
 somehow (with audio, some loss of an intermediate video update, etc.).
 
-When sent in binary, the Reliable bit is cleared (0).
+* When signaled in binary, the Reliable bit is cleared (0).
+* When signaled in JSON, it is encoded as name "reliable" and value "false".
 
-When sent in JSON, it is encoded as name "reliable" and value "false".
+## Don't Care bit
 
-## Realtime/Bulk
+Don't care bit (DC) indicates if the sender expects the packet to be delivered as reliably as possible or if the packet can be dropped without significant impact to the experience. Unreliable packet with don't care bit is different from reliable/loss-tolerant nature. The application would function when an unreliable packet with don't care bit set is lost (will not require retransmission of the packet) but there would be a considerable impact to experience. In this case, don't care bit would be cleared(0). When the nature of a packet is reliable, packet not being delivered will cause the application to fail (will require retransmission of the packet). An example for this distinction is discussed in {{IndustrialApplication}} section.
 
-Realtime packets ... ((add words)) ...
+* When signaled in binary, the don't care bit is 0 or a 1.
+* When signaled in JSON, it is encoded as name "DontCare" and is either "true" or "false".
 
-When signaled in binary, the Realtime bit is set (1).
+## Realtime/Bulk Traffic
 
-When signaled in JSON, it is encoded as name "realtime" and value "true".
+### Realtime Traffic
 
-Bulk packets ... ((add words)) ...
+Realtime traffic requires immediate processing and transmission of packets. It’s characterized by the need for speed and accuracy, such as in user typing or online gaming.
 
-When signaled in binary, the Realtime bit is cleared (0).
+* When signaled in binary, the Realtime bit is set (1).
+* When signaled in JSON, it is encoded as name "realtime" and value "true".
 
-When signaled in JSON, it is encoded as name "realtime" and value "false".
+### Bulk Traffic
+
+Bulk traffic involves the transfer of large data volumes across a network, often scheduled and not time-sensitive. It’s like sending large files or printing jobs.
+
+* When signaled in binary, the Realtime bit is cleared (0).
+* When signaled in JSON, it is encoded as name "realtime" and value "false".
 
 
-### Reliable Traffic
+## Reliable Traffic
 
+Reliable packets cannot afford to be lost. This refers to network traffic where the successful delivery of each data packet is crucial. Protocols used for this type of traffic prioritize accuracy and completeness over speed. They ensure that every packet reaches its destination, even if it requires retransmission due to packet loss or error. Examples include file transfers and email delivery.
 
+* When signaled in binary, the Loss-Tolerant bit is cleared (0). The QUIC metadata in network bits will look like
 
-When sent in JSON, will have the
-
-| MD Enable | Loss-Tolerant | Real-Time Tx | Priority | CID |
-|:---------:|:-------------:|:------------:|:--------:|:---:|
-| 1 | 0 | W | X X | Y Y ... Y |
+| Loss-Tolerant | Real-Time | DC | CID |
+|:-------------:|:---------:|:--:|:---:|
+| 0 | W | X | Y Y ... Y |
 {: #Reliable-network-bits title="Network-Bits"}
-When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide). If the traffic is real-time, then the PDB is taken into account and packet is handled accordingly.
 
-### Unreliable Traffic Loss-Tolerant
+* When signaled in JSON, it is incoded as "Loss-Tolerant" and value "false".
+
+When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide).
+
+## Unreliable/Loss-Tolerant Traffic
 
 Loss-Tolerant packets have the luxury of being dropped (that is, the application will not
-re-transmit the packet).
+re-transmit the packet). This refers to network traffic where the immediate delivery of data packets takes precedence over their reliable arrival. Protocols used for this type of traffic accept the risk of packet loss or error in favor of speed and real-time communication. Examples include user typing and online gaming.
 
 * Key Loss-Tolerant packets:
    If the application decides that any loss tolerant packet needs to be delivered reliably for some reason, the application can choose to send that specific packet as reliable so that the network will know to deliver it reliably. This is the same as reliable scenario. The QUIC metadata in network bits will look same as reliable (shown above). The application can also choose to assign high-priority to the loss-tolerant packet as well. The QUIC metadata in network bits will look like
 
-| MD Enable | Loss-Tolerant | Real-Time Tx | Priority | CID |
-|:---------:|:-------------:|:------------:|:--------:|:---:|
-| 1 | 1 | W | 1 1 | Y Y ... Y |
+  * When signaled in binary, the Loss-Tolerant bit is set (1) and the DontCare bit is cleared (0).
+  * When signaled in JSON, it is indicated as "Loss-Tolerant" and value "true" and "DontCare" vale set to "false".
+  * Network Bits will look like:
+
+| Loss-Tolerant | Real-Time | DC | CID |
+|:-------------:|:---------:|:--:|:---:|
+| 1 | W | 0 | Y Y ... Y |
 {: #key-loss-tolerant-network-bits title="Network-Bits"}
 
 When the loss tolerant packet is marked with higher priority (implementation decided by the network node), the packet can be transmitted with corresponding loss avoidance mechanism multiple times to increase the probability of delivery (implementation decided by the network node).
@@ -276,18 +274,22 @@ When the loss tolerant packet is marked with higher priority (implementation dec
 * Loss-Tolerant packets:
    If the application decides the packet is loss-tolerant and not too important to be transmitted reliably, the packet will just be transmitted once irrespective of the loss between the 2 nodes. The QUIC metadata in network bits will look like
 
-| MD Enable | Loss-Tolerant | Real-Time Tx | Priority | CID |
-|:---------:|:-------------:|:------------:|:--------:|:---:|
-| 1 | 1 | W | 0 0 | Y Y ... Y |
+  * When signaled in binary, the Loss-Tolerant bit is set (1) and the DontCare bit is set (1).
+  * When signaled in JSON, it is indicated as "Loss-Tolerant" and value "true" and "DontCare" vale set to "true".
+  * Network Bits will look like:
+
+| Loss-Tolerant | Real-Time | DC | CID |
+|:-------------:|:---------:|:--:|:---:|
+| 1 | W | 1 | Y Y ... Y |
 {: #Loss-Tolerant title="Network-Bits"}
 
 For a real-time example of the above proposal, let's consider a desktop virtualization use case that comprises of a server (VDA) and a client connected over the internet, which has mixed traffic – interactive traffic (graphics updates, mouse and keyboard activity), bulk data transfer traffic (file copy and printing), and video streaming (interactive video – VR, gaming) and VoIP remoting (MS Teams) - interactive. The application can identify the type of traffic through various methods – type of virtual channel, use of hooks to identify operations, heuristics that detect keyboard and mouse activity etc. and based on the heuristics and nature of the channel, the application can send the packets through loss tolerant or reliable channels and determine the priority.
 
 * Real-time traffic:
-Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time Tx bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.
+Most of the real-time traffic (graphics, VoIP) are loss-tolerant. The packets don't have much of a significance when they reach late. Real-Time bit will be set to 1. Priority of that packet will be set in the following 2 bits. These packets, based on the Metadata and the QoS, will be routed in the path with least latency. The video key frames will be routed just like a reliable transport - network decides how to avoid loss on these packets.
 
 * Bulk transfer:
-Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time Tx bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.
+Most of the bulk transfer (file copy or printing) are reliable data with big sized packets. Real-Time bit will be set to 0. Priority of that packet will be set in the following 2 bits. The packets, based on the Metadata and the QoS, will be transmitted in the path with high BDP and MTU size.
 
 Proactive transmission can be done at Layer 4 to avoid any possible loss (e.g., {{?FEC=RFC6363}}) or below as well {{?I-D.meng-tsvwg-wireless-collaboration}}, up to the network nodes to decide it. Local retransmissions in L2 are more efficient than L4 end to end retransmissions. Explicit signaling this way can help reduce end to end loss and also exposes application-level parameters to the network to make end to end packet delivery more efficient by making the intermediaries more intelligent and capable of handling losses and congestion more effectively, as suggested in {{?I-D.meng-tsvwg-wireless-collaboration}} as well. This provides means and data required for achieving that.
 
@@ -299,28 +301,30 @@ When the amount of in-flight data in the network is high, the network throughput
 
 A lot of applications require both types of performances to be optimized, depending on the operation being carried out (e.g., Excel – typing and scrolling is interactive whereas loading a file or saving is non-interactive). The main purpose of a transport is to optimize performance to satisfy all types of applications. Due to the counter intuitive nature of interactive and non-interactive traffic, it is hard to get best of both the worlds. The ideal solution would be to get the best performance for the activity that is happening at that point in the session with minimal impact to the other activities happening in the background.
 
-# Industrial Application of Flow Metadata
+# Industrial Application of Flow Metadata {#IndustrialApplication}
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
 
-| Traffic type    | Nature    | Loss-tolerant | Priority | Comments |
-|:---------------:|:---------:|:-------------:|:--------:|:---------|
-| User typing | real-time | Reliable (retransmit harmful to UX) | High (3) |          |
-| Glyph critical | real-time | Reliable (retransmit harmful to UX) | High (3) |  The frames that form the base for the image is more critical and needs to be transmitted with high priority. Retransmits of these are harmful to the UX and hence need to be high priority. |
-| Glyph smoothing | real-time | Loss-tolerant | Medium (1) | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
-| Video key frame | real-time | Reliable | High (3) | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. |
-| Video predictive frame | real-time | Loss-tolerant | Medium (1) | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
-| User moving/clicking mouse (client to VDA) | real-time | Reliable (retransmit harmful to UX) | High (3) |    |
-| Mouse Pointer tracking | real-time | Loss-tolerant (retransmit is ok for UX) | Low (0) | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
-| Pointer endpoint | real-time | Reliable (retransmit harmful to UX) | High (3) | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. |
-| Print job | bulk | Reliable | Medium (1) |   |
-| File copy | bulk | Reliable | Low (0) |  |
-| VoIP | real-time | Loss-tolerant (loss is harmful to UX) | Medium-High (2) |   |
+| Traffic type    | Nature    | Loss-tolerant | DC | Comments |
+|:---------------:|:---------:|:-------------:|:--:|:---------|
+| User typing | real-time | Reliable | NA |          |
+| Glyph critical | real-time | Loss-tolerant | 0 |  The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
+| Glyph smoothing | real-time | Loss-tolerant | 1 | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
+| Video key frame | real-time | Loss-tolerant | 0 | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX.**|
+| Video predictive frame | real-time | Loss-tolerant | 1 | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
+| User moving/clicking mouse (client to VDA) | real-time | Loss-tolerant | 0 | ** |
+| Mouse Pointer tracking | real-time | Loss-tolerant | 1 | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
+| Pointer endpoint | real-time | loss-tolerant | 0 | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
+| Print job | bulk | Reliable | NA |   |
+| File copy | bulk | Reliable | NA |   |
+| VoIP-Audio | real-time | Loss-tolerant | 0 | ** |
+| VoIP-Video | real-time | Loss-tolerant | 1 | |
 
+** These are critical but considering implementation constraints, data from a specific source (a virtual channel like mouse, graphics etc in this case) is either transmitted reliably or as loss-tolerant. These packets lost will have user experience impact but still since most of the traffic from this use-case come under loss-tolerant and it is not critical that the application breaks if these are not received (unlike file transfer), these are listed as loss-tolerant while having the don't bit set to 0.
 
 # Network to Host Metadata
 
-((video streaming bandwidth.  What else??))
+((video streaming bandwidth. QoS maybe to help with application's congestion control and loss handling? What else??))
 
 
 
@@ -395,89 +399,107 @@ bits and JSON format are selected as encoding mechanisms.
 * Network bits
 
 ~~~~~
-+---------------+
-| 1 0 1 1 1 1 2 3 4 5 |
-+---------------+
++-------------+
+| 0 1 0 1 2 3 4 5 |
++-------------+
 ~~~~~
 {: #user-typing-network-bits artwork-align="left" title="Network-Bits"}
 
 * JSON syntax
 
 ~~~~~
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":true,"Priority":3},"CID":{"id":12345}}
+{"metadata":{"Loss-Tolerant":false,"Real-Time":true,"DontCare":0},"CID":{"id":12345}}
 ~~~~~
 {: #user-typing-json artwork-align="left" title="JSON"}
+
+## Glyph critical
+
+* Network bits
+
+~~~~~
++-------------+
+| 1 1 0 1 2 3 4 5 |
++-------------+
+~~~~~
+{: #glyph-critical-network-bits artwork-align="left" title="Network-Bits"}
+
+* JSON syntax
+
+~~~~~
+{"metadata":{"Loss-Tolerant":true,"Real-Time":true,"DontCare":0},"CID":{"id":12345}}
+~~~~~
+{: #glyph-critical-json artwork-align="left" title="JSON"}
 
 ## Glyph smoothing
 
 * Network bits
 
 ~~~~~
-+---------------+
-| 1 1 1 0 1 1 2 3 4 5 |
-+---------------+
++-------------+
+| 1 1 1 1 2 3 4 5 |
++-------------+
 ~~~~~
 {: #glyph-smoothing-network-bits artwork-align="left" title="Network-Bits"}
 
 * JSON syntax
 
 ~~~~~
-{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":1},"CID":{"id":12345}}
+{"metadata":{"Loss-Tolerant":true,"Real-Time":true,"DontCare":1},"CID":{"id":12345}}
 ~~~~~
 {: #glyph-smoothing-json artwork-align="left" title="JSON"}
-
-## Print job
-
-* Network bits
-
-~~~~~
-+---------------+
-| 1 0 0 0 1 1 2 3 4 5 |
-+---------------+
-~~~~~
-{: #print-job-network-bits artwork-align="left" title="Network-Bits"}
-
-* JSON syntax
-
-~~~~~
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":1},"CID":{"id":12345}}
-~~~~~
-{: #print-job-json artwork-align="left" title="JSON"}
 
 ## File Transfer
 
 * Network bits
 
 ~~~~~
-+---------------+
-| 1 0 0 0 0 1 2 3 4 5 |
-+---------------+
++-------------+
+| 0 0 0 1 2 3 4 5 |
++-------------+
 ~~~~~
 {: #file-transfer-network-bits artwork-align="left" title="Network-Bits"}
 
 * JSON syntax
 
 ~~~~~
-{"metadata":{"MD Enable":true,"Loss-Tolerant":false,"Real-Time":false,"Priority":0},"CID":{"id":12345}}
+{"metadata":{"Loss-Tolerant":false,"Real-Time":false,"DontCare":0},"CID":{"id":12345}}
 ~~~~~
 {: #file-transfer-json artwork-align="left" title="JSON"}
 
-## VoIP
+## VoIP - Audio
 
 * Network bits
 
 ~~~~~
-+---------------+
-| 1 1 1 1 0 1 2 3 4 5 |
-+---------------+
++-------------+
+| 1 1 0 1 2 3 4 5 |
++-------------+
 ~~~~~
-{: #VoIP-network-bits artwork-align="left" title="Network-Bits"}
+{: #VoIP-audio-network-bits artwork-align="left" title="Network-Bits"}
 
 * JSON syntax
 
 ~~~~~
-{"metadata":{"MD Enable":true,"Loss-Tolerant":true,"Real-Time":true,"Priority":2},"CID":{"id":12345}}
+{"metadata":{"Loss-Tolerant":true,"Real-Time":true,"DontCare":0},"CID":{"id":12345}}
 ~~~~~
-{: #VoIP-json artwork-align="left" title="JSON"}
+{: #VoIP-audio-json artwork-align="left" title="JSON"}
+
+## VoIP - Video
+
+* Network bits
+
+~~~~~
++-------------+
+| 1 1 1 1 2 3 4 5 |
++-------------+
+~~~~~
+{: #VoIP-video-network-bits artwork-align="left" title="Network-Bits"}
+
+* JSON syntax
+
+~~~~~
+{"metadata":{"Loss-Tolerant":true,"Real-Time":true,"DontCare":1},"CID":{"id":12345}}
+~~~~~
+{: #VoIP-video-json artwork-align="left" title="JSON"}
 
 
