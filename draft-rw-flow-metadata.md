@@ -100,11 +100,11 @@ the available network resources.
 # Introduction
 
 Host-to-network metadata signaling has historically been performed by the sender setting
-DSCP bits ((add reference)).  While DSCP can express high priority (Expedited Forwarding {{?RFC3246}})
+DSCP bits ({{?RFC7657}})({{?RFC8837}})({{?RFC2475}}). While DSCP can express high priority (Expedited Forwarding {{?RFC3246}})
 and low priority ({{?RFC3662}}), DSCP bits are frequently ignored at congestion
 points or lost (stripped) during a packet's lifetime across the Internet.  Also, DSCP
 attempts influences the packet's treatment compared to all other packets from other
-hosts.  In contrast, the metadata desscribed by this document influences the treatment
+hosts.  In contrast, the metadata described by this document influences the treatment
 of all the packets in a flow (UDP 4-tuple) or individual packets within a single flow
 (UDP 4-tuple), rather than influencing treatment between flows belonging to different
 hosts.
@@ -115,24 +115,11 @@ the network's available bandwidth.  However, it is wasteful for the host to down
 streaming video at the full available bandwidth.  If the user abandons the video
 that downloaded data is wasted and it counts against the user's monthly data allotment.
 
+In a network, if the routers can tell apart different types of traffic, like real-time (like video calls) and bulk (like file downloads), or reliable (TCP) and unreliable (UDP), it can help the network perform more efficiently.
 
+For example, Reliable traffic, which needs all its data packets to reach their destination, might get more bandwidth. Unreliable traffic, which can afford to lose some packets, might get less. This way, the network can handle more traffic and provide a better user experience. Unreliable traffic can sometimes be associated with network attacks. Identifying this traffic can help in implementing security measures and spot potential security threats. Understanding the mix of reliable and unreliable traffic can aid in network troubleshooting and future network planning.
 
-((need introductory text explaining the value and purpose of realtim/bulk and
-reliable/unreliable.
-
-Is the separation of 'realtime/bulk' useful for a router?  What do we want it to
-do differently, considering we have priority??
-
-Is the separation of reliable/unreliable useful for a router?  What do we want it
-to do differently, considering we have priority??))
-
-
-
-
-
-
-
-
+Real-time data packets must be delivered in a timely and consistent manner to ensure a smooth, uninterrupted user experience. Bulk traffic involves the transfer of large amounts of data, such as file downloads, where the focus is on throughput rather than speed. While it’s still important for data to be delivered reliably, it’s less critical for this to happen in real-time. Once traffic is classified, routers can use Quality of Service (QoS) mechanisms to prioritize certain types of traffic over others({{?RFC4594}}). Furthermore, routers can employ traffic shaping techniques ({{?RFC7640}}) to control the rate at which packets are sent. Differentiating and appropriately managing real-time and bulk traffic optimizes network performance, improve user experience and is particularly valuable in networks with diverse traffic patterns and varying performance requirements.
 
 The advantages of both reliable {{?QUIC=RFC9000}} and unreliable QUIC {{?RFC9221}}
 will bring QUIC to displace TCP and bespoke UDP applications. Network elements
@@ -215,7 +202,7 @@ somehow (with audio, some loss of an intermediate video update, etc.).
 
 ## Don't Care bit
 
-Don't care bit (DC) indicates if the sender expects the packet to be delivered as reliably as possible or if the packet can be dropped without significant impact to the experience. Unreliable packet with don't care bit is different from reliable/loss-tolerant nature. The application would function when an unreliable packet with don't care bit set is lost (will not require retransmission of the packet) but there would be a considerable impact to experience. In this case, don't care bit would be cleared(0). When the nature of a packet is reliable, packet not being delivered will cause the application to fail (will require retransmission of the packet). An example for this distinction is discussed in {{IndustrialApplication}} section.
+Don't care bit (DC) indicates if the sender expects the packet to be delivered as reliably as possible or if the packet can be dropped without significant impact to the experience. Setting/Clearing don't care bit is not the same as tagging a traffic reliable/loss-tolerant. The application would function when an unreliable packet with don't care bit set is lost (will not require retransmission of the packet) but there would be a considerable impact to experience. On the other hand, when the nature of a packet is reliable, packet not being delivered will cause the application to fail (will require retransmission of the packet). An example for this distinction is discussed in {{IndustrialApplication}} section.
 
 * When signaled in binary, the don't care bit is 0 or a 1.
 * When signaled in JSON, it is encoded as name "DontCare" and is either "true" or "false".
@@ -241,14 +228,14 @@ Bulk traffic involves the transfer of large data volumes across a network, often
 
 Reliable packets cannot afford to be lost. This refers to network traffic where the successful delivery of each data packet is crucial. Protocols used for this type of traffic prioritize accuracy and completeness over speed. They ensure that every packet reaches its destination, even if it requires retransmission due to packet loss or error. Examples include file transfers and email delivery.
 
-* When signaled in binary, the Loss-Tolerant bit is cleared (0). The QUIC metadata in network bits will look like
+* When signaled in binary, the Loss-Tolerant bit is cleared (0).
+* When signaled in JSON, it is incoded as "Loss-Tolerant" and value "false".
+* The QUIC metadata in network bits will look like:
 
 | Loss-Tolerant | Real-Time | DC | CID |
 |:-------------:|:---------:|:--:|:---:|
 | 0 | W | X | Y Y ... Y |
 {: #Reliable-network-bits title="Network-Bits"}
-
-* When signaled in JSON, it is incoded as "Loss-Tolerant" and value "false".
 
 When there is loss detected between 2 nodes, using the above QoS measurement, the network will endeavor to deliver the packet reliably using any means the network decides to (some e.g., using FEC, stronger radio transmission, 3x transmits – up to the network to decide).
 
@@ -262,7 +249,7 @@ re-transmit the packet). This refers to network traffic where the immediate deli
 
   * When signaled in binary, the Loss-Tolerant bit is set (1) and the DontCare bit is cleared (0).
   * When signaled in JSON, it is indicated as "Loss-Tolerant" and value "true" and "DontCare" vale set to "false".
-  * Network Bits will look like:
+  * The QUIC metadata in network bits will look like:
 
 | Loss-Tolerant | Real-Time | DC | CID |
 |:-------------:|:---------:|:--:|:---:|
@@ -276,7 +263,7 @@ When the loss tolerant packet is marked with higher priority (implementation dec
 
   * When signaled in binary, the Loss-Tolerant bit is set (1) and the DontCare bit is set (1).
   * When signaled in JSON, it is indicated as "Loss-Tolerant" and value "true" and "DontCare" vale set to "true".
-  * Network Bits will look like:
+  * The QUIC metadata in network bits will look like:
 
 | Loss-Tolerant | Real-Time | DC | CID |
 |:-------------:|:---------:|:--:|:---:|
