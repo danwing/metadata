@@ -16,7 +16,7 @@ host-to-network signaling protocol in both binary and JSON.
 to the host, allowing the host to modulate its requests to conform to
 the available network resources. 
     " name="description">
-<meta content="xml2rfc 3.19.1" name="generator">
+<meta content="xml2rfc 3.19.2" name="generator">
 <meta content="user experience" name="keyword">
 <meta content="bandwidth" name="keyword">
 <meta content="priority" name="keyword">
@@ -33,14 +33,14 @@ the available network resources.
 <meta content="QUIC" name="keyword">
 <meta content="draft-rw-flow-metadata-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.1
+  xml2rfc 3.19.2
     Python 3.11.6
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 4.1.0
+    platformdirs 4.2.0
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.31.0
@@ -1045,11 +1045,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Flow Metadata</td>
-<td class="right">January 2024</td>
+<td class="right">February 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 3 August 2024</td>
+<td class="center">Expires 9 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-01-31" class="published">31 January 2024</time>
+<time datetime="2024-02-06" class="published">6 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-03">3 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-09">9 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1127,7 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1256,16 +1256,29 @@ setting the ECN bit on packets.  Both of these techniques work well to consume
 the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
 bandwidth policy rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Both the above use-cases are improved by metadata described in this document.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">For host-to-network metadata, individual packets within a flow can
+<p id="section-1-3">Both the above use-cases are improved by metadata described in this document. This
+document is a companion to signaling the metadata itself, such as<a href="#section-1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-4.1">
+          <p id="section-1-4.1.1">UDP Options (e.g., <span>[<a href="#I-D.kaippallimalil-tsvwg-media-hdr-wireless" class="cite xref">I-D.kaippallimalil-tsvwg-media-hdr-wireless</a>]</span>, <span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>),<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.2">
+          <p id="section-1-4.2.1">IPv6 Hop-by-Hop Options (<span><a href="https://rfc-editor.org/rfc/rfc8200#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>), or<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.3">
+          <p id="section-1-4.3.1">QUIC CID mapping (<span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>).<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-5">An analysis of most of those metadata signaling mechanisms is at <span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">For host-to-network metadata, individual packets within a flow can
 contain metadata describing their drop preference and their
 reliability. The network elements aware of this metadata can apply
 preferential or deferential treatment to those packets during a
-'reactive traffic policy' event.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">For network-to-host metadata, the host can be informed of the network
+'reactive traffic policy' event.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">For network-to-host metadata, the host can be informed of the network
 bandwidth policy for the subscriber to receive streaming video. This
 policy can be used by video streaming applications on that client to
-choose video streams that fit within that policy.<a href="#section-1-5" class="pilcrow">¶</a></p>
+choose video streams that fit within that policy.<a href="#section-1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1526,6 +1539,22 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.herbert-host2netsig">[I-D.herbert-host2netsig]</dt>
+        <dd>
+<span class="refAuthor">Herbert, T.</span>, <span class="refTitle">"Host to Network Signaling"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-herbert-host2netsig-00</span>, <time datetime="2023-10-04" class="refDate">4 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00">https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.kaippallimalil-tsvwg-media-hdr-wireless">[I-D.kaippallimalil-tsvwg-media-hdr-wireless]</dt>
+        <dd>
+<span class="refAuthor">Kaippallimalil, J.</span>, <span class="refAuthor">Gundavelli, S.</span>, and <span class="refAuthor">S. Dawkins</span>, <span class="refTitle">"Media Header Extensions for Wireless Networks"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kaippallimalil-tsvwg-media-hdr-wireless-03</span>, <time datetime="2023-10-16" class="refDate">16 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-03">https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.reddy-tsvwg-explcit-signal">[I-D.reddy-tsvwg-explcit-signal]</dt>
+        <dd>
+<span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Wing, D.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"An Approach for Encrypted Transport Protocol Path Explicit Signals"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-reddy-tsvwg-explcit-signal-01</span>, <time datetime="2023-07-07" class="refDate">7 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01">https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.wing-cidfi">[I-D.wing-cidfi]</dt>
+        <dd>
+<span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Reddy.K, T.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"Framework for CID Flow Indicator (CIDFI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-wing-cidfi-04</span>, <time datetime="2023-12-14" class="refDate">14 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04">https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2475">[RFC2475]</dt>
         <dd>
 <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Black, D.</span>, <span class="refAuthor">Carlson, M.</span>, <span class="refAuthor">Davies, E.</span>, <span class="refAuthor">Wang, Z.</span>, and <span class="refAuthor">W. Weiss</span>, <span class="refTitle">"An Architecture for Differentiated Services"</span>, <span class="seriesInfo">RFC 2475</span>, <span class="seriesInfo">DOI 10.17487/RFC2475</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2475">https://www.rfc-editor.org/rfc/rfc2475</a>&gt;</span>. </dd>
@@ -1541,6 +1570,10 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 <dt id="RFC7657">[RFC7657]</dt>
         <dd>
 <span class="refAuthor">Black, D., Ed.</span> and <span class="refAuthor">P. Jones</span>, <span class="refTitle">"Differentiated Services (Diffserv) and Real-Time Communication"</span>, <span class="seriesInfo">RFC 7657</span>, <span class="seriesInfo">DOI 10.17487/RFC7657</span>, <time datetime="2015-11" class="refDate">November 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7657">https://www.rfc-editor.org/rfc/rfc7657</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8200">[RFC8200]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8837">[RFC8837]</dt>
       <dd>

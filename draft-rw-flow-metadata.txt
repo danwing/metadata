@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 3 August 2024                                   31 January 2024
+Expires: 9 August 2024                                   6 February 2024
 
 
                              Flow Metadata
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 August 2024.
+   This Internet-Draft will expire on 9 August 2024.
 
 Copyright Notice
 
@@ -113,7 +113,18 @@ Table of Contents
    policy rate.
 
    Both the above use-cases are improved by metadata described in this
-   document.
+   document.  This document is a companion to signaling the metadata
+   itself, such as
+
+   *  UDP Options (e.g., [I-D.kaippallimalil-tsvwg-media-hdr-wireless],
+      [I-D.reddy-tsvwg-explcit-signal]),
+
+   *  IPv6 Hop-by-Hop Options (Section 4.3 of [RFC8200]), or
+
+   *  QUIC CID mapping ([I-D.wing-cidfi]).
+
+   An analysis of most of those metadata signaling mechanisms is at
+   [I-D.herbert-host2netsig].
 
    For host-to-network metadata, individual packets within a flow can
    contain metadata describing their drop preference and their
@@ -310,6 +321,35 @@ Normative References
 
 Informative References
 
+   [I-D.herbert-host2netsig]
+              Herbert, T., "Host to Network Signaling", Work in
+              Progress, Internet-Draft, draft-herbert-host2netsig-00, 4
+              October 2023, <https://datatracker.ietf.org/doc/html/
+              draft-herbert-host2netsig-00>.
+
+   [I-D.kaippallimalil-tsvwg-media-hdr-wireless]
+              Kaippallimalil, J., Gundavelli, S., and S. Dawkins, "Media
+              Header Extensions for Wireless Networks", Work in
+              Progress, Internet-Draft, draft-kaippallimalil-tsvwg-
+              media-hdr-wireless-03, 16 October 2023,
+              <https://datatracker.ietf.org/doc/html/draft-
+              kaippallimalil-tsvwg-media-hdr-wireless-03>.
+
+   [I-D.reddy-tsvwg-explcit-signal]
+              Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
+              Encrypted Transport Protocol Path Explicit Signals", Work
+              in Progress, Internet-Draft, draft-reddy-tsvwg-explcit-
+              signal-01, 7 July 2023,
+              <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
+              explcit-signal-01>.
+
+   [I-D.wing-cidfi]
+              Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
+              CID Flow Indicator (CIDFI)", Work in Progress, Internet-
+              Draft, draft-wing-cidfi-04, 14 December 2023,
+              <https://datatracker.ietf.org/doc/html/draft-wing-cidfi-
+              04>.
+
    [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
               and W. Weiss, "An Architecture for Differentiated
               Services", RFC 2475, DOI 10.17487/RFC2475, December 1998,
@@ -330,6 +370,11 @@ Informative References
               (Diffserv) and Real-Time Communication", RFC 7657,
               DOI 10.17487/RFC7657, November 2015,
               <https://www.rfc-editor.org/rfc/rfc7657>.
+
+   [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
+              (IPv6) Specification", STD 86, RFC 8200,
+              DOI 10.17487/RFC8200, July 2017,
+              <https://www.rfc-editor.org/rfc/rfc8200>.
 
    [RFC8837]  Jones, P., Dhesikan, S., Jennings, C., and D. Druta,
               "Differentiated Services Code Point (DSCP) Packet Markings
