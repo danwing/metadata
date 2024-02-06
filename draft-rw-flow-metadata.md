@@ -90,7 +90,14 @@ the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
 bandwidth policy rate.
 
-Both the above use-cases are improved by metadata described in this document.
+Both the above use-cases are improved by metadata described in this document. This
+document is a companion to signaling the metadata itself, such as
+
+* UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
+* IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}), or
+* QUIC CID mapping ({{?I-D.wing-cidfi}}).
+
+An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
 
 For host-to-network metadata, individual packets within a flow can
 contain metadata describing their drop preference and their
