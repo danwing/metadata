@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 9 August 2024                                   6 February 2024
+Expires: 10 August 2024                                  7 February 2024
 
 
                              Flow Metadata
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 August 2024.
+   This Internet-Draft will expire on 10 August 2024.
 
 Copyright Notice
 
@@ -75,13 +75,15 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Host to Network Metadata
-     3.1.  Reliable/Unreliable
-       3.1.1.  Network Treatment
+     3.1.  Importance
+       3.1.1.  Application Treatment
        3.1.2.  Encoding
-     3.2.  Discard Preference
+     3.2.  Reliable/Unreliable
        3.2.1.  Network Treatment
        3.2.2.  Encoding
-     3.3.  Importance
+     3.3.  Discard Preference
+       3.3.1.  Network Treatment
+       3.3.2.  Encoding
    4.  Network to Host Metadata
      4.1.  Video Streaming Bandwidth
        4.1.1.  Host Treatment
@@ -161,7 +163,49 @@ Table of Contents
    Less importance means those packets can be discarded during a
    reactive policy event.
 
-3.1.  Reliable/Unreliable
+   For more comprehensive interpretation, metadata is characterized into
+   2 different nature:
+
+   *  Network Metadata: This consists of metadata that specifies how the
+      network element should treat that packet.  The network metadata
+      comprises of the importance field and is specified in the MSB and
+      of size 1 bit.  This field indicates if the packet is more-
+      important or less-important.
+
+   *  Application Metadata: This consists of metadata that specifies how
+      the application treats that packet.  The appplication metadata
+      comprises of 2 fields - Keep/Discard bit and Reliable/Unreliable
+      bit.
+
+3.1.  Importance
+
+   Importance bit signifies if the packet is of more importance or less
+   importance by the network element.
+
+3.1.1.  Application Treatment
+
+   Application would mark a packet important when it needs the network
+   to treat the packet with greater preference compared to the unmarked
+   packets.  An example of this interpretation is specified in the
+   (appendix section - Insert a link to the section).
+
+3.1.2.  Encoding
+
+   More-Important:
+
+   *  When signaled in binary, the Importance bit is set (1).
+
+   *  When signaled in JSON, it is encoded as name "importance" and
+      value "true".
+
+   Less-Important:
+
+   *  When signaled in binary, the Importance bit is cleared (0).
+
+   *  When signaled in JSON, it is encoded as name "importance" and
+      value "false".
+
+3.2.  Reliable/Unreliable
 
    Packets are marked as 'unreliable' or 'reliable':
 
@@ -178,14 +222,14 @@ Table of Contents
    Thus, delaying or discarding such packets does not reduce the amount
    of transmitted data, it only defers when it appears on the network.
 
-3.1.1.  Network Treatment
+3.2.1.  Network Treatment
 
    During a reactive policy event, dropping unreliable traffic is
    preferred over dropping reliable traffic.  The reliable traffic will
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-3.1.2.  Encoding
+3.2.2.  Encoding
 
    Reliable:
 
@@ -201,7 +245,7 @@ Table of Contents
    *  When signaled in JSON, it is encoded as name "reliable" and value
       "false".
 
-3.2.  Discard Preference
+3.3.  Discard Preference
 
    Packets are marked as 'discard' or 'keep'.
 
@@ -219,12 +263,12 @@ Table of Contents
    'keep' traffic at the expense of the less-important 'discard'
    traffic.
 
-3.2.1.  Network Treatment
+3.3.1.  Network Treatment
 
    During a reactive policy event, dropping 'discard' packets is
    preferred over dropping 'keep' packets.
 
-3.2.2.  Encoding
+3.3.2.  Encoding
 
    Discard:
 
@@ -240,9 +284,16 @@ Table of Contents
    *  When signaled in JSON, it is encoded as name "discard" and value
       "false".
 
-3.3.  Importance
+   To adhere to both simple and comprehensive interpretation of the
+   metadata, it is vital to order the bits in the same sequence as
+   mentioned below.
 
-   todo: Maybe we also need an importance bit.
+   MSB - Importance bit.  Bit 1 - Discard Preference bit.  LSB -
+   Reliable/Unreliable bit.
+
+   More details on how simple and comprehensive interpretation of
+   metadata would work for different types of traffic is listed in the
+   (appendix section - Insert a link to the section).
 
 4.  Network to Host Metadata
 
@@ -385,6 +436,9 @@ Appendix A.  Example
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.
+
+   TODO: change the table to include the network bits for each traffic,
+   comprehensive interpretation and simple interpretation
 
    +============+==========+============+============+=================+
    |  Traffic   | Discard/ | Reliable/  | importance | Comments        |
