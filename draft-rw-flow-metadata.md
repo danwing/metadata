@@ -91,7 +91,7 @@ available bandwidth, but are complicated for the receiver to determine the netwo
 bandwidth policy rate.
 
 Both the above use-cases are improved by metadata described in this document. This
-document is a companion to signaling the metadata itself, such as
+document is a companion to host-to-network signaling the metadata itself, such as
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
 * IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}), or
@@ -103,7 +103,8 @@ For host-to-network metadata, individual packets within a flow can
 contain metadata describing their drop preference and their
 reliability. The network elements aware of this metadata can apply
 preferential or deferential treatment to those packets during a
-'reactive traffic policy' event.
+'reactive traffic policy' event.  Examples of metadata signaling
+for video streaming and for remote desktop are in {{examples}}.
 
 For network-to-host metadata, the host can be informed of the network
 bandwidth policy for the subscriber to receive streaming video. This
@@ -235,6 +236,16 @@ client chooses excessively high quality or routinely abandons watching videos th
 downloaded.  The network can assist the client by informing the client of the network's
 bandwidth policy.
 
+If the video is encoded with variable bit rate, the bitrate cannot exceed the indicated
+bitrate.
+
+The bitrate is calculated over each second. This means the packets can arrive at the
+start of a second, as near as possible behind each other, and the remaining portion
+of that second could have no packets transmitted.
+
+> Discussion: should we also signal bursts for variable bit rates?
+
+
 ### Host Treatment
 
 The host chooses a video streaming bit rate at or below the signaled rate.
@@ -271,16 +282,20 @@ To be completed.
 
 --- back
 
-# Examples
+# Examples of Host-to-Network Metadata {#examples}
 
 ## Video Streaming
 
 Streaming video contains the occasional key frame ("i-frame")
 containing a full video frame.  These are necessary to rebuild
 receiver state after loss of delta frames.  The key frames are
-therefore more critical to deliver to the receiver than delta frames.  Streaming
-video also contains audio frames which can be encoded separately and thus
-can be signaled separately.
+therefore more critical to deliver to the receiver than delta frames.
+
+Streaming video also contains audio frames which can be encoded
+separately and thus can be signaled separately.  Audio is more
+critical than video for almost all applications, but its importance
+is still an application decision.  In the example below, the audio
+is more important than video.
 
 | Traffic type      | Discard/Keep    | Reliable/Unreliable  | importance |
 |:-----------------:|:---------------:|:--------------------:|:----------:|
