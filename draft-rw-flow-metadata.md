@@ -271,7 +271,26 @@ To be completed.
 
 --- back
 
-# Example
+# Examples
+
+## Video Streaming
+
+Streaming video contains the occasional key frame ("i-frame")
+containing a full video frame.  These are necessary to rebuild
+receiver state after loss of delta frames.  The key frames are
+therefore more critical to deliver to the receiver than delta frames.  Streaming
+video also contains audio frames which can be encoded separately and thus
+can be signaled separately.
+
+| Traffic type      | Discard/Keep    | Reliable/Unreliable  | importance |
+|:-----------------:|:---------------:|:--------------------:|:----------:|
+| video key frame   | keep            | reliable             | medium     |
+| video delta frame | discard         | unreliable           | low        |
+| audio             | keep            | reliable             | high       |
+{: #table-video-streaming title="Example Values for Video Streaming Metadata"}
+
+
+## Remote Desktop Virtualization
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
 
@@ -291,6 +310,7 @@ TODO: change the table to include the network bits for each traffic, comprehensi
 | File copy | discard | reliable | low |   |
 | VoIP-Audio | discard | unreliable | high | |
 | VoIP-Video | discard | unreliable | low | |
+{: #table-desktop-virtualization title="Example Values for Remote Desktop Virtualization Metadata"}
 
 <!--
 ** These are critical but considering implementation constraints, data from a specific source (a virtual channel like mouse, graphics etc in this case) is either transmitted reliably or as loss-tolerant. These packets lost will have user experience impact but still since most of the traffic from this use-case come under loss-tolerant and it is not critical that the application breaks if these are not received (unlike file transfer), these are listed as loss-tolerant while having the don't bit set to 0.
