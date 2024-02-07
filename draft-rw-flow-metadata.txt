@@ -94,7 +94,9 @@ Table of Contents
    References
      Normative References
      Informative References
-   Appendix A.  Example
+   Appendix A.  Examples
+     A.1.  Video Streaming
+     A.2.  Remote Desktop Virtualization
    Authors' Addresses
 
 1.  Introduction
@@ -432,7 +434,32 @@ Informative References
               for WebRTC QoS", RFC 8837, DOI 10.17487/RFC8837, January
               2021, <https://www.rfc-editor.org/rfc/rfc8837>.
 
-Appendix A.  Example
+Appendix A.  Examples
+
+A.1.  Video Streaming
+
+   Streaming video contains the occasional key frame ("i-frame")
+   containing a full video frame.  These are necessary to rebuild
+   receiver state after loss of delta frames.  The key frames are
+   therefore more critical to deliver to the receiver than delta frames.
+   Streaming video also contains audio frames which can be encoded
+   separately and thus can be signaled separately.
+
+   +=================+==============+=====================+============+
+   |   Traffic type  | Discard/Keep | Reliable/Unreliable | importance |
+   +=================+==============+=====================+============+
+   |    video key    |     keep     |       reliable      |   medium   |
+   |      frame      |              |                     |            |
+   +-----------------+--------------+---------------------+------------+
+   |   video delta   |   discard    |      unreliable     |    low     |
+   |      frame      |              |                     |            |
+   +-----------------+--------------+---------------------+------------+
+   |      audio      |     keep     |       reliable      |    high    |
+   +-----------------+--------------+---------------------+------------+
+
+            Table 1: Example Values for Video Streaming Metadata
+
+A.2.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.
@@ -601,7 +628,7 @@ Appendix A.  Example
    | VoIP-Video | discard  | unreliable |    low     |                 |
    +------------+----------+------------+------------+-----------------+
 
-                                  Table 1
+     Table 2: Example Values for Remote Desktop Virtualization Metadata
 
 Authors' Addresses
 

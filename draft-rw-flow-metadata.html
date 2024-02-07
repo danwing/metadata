@@ -1237,7 +1237,15 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example" class="internal xref">Example</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
             <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
@@ -1640,111 +1648,172 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 </section>
 </div>
 </section>
-<div id="example">
+<div id="examples">
 <section id="appendix-A">
-      <h2 id="name-example">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-example" class="section-name selfRef">Example</a>
+      <h2 id="name-examples">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
       </h2>
-<p id="appendix-A-1">Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
-<p id="appendix-A-2">TODO: change the table to include the network bits for each traffic, comprehensive interpretation and simple interpretation<a href="#appendix-A-2" class="pilcrow">¶</a></p>
+<div id="video-streaming">
+<section id="appendix-A.1">
+        <h3 id="name-video-streaming">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-video-streaming" class="section-name selfRef">Video Streaming</a>
+        </h3>
+<p id="appendix-A.1-1">Streaming video contains the occasional key frame ("i-frame")
+containing a full video frame.  These are necessary to rebuild
+receiver state after loss of delta frames.  The key frames are
+therefore more critical to deliver to the receiver than delta frames.  Streaming
+video also contains audio frames which can be encoded separately and thus
+can be signaled separately.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
 <table class="center" id="table-1">
-        <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata</a>
+          </caption>
 <thead>
-          <tr>
-            <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-            <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
-            <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
-            <th class="text-center" rowspan="1" colspan="1">importance</th>
-            <th class="text-left" rowspan="1" colspan="1">Comments</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">User typing</td>
-            <td class="text-center" rowspan="1" colspan="1">keep</td>
-            <td class="text-center" rowspan="1" colspan="1">Reliable</td>
-            <td class="text-center" rowspan="1" colspan="1">high</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-            <td class="text-center" rowspan="1" colspan="1">keep</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">high</td>
-            <td class="text-left" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">high</td>
-            <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX.**</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">User moving/clicking mouse (client to VDA)</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">0</td>
-            <td class="text-left" rowspan="1" colspan="1">**</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Mouse Pointer tracking</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Pointer endpoint</td>
-            <td class="text-center" rowspan="1" colspan="1">keep</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">high</td>
-            <td class="text-left" rowspan="1" colspan="1">The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **</td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">Print job</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">File copy</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">high</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-          <tr>
-            <td class="text-center" rowspan="1" colspan="1">VoIP-Video</td>
-            <td class="text-center" rowspan="1" colspan="1">discard</td>
-            <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            <td class="text-center" rowspan="1" colspan="1">low</td>
-            <td class="text-left" rowspan="1" colspan="1"> </td>
-          </tr>
-        </tbody>
-      </table>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
+              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">importance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">medium</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="remote-desktop-virtualization">
+<section id="appendix-A.2">
+        <h3 id="name-remote-desktop-virtualizati">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
+        </h3>
+<p id="appendix-A.2-1">Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">TODO: change the table to include the network bits for each traffic, comprehensive interpretation and simple interpretation<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
+              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">importance</th>
+              <th class="text-left" rowspan="1" colspan="1">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">User typing</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">Reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-left" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX.**</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">User moving/clicking mouse (client to VDA)</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">**</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Mouse Pointer tracking</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Pointer endpoint</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-left" rowspan="1" colspan="1">The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Print job</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">VoIP-Video</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="authors-addresses">
