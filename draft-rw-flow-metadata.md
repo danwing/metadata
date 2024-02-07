@@ -79,7 +79,7 @@ Host-to-network metadata signaling has historically been performed by
 the sender setting DSCP bits
 ({{?RFC7657}})({{?RFC8837}})({{?RFC2475}}). While DSCP can express
 high priority (Expedited Forwarding {{?RFC3246}}) and low priority
-(Lower Effort PDB {{?RFC3662}}), DSCP bits are frequently ignored at
+(Lower Effort PDB {{?RFC8622}}), DSCP bits are frequently ignored at
 congestion points or lost (stripped) while routed across the Internet.
 Also, DSCP attempts to influence the packet's treatment compared to
 all other packets from other hosts.
