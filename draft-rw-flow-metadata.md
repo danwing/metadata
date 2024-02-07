@@ -123,8 +123,36 @@ Intentional policy:
 # Host to Network Metadata
 
 Three bits are introduced. A network element desiring the simplest interpretation can use the bits as a
-3-bit 'importance' field, where higher values are more important and lower values are less important.  Less
+3-bit 'importance' field, where higher values are more important and lower values are less important. Less
 importance means those packets can be discarded during a reactive policy event.
+
+For more comprehensive interpretation, metadata is characterized into 2 different nature:
+
+* Network Metadata:
+    This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more-important or less-important.
+
+* Application Metadata:
+    This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of 2 fields - Keep/Discard bit and Reliable/Unreliable bit.
+
+## Importance
+
+Importance bit signifies if the packet is of more importance or less importance by the network element.
+
+### Application Treatment
+
+Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the (appendix section - Insert a link to the section).
+
+### Encoding
+
+More-Important:
+
+* When signaled in binary, the Importance bit is set (1).
+* When signaled in JSON, it is encoded as name "importance" and value "true".
+
+Less-Important:
+
+* When signaled in binary, the Importance bit is cleared (0).
+* When signaled in JSON, it is encoded as name "importance" and value "false".
 
 ## Reliable/Unreliable
 
@@ -190,12 +218,13 @@ Keep:
 * When signaled in binary, the Discard bit is cleared (0).
 * When signaled in JSON, it is encoded as name "discard" and value "false".
 
+To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.
 
-## Importance
+MSB - Importance bit.
+Bit 1 - Discard Preference bit.
+LSB - Reliable/Unreliable bit.
 
-todo: Maybe we also need an importance bit.
-
-
+More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the (appendix section - Insert a link to the section).
 
 # Network to Host Metadata
 
@@ -245,6 +274,8 @@ To be completed.
 # Example
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
+
+TODO: change the table to include the network bits for each traffic, comprehensive interpretation and simple interpretation
 
 | Traffic type    | Discard/Keep    | Reliable/Unreliable | importance | Comments |
 |:---------------:|:---------------:|:-------------:|:--:|:---------|
