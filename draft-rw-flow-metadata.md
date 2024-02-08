@@ -141,7 +141,7 @@ Importance bit signifies if the packet is of more importance or less importance 
 
 ### Application Treatment
 
-Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the (appendix section - Insert a link to the section).
+Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the {{examples}} section.
 
 ### Encoding
 
@@ -225,7 +225,7 @@ MSB - Importance bit.
 Bit 1 - Discard Preference bit.
 LSB - Reliable/Unreliable bit.
 
-More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the (appendix section - Insert a link to the section).
+More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the {{examples}} section.
 
 # Network to Host Metadata
 
@@ -297,38 +297,48 @@ critical than video for almost all applications, but its importance
 is still an application decision.  In the example below, the audio
 is more important than video.
 
-| Traffic type      | Discard/Keep    | Reliable/Unreliable  | importance |
-|:-----------------:|:---------------:|:--------------------:|:----------:|
-| video key frame   | keep            | reliable             | medium     |
-| video delta frame | discard         | unreliable           | low        |
-| audio             | keep            | reliable             | high       |
+| Traffic type      | importance | Discard/Keep    | Reliable/Unreliable  |
+|:-----------------:|:----------:|:---------------:|:--------------------:|
+| video key frame   | low        | discard         | reliable             |
+| video delta frame | low        | discard         | unreliable           |
+| audio             | high       | keep            | reliable             |
 {: #table-video-streaming title="Example Values for Video Streaming Metadata"}
 
+>Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
+>Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation
 
 ## Remote Desktop Virtualization
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
 
-TODO: change the table to include the network bits for each traffic, comprehensive interpretation and simple interpretation
+Comprehensive interpretation:
 
-| Traffic type    | Discard/Keep    | Reliable/Unreliable | importance | Comments |
-|:---------------:|:---------------:|:-------------:|:--:|:---------|
-| User typing | keep | Reliable | high |          |
-| Glyph critical | keep | unreliable | high |  The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
-| Glyph smoothing | discard | unreliable | low | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
-| Video key frame | discard | unreliable | high | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX.**|
-| Video predictive frame | discard | unreliable | low | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
-| User moving/clicking mouse (client to VDA) | discard | unreliable | 0 | ** |
-| Mouse Pointer tracking | discard | unreliable | low | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
-| Pointer endpoint | keep | unreliable | high | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
-| Print job | discard | reliable | low |   |
-| File copy | discard | reliable | low |   |
-| VoIP-Audio | discard | unreliable | high | |
-| VoIP-Video | discard | unreliable | low | |
+| Traffic type               | Importance | Discard/Keep    | Reliable/Unreliable | Comments |
+|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------|
+| User typing                | high       | discard         | Reliable            | Client To Server Traffic         |
+| Glyph critical             | high       | keep            | Unreliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
+| Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
+| Mouse click/End Position   | high       | discard         | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
+| Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
+| File copy                  | low        | discard         | reliable            |   |
+| VoIP-Audio                 | high       | discard         | unreliable          |   |
+| VoIP-Video                 | low        | keep            | unreliable          |   |
 {: #table-desktop-virtualization title="Example Values for Remote Desktop Virtualization Metadata"}
 
+Simple interpretation:
+
+| Traffic type               | Simple Importance| Comments |
+|:--------------------------:|:----------------:|:--------:|
+| User typing                | 101 (5)          |  Client to Server traffic - simple importance is not applicable on the same path as the Server to Client traffic |
+| Glyph critical             | 110 (6)          |          |
+| Glyph smoothing            | 000 (0)          |          |
+| Mouse click/End Position   | 101 (5)          |  C2S     |
+| Mouse position tracking    | 000 (0)          |  C2S     |
+| File copy                  | 001 (1)          |          |
+| VoIP-Audio                 | 110 (6)          |          |
+| VoIP-Video                 | 010 (2)          |          |
+
+>Discussion: Removing Video frames from above table since we mention it in video streaming table
 <!--
 ** These are critical but considering implementation constraints, data from a specific source (a virtual channel like mouse, graphics etc in this case) is either transmitted reliably or as loss-tolerant. These packets lost will have user experience impact but still since most of the traffic from this use-case come under loss-tolerant and it is not critical that the application breaks if these are not received (unlike file transfer), these are listed as loss-tolerant while having the don't bit set to 0.
 -->
-
-
