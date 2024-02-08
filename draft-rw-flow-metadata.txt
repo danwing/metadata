@@ -116,7 +116,7 @@ Table of Contents
    are complicated for the receiver to determine the network's bandwidth
    policy rate.
 
-   Both the above use-cases are improved by metadata described in this
+   Both the above use cases are improved by metadata described in this
    document.  This document is a companion to host-to-network signaling
    the metadata itself, such as
 
@@ -457,28 +457,35 @@ A.1.  Video Streaming
    separately and thus can be signaled separately.  Audio is more
    critical than video for almost all applications, but its importance
    is still an application decision.  In the example below, the audio is
-   more important than video.
+   more important than video (importance=high, KD=keep, RU=reliable),
+   video key frames have middle importance (importance=low, discard,
+   reliable), and video delta frames have least importance
+   (importance=low, KD=discard, RU=unreliable).
 
-   +=================+============+==============+=====================+
-   |   Traffic type  | importance | Discard/Keep | Reliable/Unreliable |
-   +=================+============+==============+=====================+
-   |    video key    |    low     |   discard    |       reliable      |
-   |      frame      |            |              |                     |
-   +-----------------+------------+--------------+---------------------+
-   |   video delta   |    low     |   discard    |      unreliable     |
-   |      frame      |            |              |                     |
-   +-----------------+------------+--------------+---------------------+
-   |      audio      |    high    |     keep     |       reliable      |
-   +-----------------+------------+--------------+---------------------+
+         +===================+============+=========+============+
+         |    Traffic type   | importance |    KD   |     RU     |
+         +===================+============+=========+============+
+         |  video key frame  |    low     | discard |  reliable  |
+         +-------------------+------------+---------+------------+
+         | video delta frame |    low     | discard | unreliable |
+         +-------------------+------------+---------+------------+
+         |       audio       |    high    |   keep  |  reliable  |
+         +-------------------+------------+---------+------------+
 
             Table 1: Example Values for Video Streaming Metadata
+
+   Astute readers will notice this use case could be handled with a
+   ternary value represented by 2 bits (rather than 3 bits).  However,
+   other use cases such as Appendix A.2 need 3 bits.
 
       Discussion: The importance is a single bit - so change the medium
       to a high in the above table and made video key frame as reliable
       keep and low.  That way, the importance bit would be the only
-      differentiator.  Discussion: For all reliable bits, marking keep/
-      discard as discard since it really is a don't care bit but makes
-      sense to keep it 0 for simple interpretation
+      differentiator.
+
+      Discussion: For all reliable bits, marking keep/discard as discard
+      since it really is a don't care bit but makes sense to keep it 0
+      for simple interpretation
 
 A.2.  Remote Desktop Virtualization
 

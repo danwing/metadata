@@ -1272,7 +1272,7 @@ setting the ECN bit on packets.  Both of these techniques work well to consume
 the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
 bandwidth policy rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Both the above use-cases are improved by metadata described in this document. This
+<p id="section-1-3">Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-4.1">
@@ -1664,7 +1664,7 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
       <h2 id="name-examples-of-host-to-network">
 <a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-examples-of-host-to-network" class="section-name selfRef">Examples of Host-to-Network Metadata</a>
       </h2>
-<div id="video-streaming">
+<div id="example-video-streaming">
 <section id="appendix-A.1">
         <h3 id="name-video-streaming">
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-video-streaming" class="section-name selfRef">Video Streaming</a>
@@ -1677,7 +1677,9 @@ therefore more critical to deliver to the receiver than delta frames.<a href="#a
 separately and thus can be signaled separately.  Audio is more
 critical than video for almost all applications, but its importance
 is still an application decision.  In the example below, the audio
-is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+is more important than video (importance=high, KD=keep, RU=reliable), video key frames
+have middle importance (importance=low, discard, reliable), and video delta
+frames have least importance (importance=low, KD=discard, RU=unreliable).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
 <table class="center" id="table-1">
           <caption>
@@ -1688,8 +1690,8 @@ is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">importance</th>
-              <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
-              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">KD</th>
+              <th class="text-center" rowspan="1" colspan="1">RU</th>
             </tr>
           </thead>
           <tbody>
@@ -1714,15 +1716,22 @@ is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p
           </tbody>
         </table>
 </div>
+<p id="appendix-A.1-4">Astute readers will notice this use case could be handled with a
+ternary value represented by 2 bits (rather than 3 bits).  However,
+other use cases such as <a href="#example-rdt" class="auto internal xref">Appendix A.2</a> need 3 bits.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A.1-4.1">
-            <p id="appendix-A.1-4.1.1">Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
-Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation<a href="#appendix-A.1-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-A.1-5.1">
+            <p id="appendix-A.1-5.1.1">Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.<a href="#appendix-A.1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-A.1-6.1">
+            <p id="appendix-A.1-6.1.1">Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation<a href="#appendix-A.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
-<div id="remote-desktop-virtualization">
+<div id="example-rdt">
 <section id="appendix-A.2">
         <h3 id="name-remote-desktop-virtualizati">
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
