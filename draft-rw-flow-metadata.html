@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 10 August 2024</td>
+<td class="center">Expires 11 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-07" class="published">7 February 2024</time>
+<time datetime="2024-02-08" class="published">8 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-10">10 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-11">11 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1127,7 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1351,7 +1351,7 @@ importance means those packets can be discarded during a reactive policy event.<
           <h4 id="name-application-treatment">
 <a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-application-treatment" class="section-name selfRef">Application Treatment</a>
           </h4>
-<p id="section-3.1.1-1">Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the (appendix section - Insert a link to the section).<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-1">Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the <a href="#examples" class="auto internal xref">Appendix A</a> section.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding">
@@ -1488,7 +1488,7 @@ traffic at the expense of the less-important 'discard' traffic.<a href="#section
 <p id="section-3.3.2-6">MSB - Importance bit.
 Bit 1 - Discard Preference bit.
 LSB - Reliable/Unreliable bit.<a href="#section-3.3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.3.2-7">More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the (appendix section - Insert a link to the section).<a href="#section-3.3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-7">More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the <a href="#examples" class="auto internal xref">Appendix A</a> section.<a href="#section-3.3.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1687,33 +1687,39 @@ is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">importance</th>
               <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
               <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-center" rowspan="1" colspan="1">medium</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
               <td class="text-center" rowspan="1" colspan="1">discard</td>
               <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
               <td class="text-center" rowspan="1" colspan="1">keep</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
             </tr>
           </tbody>
         </table>
 </div>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-A.1-4.1">
+            <p id="appendix-A.1-4.1.1">Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
+Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation<a href="#appendix-A.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="remote-desktop-virtualization">
@@ -1722,7 +1728,7 @@ is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p
 <a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
         </h3>
 <p id="appendix-A.2-1">Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-2">TODO: change the table to include the network bits for each traffic, comprehensive interpretation and simple interpretation<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">Comprehensive interpretation:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization">
 <table class="center" id="table-2">
           <caption>
@@ -1732,100 +1738,130 @@ is more important than video.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
               <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
               <th class="text-left" rowspan="1" colspan="1">Comments</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">User typing</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">Reliable</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">Reliable</td>
+              <td class="text-left" rowspan="1" colspan="1">Client To Server Traffic</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
               <td class="text-left" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
               <td class="text-left" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
             </tr>
             <tr>
-              <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX.**</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
               <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-left" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">User moving/clicking mouse (client to VDA)</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
-              <td class="text-left" rowspan="1" colspan="1">**</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Mouse Pointer tracking</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-left" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Pointer endpoint</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
               <td class="text-left" rowspan="1" colspan="1">The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **</td>
             </tr>
             <tr>
-              <td class="text-center" rowspan="1" colspan="1">Print job</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-left" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
               <td class="text-center" rowspan="1" colspan="1">discard</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
               <td class="text-center" rowspan="1" colspan="1">discard</td>
               <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">VoIP-Video</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
 </div>
+<p id="appendix-A.2-4">Simple interpretation:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">User typing</td>
+              <td class="text-center" rowspan="1" colspan="1">101 (5)</td>
+              <td class="text-center" rowspan="1" colspan="1">Client to Server traffic - simple importance is not applicable on the same path as the Server to Client traffic</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">110 (6)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
+              <td class="text-center" rowspan="1" colspan="1">101 (5)</td>
+              <td class="text-center" rowspan="1" colspan="1">C2S</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
+              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
+              <td class="text-center" rowspan="1" colspan="1">C2S</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">001 (1)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
+              <td class="text-center" rowspan="1" colspan="1">110 (6)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">VoIP-Video</td>
+              <td class="text-center" rowspan="1" colspan="1">010 (2)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+          </tbody>
+        </table>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-A.2-6.1">
+            <p id="appendix-A.2-6.1.1">Discussion: Removing Video frames from above table since we mention it in video streaming table<a href="#appendix-A.2-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
