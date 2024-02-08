@@ -90,7 +90,7 @@ the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
 bandwidth policy rate.
 
-Both the above use-cases are improved by metadata described in this document. This
+Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
@@ -284,7 +284,7 @@ To be completed.
 
 # Examples of Host-to-Network Metadata {#examples}
 
-## Video Streaming
+## Video Streaming {#example-video-streaming}
 
 Streaming video contains the occasional key frame ("i-frame")
 containing a full video frame.  These are necessary to rebuild
@@ -295,19 +295,26 @@ Streaming video also contains audio frames which can be encoded
 separately and thus can be signaled separately.  Audio is more
 critical than video for almost all applications, but its importance
 is still an application decision.  In the example below, the audio
-is more important than video.
+is more important than video (importance=high, KD=keep, RU=reliable), video key frames
+have middle importance (importance=low, discard, reliable), and video delta
+frames have least importance (importance=low, KD=discard, RU=unreliable).
 
-| Traffic type      | importance | Discard/Keep    | Reliable/Unreliable  |
-|:-----------------:|:----------:|:---------------:|:--------------------:|
-| video key frame   | low        | discard         | reliable             |
-| video delta frame | low        | discard         | unreliable           |
-| audio             | high       | keep            | reliable             |
+| Traffic type      | importance | KD                | RU                   |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | discard           | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | keep              | reliable             |
 {: #table-video-streaming title="Example Values for Video Streaming Metadata"}
 
->Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
->Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation
+Astute readers will notice this use case could be handled with a
+ternary value represented by 2 bits (rather than 3 bits).  However,
+other use cases such as {{example-rdt}} need 3 bits.
 
-## Remote Desktop Virtualization
+> Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
+
+> Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation
+
+## Remote Desktop Virtualization {#example-rdt}
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
 
