@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 11 August 2024</td>
+<td class="center">Expires 12 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-08" class="published">8 February 2024</time>
+<time datetime="2024-02-09" class="published">9 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-11">11 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-12">12 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1127,7 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1748,7 +1748,7 @@ other use cases such as <a href="#example-rdt" class="auto internal xref">Append
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
-              <th class="text-center" rowspan="1" colspan="1">Discard/Keep</th>
+              <th class="text-center" rowspan="1" colspan="1">KD</th>
               <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
               <th class="text-left" rowspan="1" colspan="1">Comments</th>
             </tr>
@@ -1758,7 +1758,7 @@ other use cases such as <a href="#example-rdt" class="auto internal xref">Append
               <td class="text-center" rowspan="1" colspan="1">User typing</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
               <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">Reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
               <td class="text-left" rowspan="1" colspan="1">Client To Server Traffic</td>
             </tr>
             <tr>
@@ -1799,7 +1799,7 @@ other use cases such as <a href="#example-rdt" class="auto internal xref">Append
             <tr>
               <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
               <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
@@ -1809,6 +1809,27 @@ other use cases such as <a href="#example-rdt" class="auto internal xref">Append
               <td class="text-center" rowspan="1" colspan="1">keep</td>
               <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-left" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-left" rowspan="1" colspan="1">Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense</td>
             </tr>
           </tbody>
         </table>
@@ -1864,13 +1885,25 @@ other use cases such as <a href="#example-rdt" class="auto internal xref">Append
               <td class="text-center" rowspan="1" colspan="1">010 (2)</td>
               <td class="text-center" rowspan="1" colspan="1"> </td>
             </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">010 (2)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Hpatic feedback</td>
+              <td class="text-center" rowspan="1" colspan="1">100 (4)</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
           </tbody>
         </table>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A.2-6.1">
-            <p id="appendix-A.2-6.1.1">Discussion: Removing Video frames from above table since we mention it in video streaming table<a href="#appendix-A.2-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="appendix-A.2-6">*** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.
+&gt;Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
