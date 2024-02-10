@@ -314,6 +314,43 @@ other use cases such as {{example-rdt}} need 3 bits.
 
 > Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation
 
+
+## Interactive Audio/Video Streaming {#example-interactive-av}
+
+Interactive audio/video, such as a video call, involves important traffic
+in both directions -- thus is a slightly more complicated use-case than
+the previous example.  Additionally, most Internet service providers
+constrain upstream bandwidth so proper packet treatment is critical in
+the upstream direction.
+
+| Traffic type      | importance | KD                | RU                   |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | discard           | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | keep              | reliable             |
+{: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
+
+| Traffic type      | importance | KD                | RU                   |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | discard           | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | keep              | reliable             |
+{: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
+
+Many interactive audio/video applications also support sharing of the
+screen, file, video, and pictures.  During this time the presenter's video
+is less important but the screen or picture is more important.  This is depicted
+below:
+
+| Traffic type      | importance | KD                | RU                   |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | discard           | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | keep              | reliable             |
+| picture sharing   | high       | keep              | reliable             |
+{: #table-video-av-sharing title="Example Values for Interactive A/V, upstream"}
+
+
 ## Remote Desktop Virtualization {#example-rdt}
 
 Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
