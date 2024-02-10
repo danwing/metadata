@@ -1188,13 +1188,13 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-discard-preference" class="internal xref">Discard Preference</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-packet-nature-preference" class="internal xref">Packet Nature/Preference</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
-                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-packet-nature-for-unreliabl" class="internal xref">Packet Nature for Unreliable Traffic</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
-                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-encoding-3" class="internal xref">Encoding</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-packet-nature-for-reliable-" class="internal xref">Packet Nature for Reliable Traffic</a></p>
 </li>
                 </ul>
 </li>
@@ -1210,7 +1210,7 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
                     <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-host-treatment" class="internal xref">Host Treatment</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
-                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-encoding-4" class="internal xref">Encoding</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-encoding-5" class="internal xref">Encoding</a></p>
 </li>
                 </ul>
 </li>
@@ -1348,7 +1348,7 @@ importance means those packets can be discarded during a reactive policy event.<
         <h3 id="name-importance">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-importance" class="section-name selfRef">Importance</a>
         </h3>
-<p id="section-3.1-1">Importance bit signifies if the packet is of more importance or less importance by the network element.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Importance bit signifies if the packet is of more importance or less importance by the network element. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div id="application-treatment">
 <section id="section-3.1.1">
           <h4 id="name-application-treatment">
@@ -1401,15 +1401,16 @@ importance means those packets can be discarded during a reactive policy event.<
 </li>
         </ul>
 <p id="section-3.2-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted by
-the sender, appearing on the network again.  Thus, delaying or discarding such packets does not
+the sender application, appearing on the network again.  Thus, delaying or discarding such packets does not
 reduce the amount of transmitted data, it only defers when it appears on the network.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2-4">This is specified in the MSB of metadata bits and is of 1 bit length. Reliable/Unreliable belongs to Application Metadata.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <div id="network-treatment">
 <section id="section-3.2.1">
           <h4 id="name-network-treatment">
 <a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-network-treatment" class="section-name selfRef">Network Treatment</a>
           </h4>
 <p id="section-3.2.1-1">During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
-traffic.  The reliable traffic will be re-transmitted by the sender so dropping such traffic
+traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1440,58 +1441,112 @@ only defers it until later, but this deferral can be useful.<a href="#section-3.
 </div>
 </section>
 </div>
-<div id="discard-preference">
+<div id="packet-naturepreference">
 <section id="section-3.3">
-        <h3 id="name-discard-preference">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-discard-preference" class="section-name selfRef">Discard Preference</a>
+        <h3 id="name-packet-nature-preference">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-packet-nature-preference" class="section-name selfRef">Packet Nature/Preference</a>
         </h3>
-<p id="section-3.3-1">Packets are marked as 'discard' or 'keep'.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">Many flows contain a mix of important packets and less-important packets, but applications
+<div id="packet-nature-for-unreliable-traffic">
+<section id="section-3.3.1">
+          <h4 id="name-packet-nature-for-unreliabl">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-packet-nature-for-unreliabl" class="section-name selfRef">Packet Nature for Unreliable Traffic</a>
+          </h4>
+<p id="section-3.3.1-1">Packet Nature indicates discard preference for unreliable traffic.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">Packets are marked as 'discard' or 'keep'.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3">Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
 Rather, applications send everything over a reliable transport (TCP or QUIC) and leave it
-at that, as evidenced by video streaming using TCP.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
+at that, as evidenced by video streaming using TCP.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-4">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
 <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> unreliable traffic <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> on the same 5-tuple.  With
 host-to-network metadata signaling, the network can become an active assistant in such
 flows during a reactive policy event by endeavouring to send the more-important 'keep'
-traffic at the expense of the less-important 'discard' traffic.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+traffic at the expense of the less-important 'discard' traffic.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
 <div id="network-treatment-1">
-<section id="section-3.3.1">
-          <h4 id="name-network-treatment-2">
-<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-network-treatment-2" class="section-name selfRef">Network Treatment</a>
-          </h4>
-<p id="section-3.3.1-1">During a reactive policy event, dropping 'discard' packets is preferred over dropping
-'keep' packets.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<section id="section-3.3.1.1">
+            <h5 id="name-network-treatment-2">
+<a href="#section-3.3.1.1" class="section-number selfRef">3.3.1.1. </a><a href="#name-network-treatment-2" class="section-name selfRef">Network Treatment</a>
+            </h5>
+<p id="section-3.3.1.1-1">During a reactive policy event, dropping 'discard' packets is preferred over dropping
+'keep' packets.<a href="#section-3.3.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding-2">
+<section id="section-3.3.1.2">
+            <h5 id="name-encoding-3">
+<a href="#section-3.3.1.2" class="section-number selfRef">3.3.1.2. </a><a href="#name-encoding-3" class="section-name selfRef">Encoding</a>
+            </h5>
+<p id="section-3.3.1.2-1">Discard:<a href="#section-3.3.1.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.3.1.2-2.1">
+                <p id="section-3.3.1.2-2.1.1">When signaled in binary, the PacketNature bit is set (1).<a href="#section-3.3.1.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.3.1.2-2.2">
+                <p id="section-3.3.1.2-2.2.1">When signaled in JSON, it is encoded as name "Discard" and value "true".<a href="#section-3.3.1.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.3.1.2-3">Keep:<a href="#section-3.3.1.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.3.1.2-4.1">
+                <p id="section-3.3.1.2-4.1.1">When signaled in binary, the PacketNature bit is cleared (0).<a href="#section-3.3.1.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.3.1.2-4.2">
+                <p id="section-3.3.1.2-4.2.1">When signaled in JSON, it is encoded as name "Discard" and value "false".<a href="#section-3.3.1.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="packet-nature-for-reliable-traffic">
 <section id="section-3.3.2">
-          <h4 id="name-encoding-3">
-<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-encoding-3" class="section-name selfRef">Encoding</a>
+          <h4 id="name-packet-nature-for-reliable-">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-packet-nature-for-reliable-" class="section-name selfRef">Packet Nature for Reliable Traffic</a>
           </h4>
-<p id="section-3.3.2-1">Discard:<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-1">Discard preference for reliable traffic doesn't make sense since no reliable traffic should be discarded. So the packet nature bits for reliable traffic indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<div id="network-treatment-2">
+<section id="section-3.3.2.1">
+            <h5 id="name-network-treatment-3">
+<a href="#section-3.3.2.1" class="section-number selfRef">3.3.2.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
+            </h5>
+<p id="section-3.3.2.1-1">Realtime traffic prefers less latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="encoding-3">
+<section id="section-3.3.2.2">
+            <h5 id="name-encoding-4">
+<a href="#section-3.3.2.2" class="section-number selfRef">3.3.2.2. </a><a href="#name-encoding-4" class="section-name selfRef">Encoding</a>
+            </h5>
+<p id="section-3.3.2.2-1">Realtime:<a href="#section-3.3.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3.2-2.1">
-              <p id="section-3.3.2-2.1.1">When signaled in binary, the Discard bit is set (1).<a href="#section-3.3.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3.2.2-2.1">
+                <p id="section-3.3.2.2-2.1.1">When signaled in binary, the PacketNature bit is set (1).<a href="#section-3.3.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.2-2.2">
-              <p id="section-3.3.2-2.2.1">When signaled in JSON, it is encoded as name "discard" and value "true".<a href="#section-3.3.2-2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.3.2.2-2.2">
+                <p id="section-3.3.2.2-2.2.1">When signaled in JSON, it is encoded as name "realtime" and value "true".<a href="#section-3.3.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
-          </ul>
-<p id="section-3.3.2-3">Keep:<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-3.3.2.2-3">Bulk traffic:<a href="#section-3.3.2.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3.2-4.1">
-              <p id="section-3.3.2-4.1.1">When signaled in binary, the Discard bit is cleared (0).<a href="#section-3.3.2-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3.2.2-4.1">
+                <p id="section-3.3.2.2-4.1.1">When signaled in binary, the PacketNature bit is cleared (0).<a href="#section-3.3.2.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.3.2-4.2">
-              <p id="section-3.3.2-4.2.1">When signaled in JSON, it is encoded as name "discard" and value "false".<a href="#section-3.3.2-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.3.2.2-4.2">
+                <p id="section-3.3.2.2-4.2.1">When signaled in JSON, it is encoded as name "realtime" and value "false".<a href="#section-3.3.2.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          </ul>
-<p id="section-3.3.2-5">To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.<a href="#section-3.3.2-5" class="pilcrow">¶</a></p>
-<p id="section-3.3.2-6">MSB - Importance bit.
-Bit 1 - Discard Preference bit.
-LSB - Reliable/Unreliable bit.<a href="#section-3.3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.3.2-7">More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the <a href="#examples" class="auto internal xref">Appendix A</a> section.<a href="#section-3.3.2-7" class="pilcrow">¶</a></p>
+            </ul>
+<p id="section-3.3.2.2-5">To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.<a href="#section-3.3.2.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.3.2.2-6">MSB - Importance bit.
+Bit 1 - Packet Nature bit.
+LSB - Reliable/Unreliable bit.<a href="#section-3.3.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.3.2.2-7">More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the <a href="#examples" class="auto internal xref">Appendix A</a> section.<a href="#section-3.3.2.2-7" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3.3.2.2-8.1">
+                <p id="section-3.3.2.2-8.1.1">Discussion: Come up with better name for PacketNature.<a href="#section-3.3.2.2-8.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -1530,10 +1585,10 @@ of that second could have no packets transmitted.<a href="#section-4.1-3" class=
 <p id="section-4.1.1-1">The host chooses a video streaming bit rate at or below the signaled rate.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="encoding-3">
+<div id="encoding-4">
 <section id="section-4.1.2">
-          <h4 id="name-encoding-4">
-<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-encoding-4" class="section-name selfRef">Encoding</a>
+          <h4 id="name-encoding-5">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-encoding-5" class="section-name selfRef">Encoding</a>
           </h4>
 <p id="section-4.1.2-1">When signaled in JSON, the bandwidth is encoded as namae "video-streaming-bandwidth" and
 the value is in kilobits per second.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
@@ -1683,17 +1738,18 @@ is still an application decision.  In the example below, the audio
 is more important than video (importance=high, KD=keep, RU=reliable), video key frames
 have middle importance (importance=low, discard, reliable), and video delta
 frames have least importance (importance=low, KD=discard, RU=unreliable).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
+<p id="appendix-A.1-3">Comprehensive Interpretation:<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming-ci">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata</a>
+<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata - Comprehensive Interpretation</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
               <th class="text-center" rowspan="1" colspan="1">RU</th>
             </tr>
           </thead>
@@ -1701,7 +1757,7 @@ frames have least importance (importance=low, KD=discard, RU=unreliable).<a href
             <tr>
               <td class="text-center" rowspan="1" colspan="1">video key frame</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
             <tr>
@@ -1713,23 +1769,57 @@ frames have least importance (importance=low, KD=discard, RU=unreliable).<a href
             <tr>
               <td class="text-center" rowspan="1" colspan="1">audio</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="appendix-A.1-4">Astute readers will notice this use case could be handled with a
+<p id="appendix-A.1-5">Simple Interpretation:<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-video-str"></span><div id="_table-video-streaming-si">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-example-values-for-video-str" class="selfRef">Example Values for Video Streaming Metadata - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">011</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">001</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.1-7">Astute readers will notice this use case could be handled with a
 ternary value represented by 2 bits (rather than 3 bits).  However,
-other use cases such as <a href="#example-rdt" class="auto internal xref">Appendix A.3</a> need 3 bits.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+other use cases such as <a href="#example-rdt" class="auto internal xref">Appendix A.3</a> need 3 bits.<a href="#appendix-A.1-7" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A.1-5.1">
-            <p id="appendix-A.1-5.1.1">Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.<a href="#appendix-A.1-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-A.1-8.1">
+            <p id="appendix-A.1-8.1.1">Discussion: Do we need to mention the above statement about 2/3 bits?<a href="#appendix-A.1-8.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A.1-6.1">
-            <p id="appendix-A.1-6.1.1">Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation<a href="#appendix-A.1-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-A.1-9.1">
+            <p id="appendix-A.1-9.1.1">Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.<a href="#appendix-A.1-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-A.1-10.1">
+            <p id="appendix-A.1-10.1.1">Discussion: Breaking KD bits to indicate Keep/Discard for Unreliable traffic and realtime/bulk for reliable traffic<a href="#appendix-A.1-10.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1744,53 +1834,18 @@ in both directions -- thus is a slightly more complicated use-case than
 the previous example.  Additionally, most Internet service providers
 constrain upstream bandwidth so proper packet treatment is critical in
 the upstream direction.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream">
-<table class="center" id="table-2">
-          <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-example-values-for-interact" class="selfRef">Example Values for Interactive A/V, downstream</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
-              <th class="text-center" rowspan="1" colspan="1">RU</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<span id="name-example-values-for-interacti"></span><div id="_table-video-av-upstream">
+<p id="appendix-A.2-2">Comprehensive Interpretation:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream-ci">
 <table class="center" id="table-3">
           <caption>
 <a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-example-values-for-interacti" class="selfRef">Example Values for Interactive A/V, upstream</a>
+<a href="#name-example-values-for-interact" class="selfRef">Example Values for Interactive A/V, downstream - Comprehensive Interpretation</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
               <th class="text-center" rowspan="1" colspan="1">RU</th>
             </tr>
           </thead>
@@ -1798,7 +1853,7 @@ the upstream direction.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">video key frame</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
             <tr>
@@ -1810,28 +1865,23 @@ the upstream direction.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">audio</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
           </tbody>
         </table>
 </div>
-<p id="appendix-A.2-4">Many interactive audio/video applications also support sharing the presenter's
-screen, file, video, or pictures.  During this sharing the presenter's video
-is less important but the screen or picture is more important.  This change
-of imporance can be conveyed in metadata to the network, as in the table
-below:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interactiv"></span><div id="_table-video-av-sharing">
+<span id="name-example-values-for-interacti"></span><div id="_table-video-av-upstream-ci">
 <table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-example-values-for-interactiv" class="selfRef">Example Values for Interactive A/V, upstream</a>
+<a href="#name-example-values-for-interacti" class="selfRef">Example Values for Interactive A/V, upstream - Comprehensive Interpretation</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
               <th class="text-center" rowspan="1" colspan="1">RU</th>
             </tr>
           </thead>
@@ -1839,7 +1889,7 @@ below:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">video key frame</td>
               <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
             <tr>
@@ -1851,14 +1901,146 @@ below:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">audio</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-5">Simple Interpretation:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interactiv"></span><div id="_table-interactive-av-downstream-si">
+<table class="center" id="table-5">
+          <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-example-values-for-interactiv" class="selfRef">Example Values for Interactive A/V, downstream - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">011</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">001</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<span id="name-example-values-for-interactive"></span><div id="_table-video-av-upstream-si">
+<table class="center" id="table-6">
+          <caption>
+<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#name-example-values-for-interactive" class="selfRef">Example Values for Interactive A/V, upstream - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">011</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-8">Many interactive audio/video applications also support sharing the presenter's
+screen, file, video, or pictures.  During this sharing the presenter's video
+is less important but the screen or picture is more important.  This change
+of imporance can be conveyed in metadata to the network, as in the table
+below:<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-9">Comprehensive Interpretation:<a href="#appendix-A.2-9" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interactive-"></span><div id="_table-video-av-sharing-ci">
+<table class="center" id="table-7">
+          <caption>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-example-values-for-interactive-" class="selfRef">Example Values for Interactive A/V, upstream - Comprehensive Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">RU</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">picture sharing</td>
               <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
               <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-11">Simple Interpretation:<a href="#appendix-A.2-11" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interactive-a"></span><div id="_table-video-av-sharing-si">
+<table class="center" id="table-8">
+          <caption>
+<a href="#table-8" class="selfRef">Table 8</a>:
+<a href="#name-example-values-for-interactive-a" class="selfRef">Example Values for Interactive A/V, upstream - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">011</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">picture sharing</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
             </tr>
           </tbody>
         </table>
@@ -1872,209 +2054,238 @@ below:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
         </h3>
 <p id="appendix-A.3-1">Example packet metadata for Desktop Virtualization (like Citrix
 Virtual Apps and Desktops - CVAD) application.  This is shown in two
-tables, client-to-server traffic (<a href="#_table-desktop-virtualization-c2s" class="auto internal xref">Table 5</a>)
-and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c" class="auto internal xref">Table 6</a>).<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-c2s">
-<table class="center" id="table-5">
+tables, client-to-server traffic (<a href="#_table-desktop-virtualization-c2s-ci" class="auto internal xref">Table 9</a>)(<a href="#_table-desktop-virtualization-c2s-si" class="auto internal xref">Table 11</a>)
+and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c-ci" class="auto internal xref">Table 10</a>)(<a href="#_table-desktop-virtualization-s2c-si" class="auto internal xref">Table 12</a>).<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">Comprehensive Interpretation:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-c2s-ci">
+<table class="center" id="table-9">
           <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
-<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server</a>
+<a href="#table-9" class="selfRef">Table 9</a>:
+<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server - Comprehensive Interpretation</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
               <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
-              <th class="text-left" rowspan="1" colspan="1">Comments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">User typing</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-left" rowspan="1" colspan="1">Client To Server Traffic</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-left" rowspan="1" colspan="1">The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive audio</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<span id="name-example-values-for-remote-de"></span><div id="_table-desktop-virtualization-s2c">
-<table class="center" id="table-6">
-          <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
-<a href="#name-example-values-for-remote-de" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Importance</th>
-              <th class="text-center" rowspan="1" colspan="1">KD</th>
-              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
-              <th class="text-left" rowspan="1" colspan="1">Comments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">File copy</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) audio</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">keep</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video predictive frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-              <td class="text-left" rowspan="1" colspan="1">Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<p id="appendix-A.3-4">Simple interpretation:<a href="#appendix-A.3-4" class="pilcrow">¶</a></p>
-<table class="center" id="table-7">
-          <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Importance</th>
               <th class="text-center" rowspan="1" colspan="1">Comments</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">User typing</td>
-              <td class="text-center" rowspan="1" colspan="1">101 (5)</td>
-              <td class="text-center" rowspan="1" colspan="1">Client to Server traffic - simple importance is not applicable on the same path as the Server to Client traffic</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-              <td class="text-center" rowspan="1" colspan="1">110 (6)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
-              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Client To Server Traffic</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
-              <td class="text-center" rowspan="1" colspan="1">101 (5)</td>
-              <td class="text-center" rowspan="1" colspan="1">C2S</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Authentication - Finger print, smart card</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Comments</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
-              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
-              <td class="text-center" rowspan="1" colspan="1">C2S</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy.</td>
             </tr>
             <tr>
-              <td class="text-center" rowspan="1" colspan="1">File copy</td>
-              <td class="text-center" rowspan="1" colspan="1">001 (1)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">VoIP-Audio</td>
-              <td class="text-center" rowspan="1" colspan="1">110 (6)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">VoIP-Video</td>
-              <td class="text-center" rowspan="1" colspan="1">010 (2)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">010 (2)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Video predictive frame</td>
-              <td class="text-center" rowspan="1" colspan="1">000 (0)</td>
-              <td class="text-center" rowspan="1" colspan="1"> </td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Hpatic feedback</td>
-              <td class="text-center" rowspan="1" colspan="1">100 (4)</td>
+              <td class="text-center" rowspan="1" colspan="1">Interactive video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
               <td class="text-center" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
-<p id="appendix-A.3-6">*** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.<a href="#appendix-A.3-6" class="pilcrow">¶</a></p>
+</div>
+<span id="name-example-values-for-remote-de"></span><div id="_table-desktop-virtualization-s2c-ci">
+<table class="center" id="table-10">
+          <caption>
+<a href="#table-10" class="selfRef">Table 10</a>:
+<a href="#name-example-values-for-remote-de" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client - Comprehensive Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">bulk</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.3-5">Simple Interpretation:<a href="#appendix-A.3-5" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-remote-des"></span><div id="_table-desktop-virtualization-c2s-si">
+<table class="center" id="table-11">
+          <caption>
+<a href="#table-11" class="selfRef">Table 11</a>:
+<a href="#name-example-values-for-remote-des" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">User typing</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive audio</td>
+              <td class="text-center" rowspan="1" colspan="1">110</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Authentication - Finger print, smart card</td>
+              <td class="text-center" rowspan="1" colspan="1">011</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">010</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<span id="name-example-values-for-remote-desk"></span><div id="_table-desktop-virtualization-s2c-si">
+<table class="center" id="table-12">
+          <caption>
+<a href="#table-12" class="selfRef">Table 12</a>:
+<a href="#name-example-values-for-remote-desk" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">111</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) audio</td>
+              <td class="text-center" rowspan="1" colspan="1">110</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
+              <td class="text-center" rowspan="1" colspan="1">100</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">010</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">001</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">000</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.3-8">*** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.<a href="#appendix-A.3-8" class="pilcrow">¶</a></p>
 <ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="appendix-A.3-7.1">
-            <p id="appendix-A.3-7.1.1">Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?<a href="#appendix-A.3-7.1.1" class="pilcrow">¶</a></p>
+<li class="normal ulEmpty" id="appendix-A.3-9.1">
+            <p id="appendix-A.3-9.1.1">Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?<a href="#appendix-A.3-9.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
