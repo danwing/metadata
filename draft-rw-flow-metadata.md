@@ -337,9 +337,10 @@ the upstream direction.
 | audio             | high       | keep              | reliable             |
 {: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
 
-Many interactive audio/video applications also support sharing of the
-screen, file, video, and pictures.  During this time the presenter's video
-is less important but the screen or picture is more important.  This is depicted
+Many interactive audio/video applications also support sharing the presenter's
+screen, file, video, or pictures.  During this sharing the presenter's video
+is less important but the screen or picture is more important.  This change
+of imporance can be conveyed in metadata to the network, as in the table
 below:
 
 | Traffic type      | importance | KD                | RU                   |
@@ -353,24 +354,32 @@ below:
 
 ## Remote Desktop Virtualization {#example-rdt}
 
-Example packet metadata for Desktop Virtualization (like Citrix Virtual Apps and Desktops - CVAD) application.
+Example packet metadata for Desktop Virtualization (like Citrix
+Virtual Apps and Desktops - CVAD) application.  This is shown in two
+tables, client-to-server traffic ({{table-desktop-virtualization-c2s}})
+and server-to-client traffic ({{table-desktop-virtualization-s2c}}).
 
-Comprehensive interpretation:
 
 | Traffic type               | Importance | KD              | Reliable/Unreliable | Comments |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------|
 | User typing                | high       | discard         | reliable            | Client To Server Traffic         |
-| Glyph critical             | high       | keep            | Unreliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
-| Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
 | Mouse click/End Position   | high       | discard         | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
 | Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
+| Interactive audio          | high       | keep            | unreliable          |   |
+| Interactive video delta frame           | low        | keep            | unreliable          |   |
+| Interactive video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
+{: #table-desktop-virtualization-c2s title="Example Values for Remote Desktop Virtualization Metadata, client to server"}
+
+| Traffic type               | Importance | KD              | Reliable/Unreliable | Comments |
+|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------|
+| Glyph critical             | high       | keep            | Unreliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
+| Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
 | File copy                  | low        | discard         | reliable            |   |
-| VoIP-Audio                 | high       | keep            | unreliable          |   |
-| VoIP-Video                 | low        | keep            | unreliable          |   |
-| Video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
-| Video predictive frame     | low        | discard         | unreliable          | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
+| Interactive (or streaming) audio   | high       | keep            | unreliable          |   |
+| Interactive (or streaming) video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
+| Interactive (or streaming) video predictive frame     | low        | discard         | unreliable          | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
 | Haptic feedback            | high       | discard         | unreliable          | Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense |
-{: #table-desktop-virtualization title="Example Values for Remote Desktop Virtualization Metadata"}
+{: #table-desktop-virtualization-s2c title="Example Values for Remote Desktop Virtualization Metadata, server to client"}
 
 Simple interpretation:
 
@@ -389,7 +398,9 @@ Simple interpretation:
 | Hpatic feedback            | 100 (4)          |          |
 
 *** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.
->Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?
+
+> Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?
+
 <!--
 ** These are critical but considering implementation constraints, data from a specific source (a virtual channel like mouse, graphics etc in this case) is either transmitted reliably or as loss-tolerant. These packets lost will have user experience impact but still since most of the traffic from this use-case come under loss-tolerant and it is not critical that the application breaks if these are not received (unlike file transfer), these are listed as loss-tolerant while having the don't bit set to 0.
 -->
