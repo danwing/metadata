@@ -137,7 +137,7 @@ For more comprehensive interpretation, metadata is characterized into 2 differen
 
 ## Importance
 
-Importance bit signifies if the packet is of more importance or less importance by the network element.
+Importance bit signifies if the packet is of more importance or less importance by the network element. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.
 
 ### Application Treatment
 
@@ -165,13 +165,15 @@ Packets are marked as 'unreliable' or 'reliable':
 (e.g., UDP, {{RTP}}, {{LOSSY-QUIC}}) and also not re-transmitted by the application (e.g., {{RTP}}).
 
 Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted by
-the sender, appearing on the network again.  Thus, delaying or discarding such packets does not
+the sender application, appearing on the network again.  Thus, delaying or discarding such packets does not
 reduce the amount of transmitted data, it only defers when it appears on the network.
+
+This is specified in the MSB of metadata bits and is of 1 bit length. Reliable/Unreliable belongs to Application Metadata.
 
 ### Network Treatment
 
 During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
-traffic.  The reliable traffic will be re-transmitted by the sender so dropping such traffic
+traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
 ### Encoding
@@ -187,7 +189,11 @@ Unreliable:
 * When signaled in JSON, it is encoded as name "reliable" and value "false".
 
 
-## Discard Preference
+## Packet Nature/Preference
+
+### Packet Nature for Unreliable Traffic
+
+Packet Nature indicates discard preference for unreliable traffic.
 
 Packets are marked as 'discard' or 'keep'.
 
@@ -202,30 +208,52 @@ host-to-network metadata signaling, the network can become an active assistant i
 flows during a reactive policy event by endeavouring to send the more-important 'keep'
 traffic at the expense of the less-important 'discard' traffic.
 
-### Network Treatment
+#### Network Treatment
 
 During a reactive policy event, dropping 'discard' packets is preferred over dropping
 'keep' packets.
 
-### Encoding
+#### Encoding
 
 Discard:
 
-* When signaled in binary, the Discard bit is set (1).
-* When signaled in JSON, it is encoded as name "discard" and value "true".
+* When signaled in binary, the PacketNature bit is set (1).
+* When signaled in JSON, it is encoded as name "Discard" and value "true".
 
 Keep:
 
-* When signaled in binary, the Discard bit is cleared (0).
-* When signaled in JSON, it is encoded as name "discard" and value "false".
+* When signaled in binary, the PacketNature bit is cleared (0).
+* When signaled in JSON, it is encoded as name "Discard" and value "false".
+
+### Packet Nature for Reliable Traffic
+
+Discard preference for reliable traffic doesn't make sense since no reliable traffic should be discarded. So the packet nature bits for reliable traffic indicates whether the packet belongs to bulk or real-time traffic.
+
+#### Network Treatment
+
+Realtime traffic prefers less latency network paths and bulk traffic prefers high throughoupt paths.
+
+#### Encoding
+
+Realtime:
+
+* When signaled in binary, the PacketNature bit is set (1).
+* When signaled in JSON, it is encoded as name "realtime" and value "true".
+
+Bulk traffic:
+
+* When signaled in binary, the PacketNature bit is cleared (0).
+* When signaled in JSON, it is encoded as name "realtime" and value "false".
 
 To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.
 
 MSB - Importance bit.
-Bit 1 - Discard Preference bit.
+Bit 1 - Packet Nature bit.
 LSB - Reliable/Unreliable bit.
 
 More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the {{examples}} section.
+
+> Discussion: Come up with better name for PacketNature.
 
 # Network to Host Metadata
 
@@ -299,21 +327,33 @@ is more important than video (importance=high, KD=keep, RU=reliable), video key 
 have middle importance (importance=low, discard, reliable), and video delta
 frames have least importance (importance=low, KD=discard, RU=unreliable).
 
-| Traffic type      | importance | KD                | RU                   |
+Comprehensive Interpretation:
+
+| Traffic type      | Importance | PacketNature      | RU                   |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | discard           | reliable             |
+| video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
-| audio             | high       | keep              | reliable             |
-{: #table-video-streaming title="Example Values for Video Streaming Metadata"}
+| audio             | high       | realtime          | reliable             |
+{: #table-video-streaming-ci title="Example Values for Video Streaming Metadata - Comprehensive Interpretation"}
+
+Simple Interpretation:
+
+| Traffic type      | Simple Interpretation |
+|:-----------------:|:---------------------:|
+| video key frame   | 011                   |
+| video delta frame | 001                   |
+| audio             | 111                   |
+{: #table-video-streaming-si title="Example Values for Video Streaming Metadata - Simple Interpretation"}
 
 Astute readers will notice this use case could be handled with a
 ternary value represented by 2 bits (rather than 3 bits).  However,
 other use cases such as {{example-rdt}} need 3 bits.
 
+> Discussion: Do we need to mention the above statement about 2/3 bits?
+
 > Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
 
-> Discussion: For all reliable bits, marking keep/discard as discard since it really is a don't care bit but makes sense to keep it 0 for simple interpretation
-
+> Discussion: Breaking KD bits to indicate Keep/Discard for Unreliable traffic and realtime/bulk for reliable traffic
 
 ## Interactive Audio/Video Streaming {#example-interactive-av}
 
@@ -323,19 +363,37 @@ the previous example.  Additionally, most Internet service providers
 constrain upstream bandwidth so proper packet treatment is critical in
 the upstream direction.
 
-| Traffic type      | importance | KD                | RU                   |
-|:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | discard           | reliable             |
-| video delta frame | low        | discard           | unreliable           |
-| audio             | high       | keep              | reliable             |
-{: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
+Comprehensive Interpretation:
 
-| Traffic type      | importance | KD                | RU                   |
+| Traffic type      | Importance | PacketNature      | RU                   |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | discard           | reliable             |
+| video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
-| audio             | high       | keep              | reliable             |
-{: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
+| audio             | high       | realtime          | reliable             |
+{: #table-interactive-av-downstream-ci title="Example Values for Interactive A/V, downstream - Comprehensive Interpretation"}
+
+| Traffic type      | Importance | PacketNature      | RU                   |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | realtime          | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | realtime          | reliable             |
+{: #table-video-av-upstream-ci title="Example Values for Interactive A/V, upstream - Comprehensive Interpretation"}
+
+Simple Interpretation:
+
+| Traffic type      | Simple Interpretation |
+|:-----------------:|:---------------------:|
+| video key frame   | 011                   |
+| video delta frame | 001                   |
+| audio             | 111                   |
+{: #table-interactive-av-downstream-si title="Example Values for Interactive A/V, downstream - Simple Interpretation"}
+
+| Traffic type      | Simple Interpretation |
+|:-----------------:|:---------------------:|
+| video key frame   | 011                   |
+| video delta frame | 000                   |
+| audio             | 111                   |
+{: #table-video-av-upstream-si title="Example Values for Interactive A/V, upstream - Simple Interpretation"}
 
 Many interactive audio/video applications also support sharing the presenter's
 screen, file, video, or pictures.  During this sharing the presenter's video
@@ -343,59 +401,81 @@ is less important but the screen or picture is more important.  This change
 of imporance can be conveyed in metadata to the network, as in the table
 below:
 
-| Traffic type      | importance | KD                | RU                   |
+Comprehensive Interpretation:
+
+| Traffic type      | Importance | PacketNature      | RU                   |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | discard           | reliable             |
+| video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
-| audio             | high       | keep              | reliable             |
-| picture sharing   | high       | keep              | reliable             |
-{: #table-video-av-sharing title="Example Values for Interactive A/V, upstream"}
+| audio             | high       | realtime          | reliable             |
+| picture sharing   | high       | realtime          | reliable             |
+{: #table-video-av-sharing-ci title="Example Values for Interactive A/V, upstream - Comprehensive Interpretation"}
+
+Simple Interpretation:
+
+| Traffic type      | Simple Interpretation |
+|:-----------------:|:---------------------:|
+| video key frame   | 011                   |
+| video delta frame | 000                   |
+| audio             | 111                   |
+| picture sharing   | 111                   |
+{: #table-video-av-sharing-si title="Example Values for Interactive A/V, upstream - Simple Interpretation"}
 
 
 ## Remote Desktop Virtualization {#example-rdt}
 
 Example packet metadata for Desktop Virtualization (like Citrix
 Virtual Apps and Desktops - CVAD) application.  This is shown in two
-tables, client-to-server traffic ({{table-desktop-virtualization-c2s}})
-and server-to-client traffic ({{table-desktop-virtualization-s2c}}).
+tables, client-to-server traffic ({{table-desktop-virtualization-c2s-ci}})({{table-desktop-virtualization-c2s-si}})
+and server-to-client traffic ({{table-desktop-virtualization-s2c-ci}})({{table-desktop-virtualization-s2c-si}}).
 
+Comprehensive Interpretation:
 
-| Traffic type               | Importance | KD              | Reliable/Unreliable | Comments |
-|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------|
-| User typing                | high       | discard         | reliable            | Client To Server Traffic         |
-| Mouse click/End Position   | high       | discard         | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
-| Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
+| Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
+|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
+| User typing                | high       | realtime        | reliable            | Client To Server Traffic         |
+| Mouse click/End Position   | high       | realtime        | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
 | Interactive audio          | high       | keep            | unreliable          |   |
-| Interactive video delta frame           | low        | keep            | unreliable          |   |
+| Authentication - Finger print, smart card | low | realtime | reliable | Comments |
 | Interactive video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
-{: #table-desktop-virtualization-c2s title="Example Values for Remote Desktop Virtualization Metadata, client to server"}
+| Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
+| Interactive video delta frame           | low        | discard            | unreliable          |   |
+{: #table-desktop-virtualization-c2s-ci title="Example Values for Remote Desktop Virtualization Metadata, client to server - Comprehensive Interpretation"}
 
-| Traffic type               | Importance | KD              | Reliable/Unreliable | Comments |
-|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------|
-| Glyph critical             | high       | keep            | Unreliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
-| Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
-| File copy                  | low        | discard         | reliable            |   |
+| Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
+|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
+| Glyph critical             | high       | keep            | reliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
 | Interactive (or streaming) audio   | high       | keep            | unreliable          |   |
-| Interactive (or streaming) video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
-| Interactive (or streaming) video predictive frame     | low        | discard         | unreliable          | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
 | Haptic feedback            | high       | discard         | unreliable          | Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense |
-{: #table-desktop-virtualization-s2c title="Example Values for Remote Desktop Virtualization Metadata, server to client"}
+| Interactive (or streaming) video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
+| File copy                  | low        | bulk            | reliable            |   |
+| Interactive (or streaming) video predictive frame     | low        | discard         | unreliable          | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
+| Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
+{: #table-desktop-virtualization-s2c-ci title="Example Values for Remote Desktop Virtualization Metadata, server to client - Comprehensive Interpretation"}
 
-Simple interpretation:
+Simple Interpretation:
 
-| Traffic type               | Simple Importance| Comments |
-|:--------------------------:|:----------------:|:--------:|
-| User typing                | 101 (5)          |  Client to Server traffic - simple importance is not applicable on the same path as the Server to Client traffic |
-| Glyph critical             | 110 (6)          |          |
-| Glyph smoothing            | 000 (0)          |          |
-| Mouse click/End Position   | 101 (5)          |  C2S     |
-| Mouse position tracking    | 000 (0)          |  C2S     |
-| File copy                  | 001 (1)          |          |
-| VoIP-Audio                 | 110 (6)          |          |
-| VoIP-Video                 | 010 (2)          |          |
-| Video key frame            | 010 (2)          |          |
-| Video predictive frame     | 000 (0)          |          |
-| Hpatic feedback            | 100 (4)          |          |
+| Traffic type               | Simple Interpretation |
+|:--------------------------:|:---------------------:|
+| User typing                | 111                   |
+| Mouse click/End Position   | 111                   |
+| Interactive audio          | 110                   |
+| Authentication - Finger print, smart card | 011                   |
+| Interactive video key frame            | 010                   |
+| Mouse position tracking    | 000                   |
+| Interactive video delta frame           | 000                   |
+{: #table-desktop-virtualization-c2s-si title="Example Values for Remote Desktop Virtualization Metadata, client to server - Simple Interpretation"}
+
+| Traffic type               | Simple Interpretation |
+|:--------------------------:|:---------------------:|
+| Glyph critical             | 111                   |
+| Interactive (or streaming) audio   | 110                   |
+| Haptic feedback            | 100                   |
+| Interactive (or streaming) video key frame            | 010                   |
+| File copy                  | 001                   |
+| Interactive (or streaming) video predictive frame     | 000                   |
+| Glyph smoothing            | 000                   |
+{: #table-desktop-virtualization-s2c-si title="Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation"}
 
 *** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.
 
