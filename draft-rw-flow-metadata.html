@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan &amp; Wing</td>
-<td class="center">Expires 13 August 2024</td>
+<td class="center">Expires 15 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-10" class="published">10 February 2024</time>
+<time datetime="2024-02-12" class="published">12 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-13">13 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-15">15 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1127,7 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1192,9 +1192,25 @@ the available network resources.<a href="#section-abstract-2" class="pilcrow">¶
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
                     <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-packet-nature-for-unreliabl" class="internal xref">Packet Nature for Unreliable Traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1.2.1">
+                        <p id="section-toc.1-1.3.2.3.2.1.2.1.1"><a href="#section-3.3.1.1" class="auto internal xref">3.3.1.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1.2.2">
+                        <p id="section-toc.1-1.3.2.3.2.1.2.2.1"><a href="#section-3.3.1.2" class="auto internal xref">3.3.1.2</a>.  <a href="#name-encoding-3" class="internal xref">Encoding</a></p>
+</li>
+                    </ul>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
                     <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-packet-nature-for-reliable-" class="internal xref">Packet Nature for Reliable Traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2.2.1">
+                        <p id="section-toc.1-1.3.2.3.2.2.2.1.1"><a href="#section-3.3.2.1" class="auto internal xref">3.3.2.1</a>.  <a href="#name-network-treatment-3" class="internal xref">Network Treatment</a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2.2.2">
+                        <p id="section-toc.1-1.3.2.3.2.2.2.2.1"><a href="#section-3.3.2.2" class="auto internal xref">3.3.2.2</a>.  <a href="#name-encoding-4" class="internal xref">Encoding</a></p>
+</li>
+                    </ul>
 </li>
                 </ul>
 </li>
@@ -1348,7 +1364,7 @@ importance means those packets can be discarded during a reactive policy event.<
         <h3 id="name-importance">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-importance" class="section-name selfRef">Importance</a>
         </h3>
-<p id="section-3.1-1">Importance bit signifies if the packet is of more importance or less importance by the network element. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Importance bit signifies if the packet is of more importance or less importance by the host. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <div id="application-treatment">
 <section id="section-3.1.1">
           <h4 id="name-application-treatment">
@@ -1389,7 +1405,7 @@ importance means those packets can be discarded during a reactive policy event.<
         <h3 id="name-reliable-unreliable">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
         </h3>
-<p id="section-3.2-1">Packets are marked as 'unreliable' or 'reliable':<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">Reliable bit indicates if the packet is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.2-2.1">
             <p id="section-3.2-2.1.1">Reliable packets are re-transmitted by the transport
@@ -1446,22 +1462,22 @@ only defers it until later, but this deferral can be useful.<a href="#section-3.
         <h3 id="name-packet-nature-preference">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-packet-nature-preference" class="section-name selfRef">Packet Nature/Preference</a>
         </h3>
+<p id="section-3.3-1">Packet Nature indicates discard preference for unreliable traffic and reliable traffic, as detailed below.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <div id="packet-nature-for-unreliable-traffic">
 <section id="section-3.3.1">
           <h4 id="name-packet-nature-for-unreliabl">
 <a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-packet-nature-for-unreliabl" class="section-name selfRef">Packet Nature for Unreliable Traffic</a>
           </h4>
-<p id="section-3.3.1-1">Packet Nature indicates discard preference for unreliable traffic.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-2">Packets are marked as 'discard' or 'keep'.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-3">Many flows contain a mix of important packets and less-important packets, but applications
+<p id="section-3.3.1-1">Packets are marked as 'discard' or 'keep'.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
 Rather, applications send everything over a reliable transport (TCP or QUIC) and leave it
-at that, as evidenced by video streaming using TCP.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-4">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
+at that, as evidenced by video streaming using TCP.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-3">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
 <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> unreliable traffic <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> on the same 5-tuple.  With
 host-to-network metadata signaling, the network can become an active assistant in such
 flows during a reactive policy event by endeavouring to send the more-important 'keep'
-traffic at the expense of the less-important 'discard' traffic.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
+traffic at the expense of the less-important 'discard' traffic.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
 <div id="network-treatment-1">
 <section id="section-3.3.1.1">
             <h5 id="name-network-treatment-2">
@@ -1503,13 +1519,13 @@ traffic at the expense of the less-important 'discard' traffic.<a href="#section
           <h4 id="name-packet-nature-for-reliable-">
 <a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-packet-nature-for-reliable-" class="section-name selfRef">Packet Nature for Reliable Traffic</a>
           </h4>
-<p id="section-3.3.2-1">Discard preference for reliable traffic doesn't make sense since no reliable traffic should be discarded. So the packet nature bits for reliable traffic indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-1">For reliable traffic, the Packet Nature indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
 <div id="network-treatment-2">
 <section id="section-3.3.2.1">
             <h5 id="name-network-treatment-3">
 <a href="#section-3.3.2.1" class="section-number selfRef">3.3.2.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
             </h5>
-<p id="section-3.3.2.1-1">Realtime traffic prefers less latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2.1-1">Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="encoding-3">
@@ -1523,7 +1539,7 @@ traffic at the expense of the less-important 'discard' traffic.<a href="#section
                 <p id="section-3.3.2.2-2.1.1">When signaled in binary, the PacketNature bit is set (1).<a href="#section-3.3.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.3.2.2-2.2">
-                <p id="section-3.3.2.2-2.2.1">When signaled in JSON, it is encoded as name "realtime" and value "true".<a href="#section-3.3.2.2-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-3.3.2.2-2.2.1">When signaled in JSON, it is encoded as name "Realtime" and value "true".<a href="#section-3.3.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-3.3.2.2-3">Bulk traffic:<a href="#section-3.3.2.2-3" class="pilcrow">¶</a></p>
@@ -1532,7 +1548,7 @@ traffic at the expense of the less-important 'discard' traffic.<a href="#section
                 <p id="section-3.3.2.2-4.1.1">When signaled in binary, the PacketNature bit is cleared (0).<a href="#section-3.3.2.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.3.2.2-4.2">
-                <p id="section-3.3.2.2-4.2.1">When signaled in JSON, it is encoded as name "realtime" and value "false".<a href="#section-3.3.2.2-4.2.1" class="pilcrow">¶</a></p>
+                <p id="section-3.3.2.2-4.2.1">When signaled in JSON, it is encoded as name "Realtime" and value "false".<a href="#section-3.3.2.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-3.3.2.2-5">To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.<a href="#section-3.3.2.2-5" class="pilcrow">¶</a></p>

@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 13 August 2024                                 10 February 2024
+Expires: 15 August 2024                                 12 February 2024
 
 
                              Flow Metadata
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 August 2024.
+   This Internet-Draft will expire on 15 August 2024.
 
 Copyright Notice
 
@@ -83,7 +83,11 @@ Table of Contents
        3.2.2.  Encoding
      3.3.  Packet Nature/Preference
        3.3.1.  Packet Nature for Unreliable Traffic
+         3.3.1.1.  Network Treatment
+         3.3.1.2.  Encoding
        3.3.2.  Packet Nature for Reliable Traffic
+         3.3.2.1.  Network Treatment
+         3.3.2.2.  Encoding
    4.  Network to Host Metadata
      4.1.  Video Streaming Bandwidth
        4.1.1.  Host Treatment
@@ -184,9 +188,8 @@ Table of Contents
 3.1.  Importance
 
    Importance bit signifies if the packet is of more importance or less
-   importance by the network element.  This is specified in the MSB of
-   metadata bits and is of 1 bit length.  Importance belongs to Network
-   Metadata.
+   importance by the host.  This is specified in the MSB of metadata
+   bits and is of 1 bit length.  Importance belongs to Network Metadata.
 
 3.1.1.  Application Treatment
 
@@ -213,7 +216,8 @@ Table of Contents
 
 3.2.  Reliable/Unreliable
 
-   Packets are marked as 'unreliable' or 'reliable':
+   Reliable bit indicates if the packet is reliably transmitted by the
+   host.  Packets are marked as 'unreliable' or 'reliable':
 
    *  Reliable packets are re-transmitted by the transport (e.g., TCP or
       [QUIC]) or re-transmitted by the appplication (e.g.,
@@ -257,9 +261,10 @@ Table of Contents
 
 3.3.  Packet Nature/Preference
 
-3.3.1.  Packet Nature for Unreliable Traffic
+   Packet Nature indicates discard preference for unreliable traffic and
+   reliable traffic, as detailed below.
 
-   Packet Nature indicates discard preference for unreliable traffic.
+3.3.1.  Packet Nature for Unreliable Traffic
 
    Packets are marked as 'discard' or 'keep'.
 
@@ -300,14 +305,12 @@ Table of Contents
 
 3.3.2.  Packet Nature for Reliable Traffic
 
-   Discard preference for reliable traffic doesn't make sense since no
-   reliable traffic should be discarded.  So the packet nature bits for
-   reliable traffic indicates whether the packet belongs to bulk or
-   real-time traffic.
+   For reliable traffic, the Packet Nature indicates whether the packet
+   belongs to bulk or real-time traffic.
 
 3.3.2.1.  Network Treatment
 
-   Realtime traffic prefers less latency network paths and bulk traffic
+   Realtime traffic prefers lower latency network paths and bulk traffic
    prefers high throughoupt paths.
 
 3.3.2.2.  Encoding
@@ -316,14 +319,14 @@ Table of Contents
 
    *  When signaled in binary, the PacketNature bit is set (1).
 
-   *  When signaled in JSON, it is encoded as name "realtime" and value
+   *  When signaled in JSON, it is encoded as name "Realtime" and value
       "true".
 
    Bulk traffic:
 
    *  When signaled in binary, the PacketNature bit is cleared (0).
 
-   *  When signaled in JSON, it is encoded as name "realtime" and value
+   *  When signaled in JSON, it is encoded as name "Realtime" and value
       "false".
 
    To adhere to both simple and comprehensive interpretation of the
