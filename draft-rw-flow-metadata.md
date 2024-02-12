@@ -34,7 +34,15 @@ venue:
   latest: "https://danwing.github.io/metadata/draft-rw-flow-metadata.md.html"
 
 stand_alone: yes
-pi: [toc, sortrefs, symrefs, strict, comments, docmapping]
+pi:
+  tocdepth: 9
+  sortrefs: yes
+  symrefs: yes
+  strict: yes
+  comments: yes
+  docmapping: yes
+  tocdepth: 9
+  toc: yes
 
 author:
  -
@@ -137,7 +145,7 @@ For more comprehensive interpretation, metadata is characterized into 2 differen
 
 ## Importance
 
-Importance bit signifies if the packet is of more importance or less importance by the network element. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.
+Importance bit signifies if the packet is of more importance or less importance by the host. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.
 
 ### Application Treatment
 
@@ -157,7 +165,7 @@ Less-Important:
 
 ## Reliable/Unreliable
 
-Packets are marked as 'unreliable' or 'reliable':
+Reliable bit indicates if the packet is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
 
 * Reliable packets are re-transmitted by the transport
 (e.g., TCP or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
@@ -191,9 +199,9 @@ Unreliable:
 
 ## Packet Nature/Preference
 
-### Packet Nature for Unreliable Traffic
+Packet Nature indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
-Packet Nature indicates discard preference for unreliable traffic.
+### Packet Nature for Unreliable Traffic
 
 Packets are marked as 'discard' or 'keep'.
 
@@ -227,23 +235,23 @@ Keep:
 
 ### Packet Nature for Reliable Traffic
 
-Discard preference for reliable traffic doesn't make sense since no reliable traffic should be discarded. So the packet nature bits for reliable traffic indicates whether the packet belongs to bulk or real-time traffic.
+For reliable traffic, the Packet Nature indicates whether the packet belongs to bulk or real-time traffic.
 
 #### Network Treatment
 
-Realtime traffic prefers less latency network paths and bulk traffic prefers high throughoupt paths.
+Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.
 
 #### Encoding
 
 Realtime:
 
 * When signaled in binary, the PacketNature bit is set (1).
-* When signaled in JSON, it is encoded as name "realtime" and value "true".
+* When signaled in JSON, it is encoded as name "Realtime" and value "true".
 
 Bulk traffic:
 
 * When signaled in binary, the PacketNature bit is cleared (0).
-* When signaled in JSON, it is encoded as name "realtime" and value "false".
+* When signaled in JSON, it is encoded as name "Realtime" and value "false".
 
 To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.
 
