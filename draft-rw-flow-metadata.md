@@ -273,9 +273,11 @@ bandwidth policy.
 If the video is encoded with variable bit rate, the bitrate cannot exceed the indicated
 bitrate.
 
-The bitrate is calculated over each second. This means the packets can arrive at the
-start of a second, as near as possible behind each other, and the remaining portion
-of that second could have no packets transmitted.
+The nominal bitrate is calculated over each second, whereas the burst
+bitrate is calculated over the signaled interval (burst-duration).
+For either measurement, packets can arrive at the start of a second,
+as near as possible behind each other, and the remaining portion of
+that second could have no packets transmitted.
 
 ### Host Treatment
 
@@ -283,9 +285,16 @@ The host chooses a video streaming bit rate at or below the signaled rate.
 
 ### Encoding
 
-When signaled in JSON, the bandwidth is encoded as namae "video-streaming-bandwidth" and
-the value is in kilobits per second.
+When signaled in JSON, the bandwidth is encoded as name
+"videoStreamingBandwidth" containing one object containing three
+names: "nominal" and "burstBandwidth" with their values in kilobits
+per second and one name "burstDuration" with its value in
+milliseconds.
 
+An example of the encoding is in {{examples-n2h}}.
+
+Binary encoding and map encoding is unnecessary because the network-to-host signaling
+is never associated with an individual packet.
 
 # Security Considerations
 
@@ -301,9 +310,7 @@ and exchanged amongst hosts and network elements.
 
 # IANA Considerations
 
-TBD:  Will need a new registry.
-
-
+Will need a new registry.
 
 
 # Acknowledgments
@@ -493,6 +500,22 @@ traffic but a different application.
 
 # Example of Network-to-Host Metadata for Video Streaming {#examples-n2h}
 
-TODO.
+A network element can signal the bandwidth allowed for video streaming. Typically
+this policy limit only exists with cellular network operators (rather than a Wi-Fi
+network for example).
+
+The example below indicate the burst bandwidth (2Mbps), burst duration
+(3 seconds), and nominal (non-burst) bandwidth (1Mbps) for the requesting
+user:
+
+~~~~~
+{
+  "videoStreamingBandwidth": {
+    "burst": 2048,
+    "burstDuration": 3000,
+    "nominal": 1024
+  }
+}
+~~~~~
 
 
