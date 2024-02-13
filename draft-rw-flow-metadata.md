@@ -441,10 +441,10 @@ Comprehensive Interpretation:
 
 | Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
-| User typing                | high       | realtime        | reliable            | Client To Server Traffic         |
+| User typing                | high       | realtime        | reliable            |           |
 | Mouse click/End Position   | high       | realtime        | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
 | Interactive audio          | high       | keep            | unreliable          |   |
-| Authentication - Finger print, smart card | low | realtime | reliable | Comments |
+| Authentication - Finger print, smart card | low | realtime | reliable |  |
 | Interactive video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
 | Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
 | Interactive video delta frame           | low        | discard            | unreliable          |   |
@@ -468,20 +468,20 @@ Simple Interpretation:
 | User typing                | 111                   |
 | Mouse click/End Position   | 111                   |
 | Interactive audio          | 110                   |
-| Authentication - Finger print, smart card | 011                   |
-| Interactive video key frame            | 010                   |
+| Authentication - Finger print, smart card | 011    |
+| Interactive video key frame            | 010       |
 | Mouse position tracking    | 000                   |
-| Interactive video delta frame           | 000                   |
+| Interactive video delta frame           | 000      |
 {: #table-desktop-virtualization-c2s-si title="Example Values for Remote Desktop Virtualization Metadata, client to server - Simple Interpretation"}
 
 | Traffic type               | Simple Interpretation |
 |:--------------------------:|:---------------------:|
 | Glyph critical             | 111                   |
-| Interactive (or streaming) audio   | 110                   |
+| Interactive (or streaming) audio   | 110           |
 | Haptic feedback            | 100                   |
-| Interactive (or streaming) video key frame            | 010                   |
+| Interactive (or streaming) video key frame  | 010  |
 | File copy                  | 001                   |
-| Interactive (or streaming) video predictive frame     | 000                   |
+| Interactive (or streaming) video predictive frame | 000 |
 | Glyph smoothing            | 000                   |
 {: #table-desktop-virtualization-s2c-si title="Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation"}
 
