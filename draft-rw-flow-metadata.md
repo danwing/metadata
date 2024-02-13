@@ -112,7 +112,7 @@ contain metadata describing their drop preference and their
 reliability. The network elements aware of this metadata can apply
 preferential or deferential treatment to those packets during a
 'reactive traffic policy' event.  Examples of metadata signaling
-for video streaming and for remote desktop are in {{examples}}.
+for video streaming and for remote desktop are in {{examples-h2n}}.
 
 For network-to-host metadata, the host can be informed of the network
 bandwidth policy for the subscriber to receive streaming video. This
@@ -149,7 +149,7 @@ Importance bit signifies if the packet is of more importance or less importance 
 
 ### Application Treatment
 
-Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in the {{examples}} section.
+Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in {{examples-h2n}}.
 
 ### Encoding
 
@@ -259,9 +259,7 @@ MSB - Importance bit.
 Bit 1 - Packet Nature bit.
 LSB - Reliable/Unreliable bit.
 
-More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in the {{examples}} section.
-
-> Discussion: Come up with better name for PacketNature.
+More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in {{examples-h2n}}.
 
 # Network to Host Metadata
 
@@ -278,9 +276,6 @@ bitrate.
 The bitrate is calculated over each second. This means the packets can arrive at the
 start of a second, as near as possible behind each other, and the remaining portion
 of that second could have no packets transmitted.
-
-> Discussion: should we also signal bursts for variable bit rates?
-
 
 ### Host Treatment
 
@@ -318,7 +313,7 @@ To be completed.
 
 --- back
 
-# Examples of Host-to-Network Metadata {#examples}
+# Examples of Host-to-Network Metadata {#examples-h2n}
 
 ## Video Streaming {#example-video-streaming}
 
@@ -353,23 +348,16 @@ Simple Interpretation:
 | audio             | 111                   |
 {: #table-video-streaming-si title="Example Values for Video Streaming Metadata - Simple Interpretation"}
 
-Astute readers will notice this use case could be handled with a
-ternary value represented by 2 bits (rather than 3 bits).  However,
-other use cases such as {{example-rdt}} need 3 bits.
 
-> Discussion: Do we need to mention the above statement about 2/3 bits?
+## Interactive Gaming or Audio/Video  {#example-interactive-av}
 
-> Discussion: The importance is a single bit - so change the medium to a high in the above table and made video key frame as reliable keep and low. That way, the importance bit would be the only differentiator.
-
-> Discussion: Breaking KD bits to indicate Keep/Discard for Unreliable traffic and realtime/bulk for reliable traffic
-
-## Interactive Audio/Video Streaming {#example-interactive-av}
-
-Interactive audio/video, such as a video call, involves important traffic
-in both directions -- thus is a slightly more complicated use-case than
-the previous example.  Additionally, most Internet service providers
-constrain upstream bandwidth so proper packet treatment is critical in
-the upstream direction.
+Both gaming (video in both directions, audio in both directions, input
+devices from client to server) and interactive audio/video (VoIP,
+video conference) involves important traffic in both directions --
+thus is a slightly more complicated use-case than the previous
+example.  Additionally, most Internet service providers constrain
+upstream bandwidth so proper packet treatment is critical in the
+upstream direction.
 
 Comprehensive Interpretation:
 
@@ -429,6 +417,12 @@ Simple Interpretation:
 | picture sharing   | 111                   |
 {: #table-video-av-sharing-si title="Example Values for Interactive A/V, upstream - Simple Interpretation"}
 
+In many scenarios a game or VoIP application will want to signal different
+metadata for the same type of packet in each direction.  For example, for
+a game, video in the server-to-client direction might be more important
+than audio, whereas input devices (e.g., keystrokes) might be more important
+than audio.
+
 
 ## Remote Desktop Virtualization {#example-rdt}
 
@@ -485,10 +479,20 @@ Simple Interpretation:
 | Glyph smoothing            | 000                   |
 {: #table-desktop-virtualization-s2c-si title="Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation"}
 
-*** There is a key difference between a video key frame in a streaming application compared to video played within a remote desktop session. The video streaming application's primary and only nature of traffic is multimedia while it is not the case for a remote desktop application. There are certain traffic that would require more importance over multimedia (like graphics updates on a word document while user is typing in one window and a video is playing in another). Hence, the values are different even for the same nature of traffic but a different application. This is one more reason to justify 3 bits since the priorities and variety of the traffic will vary based on the application.
+*** A video key frame should be handled differently by the network
+depending on a streaming application versus a remote desktop
+application.  The video streaming application's primary and only
+nature of traffic is video and audio.  In contrast, a remote desktop
+application might be playing a video and its associated audio while at
+the same time the user is editing a document.  The user's keystrokes
+and those glyphs need to be prioritized over the video lest the user
+think their inputs are being ignored (and type the same characters
+again). Hence, the values are different even for the same nature of
+traffic but a different application.
 
-> Discussion: Haptic inputs are going to be part of future of Virtualization and including them here makes sense?
 
-<!--
-** These are critical but considering implementation constraints, data from a specific source (a virtual channel like mouse, graphics etc in this case) is either transmitted reliably or as loss-tolerant. These packets lost will have user experience impact but still since most of the traffic from this use-case come under loss-tolerant and it is not critical that the application breaks if these are not received (unlike file transfer), these are listed as loss-tolerant while having the don't bit set to 0.
--->
+# Example of Network-to-Host Metadata for Video Streaming {#examples-n2h}
+
+TODO.
+
+
