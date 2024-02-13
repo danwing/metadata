@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 15 August 2024                                 12 February 2024
+Expires: 16 August 2024                                 13 February 2024
 
 
                              Flow Metadata
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2024.
+   This Internet-Draft will expire on 16 August 2024.
 
 Copyright Notice
 
@@ -669,9 +669,7 @@ A.3.  Remote Desktop Virtualization
    |  Traffic type  |Importance| PacketNature |Reliable/ |   Comments  |
    |                |          |              |Unreliable|             |
    +================+==========+==============+==========+=============+
-   |  User typing   |   high   |   realtime   | reliable |  Client To  |
-   |                |          |              |          |    Server   |
-   |                |          |              |          |   Traffic   |
+   |  User typing   |   high   |   realtime   | reliable |             |
    +----------------+----------+--------------+----------+-------------+
    |  Mouse click/  |   high   |   realtime   | reliable |  The start  |
    |  End Position  |          |              |          | and endpoint|
@@ -695,7 +693,7 @@ A.3.  Remote Desktop Virtualization
    |  Interactive   |   high   |     keep     |unreliable|             |
    |     audio      |          |              |          |             |
    +----------------+----------+--------------+----------+-------------+
-   | Authentication |   low    |   realtime   | reliable |   Comments  |
+   | Authentication |   low    |   realtime   | reliable |             |
    |    - Finger    |          |              |          |             |
    |  print, smart  |          |              |          |             |
    |      card      |          |              |          |             |
