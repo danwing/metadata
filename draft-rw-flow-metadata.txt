@@ -100,8 +100,10 @@ Table of Contents
      Informative References
    Appendix A.  Examples of Host-to-Network Metadata
      A.1.  Video Streaming
-     A.2.  Interactive Audio/Video Streaming
+     A.2.  Interactive Gaming or Audio/Video
      A.3.  Remote Desktop Virtualization
+   Appendix B.  Example of Network-to-Host Metadata for Video
+           Streaming
    Authors' Addresses
 
 1.  Introduction
@@ -195,8 +197,8 @@ Table of Contents
 
    Application would mark a packet important when it needs the network
    to treat the packet with greater preference compared to the unmarked
-   packets.  An example of this interpretation is specified in the
-   Appendix A section.
+   packets.  An example of this interpretation is specified in
+   Appendix A.
 
 3.1.2.  Encoding
 
@@ -337,10 +339,8 @@ Table of Contents
    Unreliable bit.
 
    More details on how simple and comprehensive interpretation of
-   metadata would work for different types of traffic is listed in the
-   Appendix A section.
-
-      Discussion: Come up with better name for PacketNature.
+   metadata would work for different types of traffic is listed in
+   Appendix A.
 
 4.  Network to Host Metadata
 
@@ -359,8 +359,6 @@ Table of Contents
    can arrive at the start of a second, as near as possible behind each
    other, and the remaining portion of that second could have no packets
    transmitted.
-
-      Discussion: should we also signal bursts for variable bit rates?
 
 4.1.1.  Host Treatment
 
@@ -537,28 +535,15 @@ A.1.  Video Streaming
                         Streaming Metadata - Simple
                                Interpretation
 
-   Astute readers will notice this use case could be handled with a
-   ternary value represented by 2 bits (rather than 3 bits).  However,
-   other use cases such as Appendix A.3 need 3 bits.
+A.2.  Interactive Gaming or Audio/Video
 
-      Discussion: Do we need to mention the above statement about 2/3
-      bits?
-
-      Discussion: The importance is a single bit - so change the medium
-      to a high in the above table and made video key frame as reliable
-      keep and low.  That way, the importance bit would be the only
-      differentiator.
-
-      Discussion: Breaking KD bits to indicate Keep/Discard for
-      Unreliable traffic and realtime/bulk for reliable traffic
-
-A.2.  Interactive Audio/Video Streaming
-
-   Interactive audio/video, such as a video call, involves important
-   traffic in both directions -- thus is a slightly more complicated
-   use-case than the previous example.  Additionally, most Internet
-   service providers constrain upstream bandwidth so proper packet
-   treatment is critical in the upstream direction.
+   Both gaming (video in both directions, audio in both directions,
+   input devices from client to server) and interactive audio/video
+   (VoIP, video conference) involves important traffic in both
+   directions -- thus is a slightly more complicated use-case than the
+   previous example.  Additionally, most Internet service providers
+   constrain upstream bandwidth so proper packet treatment is critical
+   in the upstream direction.
 
    Comprehensive Interpretation:
 
@@ -655,6 +640,12 @@ A.2.  Interactive Audio/Video Streaming
 
                   Table 8: Example Values for Interactive
                    A/V, upstream - Simple Interpretation
+
+   In many scenarios a game or VoIP application will want to signal
+   different metadata for the same type of packet in each direction.
+   For example, for a game, video in the server-to-client direction
+   might be more important than audio, whereas input devices (e.g.,
+   keystrokes) might be more important than audio.
 
 A.3.  Remote Desktop Virtualization
 
@@ -935,20 +926,20 @@ A.3.  Remote Desktop Virtualization
             Virtualization Metadata, server to client - Simple
                               Interpretation
 
-   *** There is a key difference between a video key frame in a
-   streaming application compared to video played within a remote
-   desktop session.  The video streaming application's primary and only
-   nature of traffic is multimedia while it is not the case for a remote
-   desktop application.  There are certain traffic that would require
-   more importance over multimedia (like graphics updates on a word
-   document while user is typing in one window and a video is playing in
-   another).  Hence, the values are different even for the same nature
-   of traffic but a different application.  This is one more reason to
-   justify 3 bits since the priorities and variety of the traffic will
-   vary based on the application.
+   *** A video key frame should be handled differently by the network
+   depending on a streaming application versus a remote desktop
+   application.  The video streaming application's primary and only
+   nature of traffic is video and audio.  In contrast, a remote desktop
+   application might be playing a video and its associated audio while
+   at the same time the user is editing a document.  The user's
+   keystrokes and those glyphs need to be prioritized over the video
+   lest the user think their inputs are being ignored (and type the same
+   characters again).  Hence, the values are different even for the same
+   nature of traffic but a different application.
 
-      Discussion: Haptic inputs are going to be part of future of
-      Virtualization and including them here makes sense?
+Appendix B.  Example of Network-to-Host Metadata for Video Streaming
+
+   TODO.
 
 Authors' Addresses
 
