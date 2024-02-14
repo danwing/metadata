@@ -1285,19 +1285,20 @@ independent of the signaling protocol used between a host and a network.<a href=
       </h2>
 <p id="section-1-1">Host-to-network metadata signaling has historically been performed by
 the sender setting DSCP bits
-(<span>[<a href="#RFC7657" class="cite xref">RFC7657</a>]</span>)(<span>[<a href="#RFC8837" class="cite xref">RFC8837</a>]</span>)(<span>[<a href="#RFC2475" class="cite xref">RFC2475</a>]</span>). While DSCP can express
-high priority (Expedited Forwarding <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>) and low priority
-(Lower Effort PDB <span>[<a href="#RFC8622" class="cite xref">RFC8622</a>]</span>), DSCP bits are frequently ignored at
-congestion points or lost (stripped) while routed across the Internet.
+(e.g., <span>[<a href="#RFC2475" class="cite xref">RFC2475</a>]</span>, <span>[<a href="#RFC7657" class="cite xref">RFC7657</a>]</span>, and <span>[<a href="#RFC8837" class="cite xref">RFC8837</a>]</span>). While DSCP can express
+high priority (Expedited Forwarding (EF) <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>) and low priority
+(Lower-Effort Per-Hop Behavior (LE PHB) <span>[<a href="#RFC8622" class="cite xref">RFC8622</a>]</span>), DSCP bits are frequently ignored at
+congestion points or lost (stripped) while forwarded across the Internet.
+See <span><a href="https://rfc-editor.org/rfc/rfc9435#section-4" class="relref">Section 4</a> of [<a href="#RFC9435" class="cite xref">RFC9435</a>]</span> for a detailed overview of observed DSCP re-marking behaviors.
 Also, DSCP attempts to influence the packet's treatment compared to
 all other packets from other hosts.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Network-to-host metadata signaling has historically been performed by dropping packets or
-setting the ECN bit on packets.  Both of these techniques work well to consume
+setting the Explicit Congestion Notification (ECN) bit on packets <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.  Both of these techniques work well to consume
 the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
-bandwidth policy rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
+bandwidth policy rate in a timely manner.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Both the above use cases are improved by metadata described in this document. This
-document is a companion to host-to-network signaling the metadata itself, such as<a href="#section-1-3" class="pilcrow">¶</a></p>
+document is a companion to host-to-network signaling the metadata itself, such as:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-4.1">
           <p id="section-1-4.1.1">UDP Options (e.g., <span>[<a href="#I-D.kaippallimalil-tsvwg-media-hdr-wireless" class="cite xref">I-D.kaippallimalil-tsvwg-media-hdr-wireless</a>]</span>, <span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>),<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
@@ -1310,16 +1311,25 @@ document is a companion to host-to-network signaling the metadata itself, such a
 </li>
       </ul>
 <p id="section-1-5">An analysis of most of those metadata signaling mechanisms is at <span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">For host-to-network metadata, individual packets within a flow can
-contain metadata describing their drop preference and their
+<p id="section-1-6">The metadata defined in this document is independent of the actual signaling
+protocol. In doing so, we ensure that consistent metadata definitions
+are used by the various signaling protocols. It is out of scope of this document to define how the proposed
+encoding will be mapped to a specific signaling protocol.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">Some applications use heuristics to determine rate-limiting policy. This document
+proposes an explicit approach that is meant to share more granular information
+so that these application adjusts their behavior in a timely manner (e.g., anticipate congestion).<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">For host-to-network metadata, individual packets within a flow can
+contain metadata describing their drop preference or their
 reliability. The network elements aware of this metadata can apply
 preferential or deferential treatment to those packets during a
-'reactive traffic policy' event.  Examples of metadata signaling
-for video streaming and for remote desktop are in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">For network-to-host metadata, the host can be informed of the network
+'reactive traffic policy' event. It is also assumed that such network
+elements are provisioned with local policy that guides their behavior
+jointly with a signaled metadata. Examples of metadata signaling
+for video streaming and for remote desktop are provided in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">For network-to-host metadata, the host can be informed, e.g., of the network
 bandwidth policy for the subscriber to receive streaming video. This
-policy can be used by video streaming applications on that client to
-choose video streams that fit within that policy.<a href="#section-1-7" class="pilcrow">¶</a></p>
+policy can be used by video streaming applications on that host to
+choose video streams that fit within that policy.<a href="#section-1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1712,6 +1722,10 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
         <dd>
 <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Black, D.</span>, <span class="refAuthor">Carlson, M.</span>, <span class="refAuthor">Davies, E.</span>, <span class="refAuthor">Wang, Z.</span>, and <span class="refAuthor">W. Weiss</span>, <span class="refTitle">"An Architecture for Differentiated Services"</span>, <span class="seriesInfo">RFC 2475</span>, <span class="seriesInfo">DOI 10.17487/RFC2475</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2475">https://www.rfc-editor.org/rfc/rfc2475</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC3168">[RFC3168]</dt>
+        <dd>
+<span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC3246">[RFC3246]</dt>
         <dd>
 <span class="refAuthor">Davie, B.</span>, <span class="refAuthor">Charny, A.</span>, <span class="refAuthor">Bennet, J.C.R.</span>, <span class="refAuthor">Benson, K.</span>, <span class="refAuthor">Le Boudec, J.Y.</span>, <span class="refAuthor">Courtney, W.</span>, <span class="refAuthor">Davari, S.</span>, <span class="refAuthor">Firoiu, V.</span>, and <span class="refAuthor">D. Stiliadis</span>, <span class="refTitle">"An Expedited Forwarding PHB (Per-Hop Behavior)"</span>, <span class="seriesInfo">RFC 3246</span>, <span class="seriesInfo">DOI 10.17487/RFC3246</span>, <time datetime="2002-03" class="refDate">March 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3246">https://www.rfc-editor.org/rfc/rfc3246</a>&gt;</span>. </dd>
@@ -1735,6 +1749,10 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 <dt id="RFC9293">[RFC9293]</dt>
         <dd>
 <span class="refAuthor">Eddy, W., Ed.</span>, <span class="refTitle">"Transmission Control Protocol (TCP)"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 9293</span>, <span class="seriesInfo">DOI 10.17487/RFC9293</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9293">https://www.rfc-editor.org/rfc/rfc9293</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9435">[RFC9435]</dt>
+        <dd>
+<span class="refAuthor">Custura, A.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">R. Secchi</span>, <span class="refTitle">"Considerations for Assigning a New Recommended Differentiated Services Code Point (DSCP)"</span>, <span class="seriesInfo">RFC 9435</span>, <span class="seriesInfo">DOI 10.17487/RFC9435</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9435">https://www.rfc-editor.org/rfc/rfc9435</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RTP">[RTP]</dt>
       <dd>
