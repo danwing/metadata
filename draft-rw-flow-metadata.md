@@ -85,21 +85,22 @@ the available network resources.
 
 Host-to-network metadata signaling has historically been performed by
 the sender setting DSCP bits
-({{?RFC7657}})({{?RFC8837}})({{?RFC2475}}). While DSCP can express
-high priority (Expedited Forwarding {{?RFC3246}}) and low priority
-(Lower Effort PDB {{?RFC8622}}), DSCP bits are frequently ignored at
-congestion points or lost (stripped) while routed across the Internet.
+(e.g., {{?RFC2475}}, {{?RFC7657}}, and {{?RFC8837}}). While DSCP can express
+high priority (Expedited Forwarding (EF) {{?RFC3246}}) and low priority
+(Lower-Effort Per-Hop Behavior (LE PHB) {{?RFC8622}}), DSCP bits are frequently ignored at
+congestion points or lost (stripped) while forwarded across the Internet.
+See {{Section 4 of ?RFC9435}} for a detailed overview of observed DSCP re-marking behaviors.
 Also, DSCP attempts to influence the packet's treatment compared to
 all other packets from other hosts.
 
 Network-to-host metadata signaling has historically been performed by dropping packets or
-setting the ECN bit on packets.  Both of these techniques work well to consume
+setting the Explicit Congestion Notification (ECN) bit on packets {{?RFC3168}}.  Both of these techniques work well to consume
 the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
-bandwidth policy rate.
+bandwidth policy rate in a timely manner.
 
 Both the above use cases are improved by metadata described in this document. This
-document is a companion to host-to-network signaling the metadata itself, such as
+document is a companion to host-to-network signaling the metadata itself, such as:
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
 * IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}), or
@@ -107,16 +108,27 @@ document is a companion to host-to-network signaling the metadata itself, such a
 
 An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
 
+The metadata defined in this document is independent of the actual signaling
+protocol. In doing so, we ensure that consistent metadata definitions
+are used by the various signaling protocols. It is out of scope of this document to define how the proposed
+encoding will be mapped to a specific signaling protocol.
+
+Some applications use heuristics to determine rate-limiting policy. This document
+proposes an explicit approach that is meant to share more granular information
+so that these application adjusts their behavior in a timely manner (e.g., anticipate congestion).
+
 For host-to-network metadata, individual packets within a flow can
-contain metadata describing their drop preference and their
+contain metadata describing their drop preference or their
 reliability. The network elements aware of this metadata can apply
 preferential or deferential treatment to those packets during a
-'reactive traffic policy' event.  Examples of metadata signaling
-for video streaming and for remote desktop are in {{examples-h2n}}.
+'reactive traffic policy' event. It is also assumed that such network
+elements are provisioned with local policy that guides their behavior
+jointly with a signaled metadata. Examples of metadata signaling
+for video streaming and for remote desktop are provided in {{examples-h2n}}.
 
-For network-to-host metadata, the host can be informed of the network
+For network-to-host metadata, the host can be informed, e.g., of the network
 bandwidth policy for the subscriber to receive streaming video. This
-policy can be used by video streaming applications on that client to
+policy can be used by video streaming applications on that host to
 choose video streams that fit within that policy.
 
 # Conventions and Definitions
