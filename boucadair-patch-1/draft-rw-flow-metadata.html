@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Flow Metadata</title>
+<title>Flow Metadata for Collaborative Host/Network Signaling</title>
 <meta content="Sridharan Rajagopalan" name="author">
 <meta content="Dan Wing" name="author">
 <meta content="
-       As part of host-to-network signaling, an entire flow can share the same
-metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata exchanged in a
-host-to-network signaling protocol in both binary and JSON. 
-       As part of network-to-host signaling, network metadata can be communicated
-to the host, allowing the host to modulate its requests to conform to
+       As part of host-to-network signaling, an entire flow can share the same set of
+metadata or certain packets of a flow can have specific metadata associated with those
+packets. Also, as part of network-to-host signaling, network metadata can be communicated
+to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
 the available network resources. 
+       This document describes the metadata exchanged in a host-to-network/network-to-host
+signaling protocol in both binary and JSON. These metadata are intended to be applicable
+independent of the signaling protocol used between a host and a network. 
     " name="description">
 <meta content="xml2rfc 3.19.2" name="generator">
 <meta content="user experience" name="keyword">
@@ -1081,16 +1082,17 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">Flow Metadata</h1>
+<h1 id="title">Flow Metadata for Collaborative Host/Network Signaling</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">As part of host-to-network signaling, an entire flow can share the same
-metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata exchanged in a
-host-to-network signaling protocol in both binary and JSON.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">As part of network-to-host signaling, network metadata can be communicated
-to the host, allowing the host to modulate its requests to conform to
-the available network resources.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">As part of host-to-network signaling, an entire flow can share the same set of
+metadata or certain packets of a flow can have specific metadata associated with those
+packets. Also, as part of network-to-host signaling, network metadata can be communicated
+to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
+the available network resources.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document describes the metadata exchanged in a host-to-network/network-to-host
+signaling protocol in both binary and JSON. These metadata are intended to be applicable
+independent of the signaling protocol used between a host and a network.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1684,7 +1686,7 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 <dd class="break"></dd>
 <dt id="I-D.kaippallimalil-tsvwg-media-hdr-wireless">[I-D.kaippallimalil-tsvwg-media-hdr-wireless]</dt>
         <dd>
-<span class="refAuthor">Kaippallimalil, J.</span>, <span class="refAuthor">Gundavelli, S.</span>, and <span class="refAuthor">S. Dawkins</span>, <span class="refTitle">"Media Header Extensions for Wireless Networks"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kaippallimalil-tsvwg-media-hdr-wireless-03</span>, <time datetime="2023-10-16" class="refDate">16 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-03">https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Kaippallimalil, J.</span>, <span class="refAuthor">Gundavelli, S.</span>, and <span class="refAuthor">S. Dawkins</span>, <span class="refTitle">"Media Handling Considerations for Wireless Networks"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kaippallimalil-tsvwg-media-hdr-wireless-04</span>, <time datetime="2024-02-14" class="refDate">14 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-04">https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.reddy-tsvwg-explcit-signal">[I-D.reddy-tsvwg-explcit-signal]</dt>
         <dd>
