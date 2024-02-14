@@ -66,8 +66,6 @@ normative:
   RELIABLE-RTP: RFC4588
 
 
-
-
 --- abstract
 
 As part of host-to-network signaling, an entire flow can share the same
@@ -124,7 +122,7 @@ choose video streams that fit within that policy.
 {::boilerplate bcp14-tagged}
 
 Reactive policy:
-: Treatment given to a flow when an exceptional event occurs, such as diminished throughput to the host caused by radio interference or weak radio signal, congestion on the network caused by other users or other applications on the same host
+: Treatment given to a flow when an exceptional event occurs, such as diminished throughput to the host caused by radio interference or weak radio signal, congestion on the network caused by other users or other applications on the same host.
 
 Intentional policy:
 : Configured bandwidth, pps, or similar throughput constraints applied to a flow, application, host, or subscriber.
@@ -132,16 +130,17 @@ Intentional policy:
 # Host to Network Metadata
 
 Three bits are introduced. A network element desiring the simplest interpretation can use the bits as a
-3-bit 'importance' field, where higher values are more important and lower values are less important. Less
-importance means those packets can be discarded during a reactive policy event.
+3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less
+important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.
+Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.
 
-For more comprehensive interpretation, metadata is characterized into 2 different nature:
+For more comprehensive interpretation, metadata is characterized into two different nature:
 
 * Network Metadata:
-    This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more-important or less-important.
+    This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
 
 * Application Metadata:
-    This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of 2 fields - Keep/Discard bit and Reliable/Unreliable bit.
+    This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.
 
 ## Importance
 
@@ -149,7 +148,7 @@ Importance bit signifies if the packet is of more importance or less importance 
 
 ### Application Treatment
 
-Application would mark a packet important when it needs the network to treat the packet with greater preference compared to the unmarked packets. An example of this interpretation is specified in {{examples-h2n}}.
+An application would mark a packet as important when it needs the network to treat the packet with greater preference compared to the unmarked packets (of the same flow). This tagging does not provide more privileges to an application with regards to resources usage compared to the absence of signal. An example of this interpretation is specified in {{examples-h2n}}.
 
 ### Encoding
 
@@ -165,18 +164,18 @@ Less-Important:
 
 ## Reliable/Unreliable
 
-Reliable bit indicates if the packet is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
+Reliable bit indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
 
-* Reliable packets are re-transmitted by the transport
-(e.g., TCP or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
+* Reliable packets are re-transmitted by the underlying transport
+(e.g., TCP {{?RFC9293}} or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
 * Unreliable packets are not re-transmitted by the transport
 (e.g., UDP, {{RTP}}, {{LOSSY-QUIC}}) and also not re-transmitted by the application (e.g., {{RTP}}).
 
-Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted by
-the sender application, appearing on the network again.  Thus, delaying or discarding such packets does not
-reduce the amount of transmitted data, it only defers when it appears on the network.
+Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by
+the sender application, appearing on the network again. Thus, delaying or discarding such packets does not
+reduce the amount of transmitted data in a network; it only defers when it appears on the network.
 
-This is specified in the MSB of metadata bits and is of 1 bit length. Reliable/Unreliable belongs to Application Metadata.
+The reliability indication is specified in the MSB of metadata bits and is of 1-bit length. Reliable/Unreliable belongs to Application Metadata.
 
 ### Network Treatment
 
@@ -197,13 +196,13 @@ Unreliable:
 * When signaled in JSON, it is encoded as name "reliable" and value "false".
 
 
-## Packet Nature/Preference
+## Packet Discard Preference
 
-Packet Nature indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
+This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
-### Packet Nature for Unreliable Traffic
+### Unreliable Traffic
 
-Packets are marked as 'discard' or 'keep'.
+Packets are marked as 'may-discard' or 'prefer-keep'.
 
 Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
@@ -213,13 +212,16 @@ at that, as evidenced by video streaming using TCP.
 With the advent of {{LOSSY-QUIC}}, applications can send both {{QUIC}} reliable traffic and
 {{LOSSY-QUIC}} unreliable traffic {{LOSSY-QUIC}} on the same 5-tuple.  With
 host-to-network metadata signaling, the network can become an active assistant in such
-flows during a reactive policy event by endeavouring to send the more-important 'keep'
-traffic at the expense of the less-important 'discard' traffic.
+flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
+traffic at the expense of the less-important 'may-discard' traffic.
+
+The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
+the application can avoid sending that packet is application-specific.
 
 #### Network Treatment
 
-During a reactive policy event, dropping 'discard' packets is preferred over dropping
-'keep' packets.
+During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
+'prefer-keep' packets.
 
 #### Encoding
 
@@ -233,9 +235,9 @@ Keep:
 * When signaled in binary, the PacketNature bit is cleared (0).
 * When signaled in JSON, it is encoded as name "Discard" and value "false".
 
-### Packet Nature for Reliable Traffic
+### Reliable Traffic
 
-For reliable traffic, the Packet Nature indicates whether the packet belongs to bulk or real-time traffic.
+For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.
 
 #### Network Treatment
 
@@ -267,7 +269,7 @@ More details on how simple and comprehensive interpretation of metadata would wo
 
 Monthly data quotas on cellular networks can be easily exceeded by video streaming if the
 client chooses excessively high quality or routinely abandons watching videos that were
-downloaded.  The network can assist the client by informing the client of the network's
+downloaded. The network can assist the client by informing the client of the network's
 bandwidth policy.
 
 If the video is encoded with variable bit rate, the bitrate cannot exceed the indicated
@@ -301,17 +303,18 @@ is never associated with an individual packet.
 Metadata increases the information available to attackers to
 distinguish important packets from less-important packets, which the
 attacker might use to attack such packets (e.g., prevent their
-delivery) or attempt to decrypt those packets.  It is useful to
+delivery) or attempt to decrypt those packets. It is RECOMMENDED to
 encrypt or obfuscate the metadata information so it is only available
-to end hosts and to participating network elements.  The method of
+to hosts and to authorized network elements.  The method of
 encryption or obfuscation is not described in this document but
 rather in other documents describing how this metadata is encoded
 and exchanged amongst hosts and network elements.
 
 # IANA Considerations
 
-Will need a new registry.
+This document requests IANA to create a new registry, entitled "Metadata for Collaborative Host/Network Signaling".
 
+More details about the registration policy and structure will be provided in future version.
 
 # Acknowledgments
 {:numbered="false"}
@@ -500,11 +503,10 @@ traffic but a different application.
 
 # Example of Network-to-Host Metadata for Video Streaming {#examples-n2h}
 
-A network element can signal the bandwidth allowed for video streaming. Typically
-this policy limit only exists with cellular network operators (rather than a Wi-Fi
-network for example).
+A network element can signal the maximum bandwidth allowed for video streaming. Typically,
+this policy limit exists in cellular networks.
 
-The example below indicate the burst bandwidth (2Mbps), burst duration
+The example below indicates the burst bandwidth (2Mbps), burst duration
 (3 seconds), and nominal (non-burst) bandwidth (1Mbps) for the requesting
 user:
 
