@@ -1,5 +1,5 @@
 ---
-title: "Flow Metadata"
+title: "Flow Metadata for Collaborative Host/Network Signaling"
 abbrev: "Flow Metadata"
 category: std
 
