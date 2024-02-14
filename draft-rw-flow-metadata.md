@@ -59,7 +59,7 @@ author:
     email: ["danwing@gmail.com"]
 
 
-normative:
+informative:
   QUIC: RFC9000
   LOSSY-QUIC: RFC9221
   RTP: RFC3550
