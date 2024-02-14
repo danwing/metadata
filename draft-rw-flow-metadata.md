@@ -67,17 +67,17 @@ normative:
 
 
 
-
 --- abstract
 
-As part of host-to-network signaling, an entire flow can share the same
-metadata or certain packets can have certain metadata associated with those
-packets.  This document describes the metadata exchanged in a
-host-to-network signaling protocol in both binary and JSON.
-
-As part of network-to-host signaling, network metadata can be communicated
-to the host, allowing the host to modulate its requests to conform to
+As part of host-to-network signaling, an entire flow can share the same set of
+metadata or certain packets of a flow can have specific metadata associated with those
+packets. Also, as part of network-to-host signaling, network metadata can be communicated
+to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
 the available network resources.
+
+This document describes the metadata exchanged in a host-to-network/network-to-host
+signaling protocol in both binary and JSON. These metadata are intended to be applicable
+independent of the signaling protocol used between a host and a network.
 
 --- middle
 
