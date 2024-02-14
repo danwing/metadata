@@ -418,23 +418,6 @@ References
 
 Normative References
 
-   [LOSSY-QUIC]
-              Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
-              Datagram Extension to QUIC", RFC 9221,
-              DOI 10.17487/RFC9221, March 2022,
-              <https://www.rfc-editor.org/rfc/rfc9221>.
-
-   [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
-              Multiplexed and Secure Transport", RFC 9000,
-              DOI 10.17487/RFC9000, May 2021,
-              <https://www.rfc-editor.org/rfc/rfc9000>.
-
-   [RELIABLE-RTP]
-              Rey, J., Leon, D., Miyazaki, A., Varsa, V., and R.
-              Hakenberg, "RTP Retransmission Payload Format", RFC 4588,
-              DOI 10.17487/RFC4588, July 2006,
-              <https://www.rfc-editor.org/rfc/rfc4588>.
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -443,11 +426,6 @@ Normative References
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
-
-   [RTP]      Schulzrinne, H., Casner, S., Frederick, R., and V.
-              Jacobson, "RTP: A Transport Protocol for Real-Time
-              Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
-              July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
 Informative References
 
@@ -479,6 +457,23 @@ Informative References
               Draft, draft-wing-cidfi-04, 14 December 2023,
               <https://datatracker.ietf.org/doc/html/draft-wing-cidfi-
               04>.
+
+   [LOSSY-QUIC]
+              Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
+              Datagram Extension to QUIC", RFC 9221,
+              DOI 10.17487/RFC9221, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9221>.
+
+   [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RELIABLE-RTP]
+              Rey, J., Leon, D., Miyazaki, A., Varsa, V., and R.
+              Hakenberg, "RTP Retransmission Payload Format", RFC 4588,
+              DOI 10.17487/RFC4588, July 2006,
+              <https://www.rfc-editor.org/rfc/rfc4588>.
 
    [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
               and W. Weiss, "An Architecture for Differentiated
@@ -513,6 +508,11 @@ Informative References
    [RFC9293]  Eddy, W., Ed., "Transmission Control Protocol (TCP)",
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9293>.
+
+   [RTP]      Schulzrinne, H., Casner, S., Frederick, R., and V.
+              Jacobson, "RTP: A Transport Protocol for Real-Time
+              Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
+              July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
 Appendix A.  Examples of Host-to-Network Metadata
 
