@@ -5,10 +5,10 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 16 August 2024                                 13 February 2024
+Expires: 17 August 2024                                 14 February 2024
 
 
-                             Flow Metadata
+         Flow Metadata for Collaborative Host/Network Signaling
                      draft-rw-flow-metadata-latest
 
 Abstract
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 August 2024.
+   This Internet-Draft will expire on 17 August 2024.
 
 Copyright Notice
 
@@ -444,11 +444,11 @@ Informative References
 
    [I-D.kaippallimalil-tsvwg-media-hdr-wireless]
               Kaippallimalil, J., Gundavelli, S., and S. Dawkins, "Media
-              Header Extensions for Wireless Networks", Work in
+              Handling Considerations for Wireless Networks", Work in
               Progress, Internet-Draft, draft-kaippallimalil-tsvwg-
-              media-hdr-wireless-03, 16 October 2023,
+              media-hdr-wireless-04, 14 February 2024,
               <https://datatracker.ietf.org/doc/html/draft-
-              kaippallimalil-tsvwg-media-hdr-wireless-03>.
+              kaippallimalil-tsvwg-media-hdr-wireless-04>.
 
    [I-D.reddy-tsvwg-explcit-signal]
               Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
