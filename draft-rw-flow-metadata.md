@@ -280,7 +280,7 @@ More details on how simple and comprehensive interpretation of metadata would wo
 
 # Network to Host Metadata
 
-## Uplink Bitrate
+## Downlink Bitrate
 
 Monthly data quotas on cellular networks can be easily exceeded by video streaming, in particular, if the
 client chooses excessively high quality or routinely abandons watching videos that were
@@ -300,7 +300,7 @@ that second could have no packets transmitted.
 
 The host chooses a video streaming bit rate at or below the signaled rate.
 
-The host may also choose to signal the received uplink bitrate to the remote peer. The remote
+The host may also choose to signal the received bitrate to the remote peer. The remote
 peer will adapt its transmission behavior to comply with the received bitrate.
 
 ### Encoding
