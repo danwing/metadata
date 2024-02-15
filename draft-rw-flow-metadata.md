@@ -362,8 +362,7 @@ The initial values of the registry are listed in {{initial-reg}}.
 | 2          | PacketNature      | Indicates whether a packet is reliably or unreliably transmitted   | This-Document | 1.0     |
 | 3          | DiscardPreference | Indicates a discard preference         | This-Document | 1.0     |
 | 0          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
-
-{: #initial-reg title="Example Values for Video Streaming Metadata - Comprehensive Interpretation"}
+{: #initial-reg title="Initial Values"}
 
 New entries can be added to the registery using "Standards Action" policy ({{Section 4.9 of !RFC8126}}.
 
