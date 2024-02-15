@@ -95,6 +95,8 @@ Table of Contents
      4.1.  Video Streaming Bandwidth
        4.1.1.  Host Treatment
        4.1.2.  Encoding
+     4.2.  Prefer Alternate Path ('pref-alt-path')
+       4.2.1.  Host Treatment
    5.  Security Considerations
    6.  IANA Considerations
    Acknowledgments
@@ -410,6 +412,22 @@ Table of Contents
 
    Binary encoding and map encoding is unnecessary because the network-
    to-host signaling is never associated with an individual packet.
+
+4.2.  Prefer Alternate Path ('pref-alt-path')
+
+   There are also crisis cases where nominal network resources cannot be
+   used at maximum to handle packets.  A network would thus seek to
+   offload some of the traffic during these events.  Under such
+   exceptional events, a network element may signal to a host that it is
+   preferrable to use alternate paths, if available.  An alternate path
+   is typically an alternate network attachment.
+
+   The 'pref-alt-path' metadata may be sent together with the bitrate
+   metadata set to a very low value.
+
+4.2.1.  Host Treatment
+
+   The host offloads its connections to alternate available paths.
 
 5.  Security Considerations
 

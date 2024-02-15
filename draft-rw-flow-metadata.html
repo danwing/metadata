@@ -1232,6 +1232,14 @@ independent of the signaling protocol used between a host and a network.<a href=
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-prefer-alternate-path-pref-" class="internal xref">Prefer Alternate Path ('pref-alt-path')</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-host-treatment-2" class="internal xref">Host Treatment</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
@@ -1624,6 +1632,28 @@ milliseconds.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-2">An example of the encoding is in <a href="#examples-n2h" class="auto internal xref">Appendix B</a>.<a href="#section-4.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-3">Binary encoding and map encoding is unnecessary because the network-to-host signaling
 is never associated with an individual packet.<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="prefer-alternate-path-pref-alt-path">
+<section id="section-4.2">
+        <h3 id="name-prefer-alternate-path-pref-">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-prefer-alternate-path-pref-" class="section-name selfRef">Prefer Alternate Path ('pref-alt-path')</a>
+        </h3>
+<p id="section-4.2-1">There are also crisis cases where nominal network resources cannot be
+used at maximum to handle packets. A network would thus seek to offload some of the
+traffic during these events. Under such exceptional events, a network
+element may signal to a host that it is preferrable to use alternate
+paths, if available. An alternate path is typically an alternate network
+attachment.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<div id="host-treatment-1">
+<section id="section-4.2.1">
+          <h4 id="name-host-treatment-2">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-host-treatment-2" class="section-name selfRef">Host Treatment</a>
+          </h4>
+<p id="section-4.2.1-1">The host offloads its connections to alternate available paths.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
