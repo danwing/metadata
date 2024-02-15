@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-13T01:14:17.481255+00:00",
+  "timestamp": "2024-02-15T01:13:52.170165+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -49,6 +49,176 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
-  "pulls": []
+  "issues": [
+    {
+      "number": 5,
+      "id": "I_kwDOK0CwpM5_MZU2",
+      "title": "Encoding",
+      "url": "https://github.com/danwing/metadata/issues/5",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I really like that there are only very few metadata in the document. \r\n\r\nI would suggest that the encoding part is separated from the actual definition of the metadata (moved to an appendix). The 3-bit proposal can be listed as an implementation example, but I don't think that actually matters.",
+      "createdAt": "2024-02-14T09:55:56Z",
+      "updatedAt": "2024-02-14T09:55:56Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOK0CwpM5_MZtY",
+      "title": "Interaction with mechanisms such as RFC7198",
+      "url": "https://github.com/danwing/metadata/issues/6",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-14T09:56:35Z",
+      "updatedAt": "2024-02-14T09:56:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOK0CwpM5_Mdf7",
+      "title": "Packets discard and Impact on Quality of experience",
+      "url": "https://github.com/danwing/metadata/issues/7",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "FWIW, https://dspace.mit.edu/handle/1721.1/99941 revealed that: \"63% of the external communication made by top-popular free Android applications from Google Play has no effect on the user-observable application functionality\"\r\n\r\nMay be cited as an example of packets  that may be tagged as \"may-discard\".\r\n\r\n\r\n",
+      "createdAt": "2024-02-14T10:05:03Z",
+      "updatedAt": "2024-02-14T19:41:46Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "body": "Based on the abstract (as I can't seem to access the paper itself), it seems to have analyzed **blocking** some communications from apps -- likely to advertising servers or to other non-primary servers, and said that most apps continued working fine when that communication was blocked.\r\n",
+          "createdAt": "2024-02-14T19:41:45Z",
+          "updatedAt": "2024-02-14T19:41:45Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOK0CwpM5m0yZd",
+      "title": "Update title to better reflect the content",
+      "url": "https://github.com/danwing/metadata/pull/1",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-14T07:12:59Z",
+      "updatedAt": "2024-02-14T17:24:19Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "a7d92e03d7123bf4225b638a69f4380cd66f4130",
+      "headRepository": "danwing/metadata",
+      "headRefName": "title",
+      "headRefOid": "7ae9bad3113d7d7eeae6a527d1fe3db8c8a7233b",
+      "closedAt": "2024-02-14T17:24:18Z",
+      "mergedAt": "2024-02-14T17:24:18Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "7f6f686948750ef992d8ea04dd5975e348c7a1d2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOK0CwpM5m03Bo",
+      "title": "restructure the abstract + insist the metadata does not depend on the\u2026",
+      "url": "https://github.com/danwing/metadata/pull/2",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\u2026 specific sig",
+      "createdAt": "2024-02-14T07:30:35Z",
+      "updatedAt": "2024-02-14T17:25:22Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "a7d92e03d7123bf4225b638a69f4380cd66f4130",
+      "headRepository": "danwing/metadata",
+      "headRefName": "restructure-abstract",
+      "headRefOid": "4c302c9bbc5dc27c98a8d45fdf0e3b489324eb63",
+      "closedAt": "2024-02-14T17:25:22Z",
+      "mergedAt": "2024-02-14T17:25:22Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "76b461ca214a1213fdd908f1b6bc2fcd607c9922"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOK0CwpM5m1T3o",
+      "title": "More about the rationale of defining generic metadata",
+      "url": "https://github.com/danwing/metadata/pull/3",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-14T08:55:49Z",
+      "updatedAt": "2024-02-14T17:49:09Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "a7d92e03d7123bf4225b638a69f4380cd66f4130",
+      "headRepository": "danwing/metadata",
+      "headRefName": "why-generic-metadata",
+      "headRefOid": "f360e89ee27b0378a9f49c6c6e6a455c344c4648",
+      "closedAt": "2024-02-14T17:49:09Z",
+      "mergedAt": "2024-02-14T17:49:09Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "703e0c005106b0123fa28531b0e3aca5b8ccdaad"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOK0CwpM5m1h7M",
+      "title": "some edits to the core text",
+      "url": "https://github.com/danwing/metadata/pull/4",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-14T09:33:57Z",
+      "updatedAt": "2024-02-14T17:48:33Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "76b461ca214a1213fdd908f1b6bc2fcd607c9922",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-1",
+      "headRefOid": "e299af11b5d04da0db48f701e403325b32e2a9c2",
+      "closedAt": "2024-02-14T17:48:33Z",
+      "mergedAt": "2024-02-14T17:48:32Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "f0a1c686f7324f14cc848e8535c9c6b27152bd62"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
