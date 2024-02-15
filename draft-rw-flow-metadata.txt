@@ -824,7 +824,7 @@ A.3.  Remote Desktop Virtualization
    |  Traffic  |Importance| PacketNature |Reliable/ |     Comments     |
    |    type   |          |              |Unreliable|                  |
    +===========+==========+==============+==========+==================+
-   |   Glyph   |   high   |     keep     | reliable | The frames that  |
+   |   Glyph   |   high   |   realtime   | reliable | The frames that  |
    |  critical |          |              |          |  form the base   |
    |           |          |              |          |  for the image   |
    |           |          |              |          |     is more      |
