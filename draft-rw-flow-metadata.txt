@@ -99,6 +99,9 @@ Table of Contents
        4.2.1.  Host Treatment
    5.  Security Considerations
    6.  IANA Considerations
+     6.1.  Metadata for Collaborative Host/Network Signaling Registry
+           Group
+     6.2.  Flow Metadata Registry
    Acknowledgments
    References
      Normative References
@@ -443,11 +446,76 @@ Table of Contents
 
 6.  IANA Considerations
 
-   This document requests IANA to create a new registry, entitled
+6.1.  Metadata for Collaborative Host/Network Signaling Registry Group
+
+   This document requests IANA to create a new registry group, entitled
    "Metadata for Collaborative Host/Network Signaling".
 
-   More details about the registration policy and structure will be
-   provided in future version.
+6.2.  Flow Metadata Registry
+
+   IANA is requested to create a new registry, entitled "Flow Metadata
+   Registry", under the "Metadata for Collaborative Host/Network
+   Signaling" registry group.  This registry is inspired by the
+   "Performance Metrics Registry" created by [RFC8911].  The structure
+   of the registry is as follows:
+
+   Identifier:  A numeric identifier for the registered metadata.
+
+      The Identifier 0 is Reserved.
+
+      The Identifier values from 250 to 255 are reserved for private or
+      experimental use.
+
+   Name:  Name of the registered metadata.
+
+   Description:  Provides a description of the intended use of the
+      registered metadata.
+
+   Reference:  Lists the authoritative reference that specifies the
+      registered metadata.
+
+   Version:  Tracks the current version of the metadata.
+
+      The initial version of a new registered metadata MUST be 1.0.
+
+      IANA will bump the version when a new RFC that changes the format/
+      semantic of a registered entry.
+
+   The initial values of the registry are listed in Table 1.
+
+   +==========+===================+============+===============+=======+
+   |Identifier|        Name       |Description |   Reference   |Version|
+   +==========+===================+============+===============+=======+
+   |    0     |                   |Reserved    | This-Document |       |
+   +----------+-------------------+------------+---------------+-------+
+   |    1     |     Importance    |Indicates   | This-Document |  1.0  |
+   |          |                   |the level   |               |       |
+   |          |                   |of          |               |       |
+   |          |                   |importance  |               |       |
+   |          |                   |of a packet |               |       |
+   |          |                   |in a flow   |               |       |
+   +----------+-------------------+------------+---------------+-------+
+   |    2     |    PacketNature   |Indicates   | This-Document |  1.0  |
+   |          |                   |whether a   |               |       |
+   |          |                   |packet is   |               |       |
+   |          |                   |reliably or |               |       |
+   |          |                   |unreliably  |               |       |
+   |          |                   |transmitted |               |       |
+   +----------+-------------------+------------+---------------+-------+
+   |    3     | DiscardPreference |Indicates a | This-Document |  1.0  |
+   |          |                   |discard     |               |       |
+   |          |                   |preference  |               |       |
+   +----------+-------------------+------------+---------------+-------+
+   |    0     |  DownlinkBitrate  |Specifies   | This-Document |  1.0  |
+   |          |                   |the maximum |               |       |
+   |          |                   |downlink    |               |       |
+   |          |                   |bitrate     |               |       |
+   +----------+-------------------+------------+---------------+-------+
+
+                          Table 1: Initial Values
+
+   New entries can be added to the registery using "Standards Action"
+   policy (Section 4.9 of [RFC8126].
 
 Acknowledgments
 
@@ -461,6 +529,11 @@ Normative References
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -549,6 +622,11 @@ Informative References
               for WebRTC QoS", RFC 8837, DOI 10.17487/RFC8837, January
               2021, <https://www.rfc-editor.org/rfc/rfc8837>.
 
+   [RFC8911]  Bagnulo, M., Claise, B., Eardley, P., Morton, A., and A.
+              Akhter, "Registry for Performance Metrics", RFC 8911,
+              DOI 10.17487/RFC8911, November 2021,
+              <https://www.rfc-editor.org/rfc/rfc8911>.
+
    [RFC9293]  Eddy, W., Ed., "Transmission Control Protocol (TCP)",
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9293>.
@@ -599,7 +677,7 @@ A.1.  Video Streaming
         |     audio     |    high    |   realtime   |  reliable  |
         +---------------+------------+--------------+------------+
 
-          Table 1: Example Values for Video Streaming Metadata -
+          Table 2: Example Values for Video Streaming Metadata -
                        Comprehensive Interpretation
 
    Simple Interpretation:
@@ -614,7 +692,7 @@ A.1.  Video Streaming
                |       audio       |          111          |
                +-------------------+-----------------------+
 
-                     Table 2: Example Values for Video
+                     Table 3: Example Values for Video
                         Streaming Metadata - Simple
                                Interpretation
 
@@ -640,7 +718,7 @@ A.2.  Interactive Gaming or Audio/Video
       |       audio       |    high    |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
 
-        Table 3: Example Values for Interactive A/V, downstream -
+        Table 4: Example Values for Interactive A/V, downstream -
                        Comprehensive Interpretation
 
       +===================+============+==============+============+
@@ -653,7 +731,7 @@ A.2.  Interactive Gaming or Audio/Video
       |       audio       |    high    |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
 
-         Table 4: Example Values for Interactive A/V, upstream -
+         Table 5: Example Values for Interactive A/V, upstream -
                        Comprehensive Interpretation
 
    Simple Interpretation:
@@ -668,7 +746,7 @@ A.2.  Interactive Gaming or Audio/Video
                |       audio       |          111          |
                +-------------------+-----------------------+
 
-                  Table 5: Example Values for Interactive
+                  Table 6: Example Values for Interactive
                   A/V, downstream - Simple Interpretation
 
                +===================+=======================+
@@ -681,7 +759,7 @@ A.2.  Interactive Gaming or Audio/Video
                |       audio       |          111          |
                +-------------------+-----------------------+
 
-                  Table 6: Example Values for Interactive
+                  Table 7: Example Values for Interactive
                    A/V, upstream - Simple Interpretation
 
    Many interactive audio/video applications also support sharing the
@@ -704,7 +782,7 @@ A.2.  Interactive Gaming or Audio/Video
       |  picture sharing  |    high    |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
 
-         Table 7: Example Values for Interactive A/V, upstream -
+         Table 8: Example Values for Interactive A/V, upstream -
                        Comprehensive Interpretation
 
    Simple Interpretation:
@@ -721,7 +799,7 @@ A.2.  Interactive Gaming or Audio/Video
                |  picture sharing  |          111          |
                +-------------------+-----------------------+
 
-                  Table 8: Example Values for Interactive
+                  Table 9: Example Values for Interactive
                    A/V, upstream - Simple Interpretation
 
    In many scenarios a game or VoIP application will want to signal
@@ -734,8 +812,8 @@ A.3.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.  This is shown in two
-   tables, client-to-server traffic (Table 9)(Table 11) and server-to-
-   client traffic (Table 10)(Table 12).
+   tables, client-to-server traffic (Table 10)(Table 12) and server-to-
+   client traffic (Table 11)(Table 13).
 
    Comprehensive Interpretation:
 
@@ -835,7 +913,7 @@ A.3.  Remote Desktop Virtualization
    |     frame      |          |              |          |             |
    +----------------+----------+--------------+----------+-------------+
 
-         Table 9: Example Values for Remote Desktop Virtualization
+         Table 10: Example Values for Remote Desktop Virtualization
          Metadata, client to server - Comprehensive Interpretation
 
    +===========+==========+==============+==========+==================+
@@ -956,7 +1034,7 @@ A.3.  Remote Desktop Virtualization
    |           |          |              |          |    elements.     |
    +-----------+----------+--------------+----------+------------------+
 
-         Table 10: Example Values for Remote Desktop Virtualization
+         Table 11: Example Values for Remote Desktop Virtualization
          Metadata, server to client - Comprehensive Interpretation
 
    Simple Interpretation:
@@ -982,7 +1060,7 @@ A.3.  Remote Desktop Virtualization
    |                   frame                   |                       |
    +-------------------------------------------+-----------------------+
 
-         Table 11: Example Values for Remote Desktop Virtualization
+         Table 12: Example Values for Remote Desktop Virtualization
              Metadata, client to server - Simple Interpretation
 
        +==================================+=======================+
@@ -1005,7 +1083,7 @@ A.3.  Remote Desktop Virtualization
        |         Glyph smoothing          |          000          |
        +----------------------------------+-----------------------+
 
-               Table 12: Example Values for Remote Desktop
+               Table 13: Example Values for Remote Desktop
             Virtualization Metadata, server to client - Simple
                               Interpretation
 
