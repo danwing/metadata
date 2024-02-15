@@ -311,6 +311,21 @@ An example of the encoding is in {{examples-n2h}}.
 Binary encoding and map encoding is unnecessary because the network-to-host signaling
 is never associated with an individual packet.
 
+## Prefer Alternate Path ('pref-alt-path')
+
+There are also crisis cases where nominal network resources cannot be
+used at maximum to handle packets. A network would thus seek to offload some of the
+traffic during these events. Under such exceptional events, a network
+element may signal to a host that it is preferrable to use alternate
+paths, if available. An alternate path is typically an alternate network
+attachment.
+
+The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
+
+### Host Treatment
+
+The host offloads its connections to alternate available paths.
+
 # Security Considerations
 
 Metadata increases the information available to attackers to
