@@ -296,6 +296,10 @@ For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
+### Unit
+
+Expressed in Mbps.
+
 ### Host Treatment
 
 The host chooses a video streaming bit rate at or below the signaled rate.
