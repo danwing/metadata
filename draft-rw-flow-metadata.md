@@ -348,25 +348,26 @@ therefore more critical to deliver to the receiver than delta frames.
 Streaming video also contains audio frames which can be encoded
 separately and thus can be signaled separately.  Audio is more
 critical than video for almost all applications, but its importance
-is still an application decision.  In the example below, the audio
+(relative to other packets in the flow) is still an application decision.  In the example below, the audio
 is more important than video (importance=high, KD=keep, RU=reliable), video key frames
-have middle importance (importance=low, discard, reliable), and video delta
-frames have least importance (importance=low, KD=discard, RU=unreliable).
+have middle importance (importance=low, discard, reliable), and both types
+of video delta frames (P-frame and B-frame) have least importance (importance=low, KD=discard, RU=unreliable).
 
 Comprehensive Interpretation:
 
-| Traffic type      | Importance | PacketNature      | RU                   |
-|:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | realtime          | reliable             |
-| video delta frame | low        | discard           | unreliable           |
-| audio             | high       | realtime          | reliable             |
+| Traffic type                             | Importance | PacketNature      | RU                   |
+|:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
+| video I-frame (key frame)                | low        | realtime          | reliable             |
+| video delta P-frame                      | low        | discard           | unreliable           |
+| video delta B-frame                      | low        | discard           | unreliable           |
+| audio                                    | high       | realtime          | reliable             |
 {: #table-video-streaming-ci title="Example Values for Video Streaming Metadata - Comprehensive Interpretation"}
 
 Simple Interpretation:
 
 | Traffic type      | Simple Interpretation |
 |:-----------------:|:---------------------:|
-| video key frame   | 011                   |
+| video I-frame     | 011                   |
 | video delta frame | 001                   |
 | audio             | 111                   |
 {: #table-video-streaming-si title="Example Values for Video Streaming Metadata - Simple Interpretation"}
