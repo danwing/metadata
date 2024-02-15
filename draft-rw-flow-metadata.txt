@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 17 August 2024                                 14 February 2024
+Expires: 18 August 2024                                 15 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 August 2024.
+   This Internet-Draft will expire on 18 August 2024.
 
 Copyright Notice
 
@@ -557,23 +557,29 @@ A.1.  Video Streaming
    Streaming video also contains audio frames which can be encoded
    separately and thus can be signaled separately.  Audio is more
    critical than video for almost all applications, but its importance
-   is still an application decision.  In the example below, the audio is
-   more important than video (importance=high, KD=keep, RU=reliable),
-   video key frames have middle importance (importance=low, discard,
-   reliable), and video delta frames have least importance
+   (relative to other packets in the flow) is still an application
+   decision.  In the example below, the audio is more important than
+   video (importance=high, KD=keep, RU=reliable), video key frames have
+   middle importance (importance=low, discard, reliable), and both types
+   of video delta frames (P-frame and B-frame) have least importance
    (importance=low, KD=discard, RU=unreliable).
 
    Comprehensive Interpretation:
 
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature |     RU     |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
+        +===============+============+==============+============+
+        |  Traffic type | Importance | PacketNature |     RU     |
+        +===============+============+==============+============+
+        | video I-frame |    low     |   realtime   |  reliable  |
+        |  (key frame)  |            |              |            |
+        +---------------+------------+--------------+------------+
+        |  video delta  |    low     |   discard    | unreliable |
+        |    P-frame    |            |              |            |
+        +---------------+------------+--------------+------------+
+        |  video delta  |    low     |   discard    | unreliable |
+        |    B-frame    |            |              |            |
+        +---------------+------------+--------------+------------+
+        |     audio     |    high    |   realtime   |  reliable  |
+        +---------------+------------+--------------+------------+
 
           Table 1: Example Values for Video Streaming Metadata -
                        Comprehensive Interpretation
@@ -583,7 +589,7 @@ A.1.  Video Streaming
                +===================+=======================+
                |    Traffic type   | Simple Interpretation |
                +===================+=======================+
-               |  video key frame  |          011          |
+               |   video I-frame   |          011          |
                +-------------------+-----------------------+
                | video delta frame |          001          |
                +-------------------+-----------------------+
