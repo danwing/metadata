@@ -470,7 +470,7 @@ Comprehensive Interpretation:
 
 | Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
-| Glyph critical             | high       | keep            | reliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
+| Glyph critical             | high       | realtime        | reliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
 | Interactive (or streaming) audio   | high       | keep            | unreliable          |   |
 | Haptic feedback            | high       | discard         | unreliable          | Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense |
 | Interactive (or streaming) video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
