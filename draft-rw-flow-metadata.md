@@ -340,9 +340,46 @@ and exchanged amongst hosts and network elements.
 
 # IANA Considerations
 
-This document requests IANA to create a new registry, entitled "Metadata for Collaborative Host/Network Signaling".
+## Metadata for Collaborative Host/Network Signaling Registry Group
 
-More details about the registration policy and structure will be provided in future version.
+This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".
+
+## Flow Metadata Registry
+
+IANA is requested to create a new registry, entitled "Flow Metadata Registry", under the "Metadata for Collaborative Host/Network Signaling" registry group.
+This registry is inspired by the "Performance Metrics Registry" created by {{?RFC8911}}. The structure of the registry is as follows:
+
+Identifier:
+: A numeric identifier for the registered metadata.
+: The Identifier 0 is Reserved.
+: The Identifier values from 250 to 255 are reserved for private or experimental use.
+
+Name:
+: Name of the registered metadata.
+
+Description:
+: Provides a description of the intended use of the registered metadata.
+
+Reference:
+: Lists the authoritative reference that specifies the registered metadata.
+
+Version:
+: Tracks the current version of the metadata.
+: The initial version of a new registered metadata MUST be 1.0.
+: IANA will bump the version when a new RFC that changes the format/semantic of a registered entry.
+
+The initial values of the registry are listed in {{initial-reg}}.
+
+| Identifier | Name              | Description      | Reference     | Version |
+|:----------:|:-----------------:|:-----------------|:-------------:|:-------:|
+| 0          |                   | Reserved         | This-Document |         |
+| 1          | Importance        | Indicates the level of importance of a packet in a flow            | This-Document | 1.0     |
+| 2          | PacketNature      | Indicates whether a packet is reliably or unreliably transmitted   | This-Document | 1.0     |
+| 3          | DiscardPreference | Indicates a discard preference         | This-Document | 1.0     |
+| 0          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
+{: #initial-reg title="Initial Values"}
+
+New entries can be added to the registery using "Standards Action" policy ({{Section 4.9 of !RFC8126}}.
 
 # Acknowledgments
 {:numbered="false"}
