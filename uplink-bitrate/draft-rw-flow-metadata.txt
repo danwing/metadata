@@ -92,7 +92,7 @@ Table of Contents
          3.3.2.1.  Network Treatment
          3.3.2.2.  Encoding
    4.  Network to Host Metadata
-     4.1.  Uplink Bitrate
+     4.1.  Downlink Bitrate
        4.1.1.  Host Treatment
        4.1.2.  Encoding
    5.  Security Considerations
@@ -376,7 +376,7 @@ Table of Contents
 
 4.  Network to Host Metadata
 
-4.1.  Uplink Bitrate
+4.1.  Downlink Bitrate
 
    Monthly data quotas on cellular networks can be easily exceeded by
    video streaming, in particular, if the client chooses excessively
@@ -398,9 +398,9 @@ Table of Contents
    The host chooses a video streaming bit rate at or below the signaled
    rate.
 
-   The host may also choose to signal the received uplink bitrate to the
-   remote peer.  The remote peer will adapt its transmission behavior to
-   comply with the received bitrate.
+   The host may also choose to signal the received bitrate to the remote
+   peer.  The remote peer will adapt its transmission behavior to comply
+   with the received bitrate.
 
 4.1.2.  Encoding
 
