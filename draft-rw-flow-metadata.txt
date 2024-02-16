@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 18 August 2024                                 15 February 2024
+Expires: 19 August 2024                                 16 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 August 2024.
+   This Internet-Draft will expire on 19 August 2024.
 
 Copyright Notice
 
@@ -92,9 +92,10 @@ Table of Contents
          3.3.2.1.  Network Treatment
          3.3.2.2.  Encoding
    4.  Network to Host Metadata
-     4.1.  Video Streaming Bandwidth
-       4.1.1.  Host Treatment
-       4.1.2.  Encoding
+     4.1.  Downlink Bitrate
+       4.1.1.  Unit
+       4.1.2.  Host Treatment
+       4.1.3.  Encoding
      4.2.  Prefer Alternate Path ('pref-alt-path')
        4.2.1.  Host Treatment
    5.  Security Considerations
@@ -381,13 +382,13 @@ Table of Contents
 
 4.  Network to Host Metadata
 
-4.1.  Video Streaming Bandwidth
+4.1.  Downlink Bitrate
 
    Monthly data quotas on cellular networks can be easily exceeded by
-   video streaming if the client chooses excessively high quality or
-   routinely abandons watching videos that were downloaded.  The network
-   can assist the client by informing the client of the network's
-   bandwidth policy.
+   video streaming, in particular, if the client chooses excessively
+   high quality or routinely abandons watching videos that were
+   downloaded.  The network can assist the client by informing the
+   client of the network's bandwidth policy.
 
    If the video is encoded with variable bit rate, the bitrate cannot
    exceed the indicated bitrate.
@@ -398,12 +399,20 @@ Table of Contents
    as near as possible behind each other, and the remaining portion of
    that second could have no packets transmitted.
 
-4.1.1.  Host Treatment
+4.1.1.  Unit
+
+   Expressed in Mbps.
+
+4.1.2.  Host Treatment
 
    The host chooses a video streaming bit rate at or below the signaled
    rate.
 
-4.1.2.  Encoding
+   The host may also choose to signal the received bitrate to the remote
+   peer.  The remote peer will adapt its transmission behavior to comply
+   with the received bitrate.
+
+4.1.3.  Encoding
 
    When signaled in JSON, the bandwidth is encoded as name
    "videoStreamingBandwidth" containing one object containing three
