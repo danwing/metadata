@@ -167,8 +167,6 @@ The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
 same flow.  Importance belongs to Network Metadata.
 
-### Application Treatment
-
 An application would mark a packet as important when it needs the
 network to treat the packet with greater preference compared to the
 unmarked packets or to packets marked important=false (of the same
@@ -176,11 +174,17 @@ flow). This tagging does not provide more privileges to an application
 with regards to resources usage compared to the absence of signal. An
 example of this interpretation is specified in {{examples-h2n}}.
 
-### CDDL Encoding
-
 ~~~~~
 importance = true / false
 ~~~~~
+{: #cddl-importance title="CDDL Encoding of Importance"}
+
+
+### Network Treatment
+
+During a reactive policy event, a network element is encouraged to
+discard packets marked importance=false in favor of packets marked
+importance=true, for the same flow.
 
 ## Reliable/Unreliable
 
@@ -197,17 +201,23 @@ reduce the amount of transmitted data in a network; it only defers when it appea
 
 Reliable/Unreliable belongs to Application Metadata.
 
+~~~~~
+reliable = {
+  ( true,
+    prefer-keep ) /
+  ( false,
+    realtime )
+}
+~~~~~
+{: #cddl-reliable title="CDDL Encoding of Reliable"}
+
 ### Network Treatment
 
 During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
-### CDDL Encoding
 
-~~~~~
-reliable = true / false
-~~~~~
 
 ## Packet Discard Preference
 
@@ -231,30 +241,30 @@ traffic at the expense of the less-important 'may-discard' traffic.
 The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
 the application can avoid sending that packet is application-specific.
 
+~~~~~
+prefer-keep = true / false
+~~~~~
+{: #cddl-prefer-keep title="CDDL Encoding of Prefer-Keep"}
+
 #### Network Treatment
 
 During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
 'prefer-keep' packets.
 
-#### CDDL Encoding
-
-~~~~~
-prefer-keep = true / false
-~~~~~
 
 ### Reliable Traffic
 
 For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.
 
+~~~~~
+realtime = true / false
+~~~~~
+{: #cddl-realtime title="CDDL Encoding of Realtime"}
+
 #### Network Treatment
 
 Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.
 
-#### CDDL Encoding
-
-~~~~~
-realtime = true / false
-~~~~~
 
 # Network to Host Metadata
 
@@ -274,19 +284,6 @@ For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
-### Units
-
-Bit rate is expressed in Mbps and duration is in milliseconds.
-
-### Host Treatment
-
-The host chooses a video streaming bit rate at or below the signaled rate.
-
-The host may also choose to signal the received bitrate to the remote peer. The remote
-peer will adapt its transmission behavior to comply with the received bitrate.
-
-### CDDL Encoding
-
 ~~~~~
 downlinkBitrate = {
   nominal: uint,        ; Mbps
@@ -298,6 +295,19 @@ burst-info = {
   burstDuration: uint   ; milliseconds
 }
 ~~~~~
+{: #cddl-downlink title="CDDL Encoding of Downlink Bitrate"}
+
+### Units
+
+Bit rate is expressed in Mbps and duration is in milliseconds.
+
+### Host Treatment
+
+The host chooses a video streaming bit rate at or below the signaled rate.
+
+The host may also choose to signal the received bitrate to the remote peer. The remote
+peer will adapt its transmission behavior to comply with the received bitrate.
+
 
 An example of the encoding is in {{examples-n2h}}.
 
@@ -313,15 +323,15 @@ with pref-alt-path=false.
 
 The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
 
+~~~~~
+pref-alt-path = true / false
+~~~~~
+{: #cddl-pref-alt-path title="CDDL Encoding of pref-alt-path"}
+
 ### Host Treatment
 
 The host offloads its connections to alternate available paths.
 
-### CDDL Encoding
-
-~~~~~
-pref-alt-path = true / false
-~~~~~
 
 # Security Considerations
 
