@@ -74,9 +74,10 @@ packets. Also, as part of network-to-host signaling, network metadata can be com
 to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
 the available network resources.
 
-This document describes the metadata exchanged in a host-to-network/network-to-host
-signaling protocol in both binary and JSON. These metadata are intended to be applicable
-independent of the signaling protocol used between a host and a network.
+This document describes the metadata exchanged in a companion
+host-to-network/network-to-host signaling protocol.  These metadata
+are intended to be applicable independent of the signaling protocol
+used between a host and a network.
 
 --- middle
 
@@ -107,10 +108,13 @@ document is a companion to host-to-network signaling the metadata itself, such a
 
 An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
 
-The metadata defined in this document is independent of the actual signaling
-protocol. In doing so, we ensure that consistent metadata definitions
-are used by the various signaling protocols. It is out of scope of this document to define how the proposed
-encoding will be mapped to a specific signaling protocol.
+The metadata defined in this document is independent of the actual
+companion signaling protocol. In doing so, we ensure that consistent
+metadata definitions are used by the various signaling protocols.  The
+metadata is described using {{!CDDL=RFC8610}} which can be expressed
+in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  It is
+out of scope of this document to define how the proposed encoding will
+be mapped to a specific signaling protocol.
 
 Some applications use heuristics to determine rate-limiting policy. This document
 proposes an explicit approach that is meant to share more granular information
@@ -159,27 +163,28 @@ For more comprehensive interpretation, metadata is characterized into two differ
 
 ## Importance
 
-Importance bit signifies if the packet is of more importance or less importance by the host. This is specified in the MSB of metadata bits and is of 1 bit length. Importance belongs to Network Metadata.
+The "Importance" metadata signifies if the packet is of more important (true) or
+less important (false) by the host, relative to other packets in the
+same flow.  Importance belongs to Network Metadata.
 
 ### Application Treatment
 
-An application would mark a packet as important when it needs the network to treat the packet with greater preference compared to the unmarked packets (of the same flow). This tagging does not provide more privileges to an application with regards to resources usage compared to the absence of signal. An example of this interpretation is specified in {{examples-h2n}}.
+An application would mark a packet as important when it needs the
+network to treat the packet with greater preference compared to the
+unmarked packets or to packets marked important=false (of the same
+flow). This tagging does not provide more privileges to an application
+with regards to resources usage compared to the absence of signal. An
+example of this interpretation is specified in {{examples-h2n}}.
 
-### Encoding
+### CDDL Encoding
 
-More-Important:
-
-* When signaled in binary, the Importance bit is set (1).
-* When signaled in JSON, it is encoded as name "importance" and value "true".
-
-Less-Important:
-
-* When signaled in binary, the Importance bit is cleared (0).
-* When signaled in JSON, it is encoded as name "importance" and value "false".
+~~~~~
+importance = true / false
+~~~~~
 
 ## Reliable/Unreliable
 
-Reliable bit indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
+The "Reliable" metadata indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
 
 * Reliable packets are re-transmitted by the underlying transport
 (e.g., TCP {{?RFC9293}} or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
@@ -190,7 +195,7 @@ Packets marked reliable, if delayed excessively or dropped outright, will be re-
 the sender application, appearing on the network again. Thus, delaying or discarding such packets does not
 reduce the amount of transmitted data in a network; it only defers when it appears on the network.
 
-The reliability indication is specified in the MSB of metadata bits and is of 1-bit length. Reliable/Unreliable belongs to Application Metadata.
+Reliable/Unreliable belongs to Application Metadata.
 
 ### Network Treatment
 
@@ -198,18 +203,11 @@ During a reactive policy event, dropping unreliable traffic is preferred over dr
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
-### Encoding
+### CDDL Encoding
 
-Reliable:
-
-* When signaled in binary, the Reliable bit is set (1).
-* When signaled in JSON, it is encoded as name "reliable" and value "true".
-
-Unreliable:
-
-* When signaled in binary, the Reliable bit is cleared (0).
-* When signaled in JSON, it is encoded as name "reliable" and value "false".
-
+~~~~~
+reliable = true / false
+~~~~~
 
 ## Packet Discard Preference
 
@@ -238,17 +236,11 @@ the application can avoid sending that packet is application-specific.
 During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
 'prefer-keep' packets.
 
-#### Encoding
+#### CDDL Encoding
 
-Discard:
-
-* When signaled in binary, the PacketNature bit is set (1).
-* When signaled in JSON, it is encoded as name "Discard" and value "true".
-
-Keep:
-
-* When signaled in binary, the PacketNature bit is cleared (0).
-* When signaled in JSON, it is encoded as name "Discard" and value "false".
+~~~~~
+prefer-keep = true / false
+~~~~~
 
 ### Reliable Traffic
 
@@ -258,25 +250,11 @@ For reliable traffic, this metadata indicates whether the packet belongs to bulk
 
 Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.
 
-#### Encoding
+#### CDDL Encoding
 
-Realtime:
-
-* When signaled in binary, the PacketNature bit is set (1).
-* When signaled in JSON, it is encoded as name "Realtime" and value "true".
-
-Bulk traffic:
-
-* When signaled in binary, the PacketNature bit is cleared (0).
-* When signaled in JSON, it is encoded as name "Realtime" and value "false".
-
-To adhere to both simple and comprehensive interpretation of the metadata, it is vital to order the bits in the same sequence as mentioned below.
-
-MSB - Importance bit.
-Bit 1 - Packet Nature bit.
-LSB - Reliable/Unreliable bit.
-
-More details on how simple and comprehensive interpretation of metadata would work for different types of traffic is listed in {{examples-h2n}}.
+~~~~~
+realtime = true / false
+~~~~~
 
 # Network to Host Metadata
 
@@ -296,9 +274,9 @@ For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
-### Unit
+### Units
 
-Expressed in Mbps.
+Bit rate is expressed in Mbps and duration is in milliseconds.
 
 ### Host Treatment
 
@@ -307,18 +285,21 @@ The host chooses a video streaming bit rate at or below the signaled rate.
 The host may also choose to signal the received bitrate to the remote peer. The remote
 peer will adapt its transmission behavior to comply with the received bitrate.
 
-### Encoding
+### CDDL Encoding
 
-When signaled in JSON, the bandwidth is encoded as name
-"videoStreamingBandwidth" containing one object containing three
-names: "nominal" and "burstBandwidth" with their values in kilobits
-per second and one name "burstDuration" with its value in
-milliseconds.
+~~~~~
+downlinkBitrate = {
+  nominal: uint,
+  ? burst-info
+}
+
+burst-info = {
+  burst: uint,
+  burstDuration: uint
+}
+~~~~~
 
 An example of the encoding is in {{examples-n2h}}.
-
-Binary encoding and map encoding is unnecessary because the network-to-host signaling
-is never associated with an individual packet.
 
 ## Prefer Alternate Path ('pref-alt-path')
 
@@ -327,13 +308,20 @@ used at maximum to handle packets. A network would thus seek to offload some of 
 traffic during these events. Under such exceptional events, a network
 element may signal to a host that it is preferrable to use alternate
 paths, if available. An alternate path is typically an alternate network
-attachment.
+attachment.  After the crisis has subsided, the network should signal
+with pref-alt-path=false.
 
 The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
 
 ### Host Treatment
 
 The host offloads its connections to alternate available paths.
+
+### CDDL Encoding
+
+~~~~~
+pref-alt-path = true / false
+~~~~~
 
 # Security Considerations
 
