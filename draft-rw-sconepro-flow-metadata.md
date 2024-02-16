@@ -4,7 +4,7 @@ abbrev: "Flow Metadata"
 category: std
 
 
-docname: draft-rw-flow-metadata-latest
+docname: draft-rw-sconepro-flow-metadata-latest
 submissiontype: IETF
 v: 3
 area: "Network"
