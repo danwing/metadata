@@ -130,6 +130,8 @@ bandwidth policy for the subscriber to receive streaming video. This
 policy can be used by video streaming applications on that host to
 choose video streams that fit within that policy.
 
+
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -278,9 +280,9 @@ More details on how simple and comprehensive interpretation of metadata would wo
 
 # Network to Host Metadata
 
-## Video Streaming Bandwidth
+## Downlink Bitrate
 
-Monthly data quotas on cellular networks can be easily exceeded by video streaming if the
+Monthly data quotas on cellular networks can be easily exceeded by video streaming, in particular, if the
 client chooses excessively high quality or routinely abandons watching videos that were
 downloaded. The network can assist the client by informing the client of the network's
 bandwidth policy.
@@ -294,9 +296,16 @@ For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
+### Unit
+
+Expressed in Mbps.
+
 ### Host Treatment
 
 The host chooses a video streaming bit rate at or below the signaled rate.
+
+The host may also choose to signal the received bitrate to the remote peer. The remote
+peer will adapt its transmission behavior to comply with the received bitrate.
 
 ### Encoding
 
