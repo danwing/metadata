@@ -289,13 +289,13 @@ peer will adapt its transmission behavior to comply with the received bitrate.
 
 ~~~~~
 downlinkBitrate = {
-  nominal: uint,
+  nominal: uint,        ; Mbps
   ? burst-info
 }
 
 burst-info = {
-  burst: uint,
-  burstDuration: uint
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
 }
 ~~~~~
 
