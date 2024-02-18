@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-15T01:13:52.170165+00:00",
+  "timestamp": "2024-02-18T01:18:03.492670+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -62,9 +62,31 @@
       "labels": [],
       "body": "I really like that there are only very few metadata in the document. \r\n\r\nI would suggest that the encoding part is separated from the actual definition of the metadata (moved to an appendix). The 3-bit proposal can be listed as an implementation example, but I don't think that actually matters.",
       "createdAt": "2024-02-14T09:55:56Z",
-      "updatedAt": "2024-02-14T09:55:56Z",
+      "updatedAt": "2024-02-15T20:30:08Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I really like that there are only very few metadata in the document.\r\n> \r\n> I would suggest that the encoding part is separated from the actual definition of the metadata (moved to an appendix). The 3-bit proposal can be listed as an implementation example, but I don't think that actually matters.\r\n\r\nThanks Med. \r\n\r\nGiven the document focuses on standardizing (or using consistent) metadata across the board as well as proposing explicit approach in sharing granular information, wouldn't it be more streamlined and necessary for it to be the way it is where we read \"the parameter -> what it means -> why its needed -> how it looks\" and then both interpretations (simple as well as granular) of real-world examples (as many scenarios as we could cover without overdoing all possible applications)? ",
+          "createdAt": "2024-02-15T04:29:58Z",
+          "updatedAt": "2024-02-15T04:29:58Z"
+        },
+        {
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree that this would be ideal. \r\n\r\nFrom where I sit, I think that standardization the definition and intended usage is by itself a great contribution. The \"how it looks\" part depends on the signaling protocol. For example, there are encoding constraints that are imposed by the sig (QUIC, MASQUE, TCP, SCOKS, Convert, etc.).\r\n\r\nAlso, consider the 3-bit info in the draft. This is an artificial limitation at this stage because more bits may be needed if a new information is defined.   \r\n\r\nWe may consider using an abstract data modelling (e.g., CDDL  (rfc8610), YANG Abstract Data Structure (RFC8791)) to ease the mapping with specific sig protocol encoding.",
+          "createdAt": "2024-02-15T07:55:50Z",
+          "updatedAt": "2024-02-15T07:55:50Z"
+        },
+        {
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "body": "CDDL is a good idea.",
+          "createdAt": "2024-02-15T20:30:07Z",
+          "updatedAt": "2024-02-15T20:30:07Z"
+        }
+      ]
     },
     {
       "number": 6,
@@ -78,9 +100,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-02-14T09:56:35Z",
-      "updatedAt": "2024-02-14T09:56:35Z",
+      "updatedAt": "2024-02-17T04:41:40Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I was thinking from another perspective. If the application tags the packets and the network applies appropriate routing/loss avoidance algorithms over the loss prone hop(s), using metadata can reduce the necessity for mechanisms like dual stream, right? This will also minimize end-to-end retransmissions.",
+          "createdAt": "2024-02-17T04:41:38Z",
+          "updatedAt": "2024-02-17T04:41:38Z"
+        }
+      ]
     },
     {
       "number": 7,
@@ -94,7 +124,7 @@
       "labels": [],
       "body": "FWIW, https://dspace.mit.edu/handle/1721.1/99941 revealed that: \"63% of the external communication made by top-popular free Android applications from Google Play has no effect on the user-observable application functionality\"\r\n\r\nMay be cited as an example of packets  that may be tagged as \"may-discard\".\r\n\r\n\r\n",
       "createdAt": "2024-02-14T10:05:03Z",
-      "updatedAt": "2024-02-14T19:41:46Z",
+      "updatedAt": "2024-02-15T20:53:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -103,6 +133,60 @@
           "body": "Based on the abstract (as I can't seem to access the paper itself), it seems to have analyzed **blocking** some communications from apps -- likely to advertising servers or to other non-primary servers, and said that most apps continued working fine when that communication was blocked.\r\n",
           "createdAt": "2024-02-14T19:41:45Z",
           "updatedAt": "2024-02-14T19:41:45Z"
+        },
+        {
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "body": "If we extrapolate the reasoning and consider that the app itself tags these packets as \"may-discard\" ones, the app will continue to function if its happens that some of these packets are dropped as a side effect of a reactive policy. ",
+          "createdAt": "2024-02-15T08:15:12Z",
+          "updatedAt": "2024-02-15T08:15:12Z"
+        },
+        {
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "body": "I expect lots of the traffic in that study is advertising traffic. Product Managers and engineers need to see ad impressions and would consider advertising traffic as important (even more important!) than the application's primary traffic (such as retrieving weather information). \r\n\r\nIn any event, being able to say \"this flow is un-important\" is just as difficult as \"this flow is important\":  relative to other flows to/from the same host, or relative to other users?  And who is to decide the importance, because I might assign my software updates to super low priority but if my neighbor has assigned a slightly higher priority to downloading a few petabytes of home movies from their cloud storage, it could take days and days.\r\n\r\nThat's why I hope to only have metadata describing relative importance **within a flow**, not between flows.",
+          "createdAt": "2024-02-15T20:53:32Z",
+          "updatedAt": "2024-02-15T20:53:32Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOK0CwpM5_SrXG",
+      "title": "Less importance packets discarded during reactive policy event can lead to retransmits",
+      "url": "https://github.com/danwing/metadata/issues/8",
+      "state": "OPEN",
+      "author": "sridharangirish91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In simple interpretation, we have the LSB signifying reliability. So low priority values like 1 or 3, if dropped, will be retransmitted by the application/transport layer. Will it make sense to reword it like lowest importance (0) can be dropped instead?",
+      "createdAt": "2024-02-15T04:13:57Z",
+      "updatedAt": "2024-02-15T04:13:58Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOK0CwpM5_VuEA",
+      "title": "Add Public Safety/emergency Session as another example for importance/realtime indicators",
+      "url": "https://github.com/danwing/metadata/issues/11",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-15T12:26:50Z",
+      "updatedAt": "2024-02-15T17:12:56Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "body": "Do you mean a video/audio call with emergency services (e.g., 112, 911), which we would want prioritized over **other** flows, rather than within this one flow?  Prioritizing over other flows is a different problem -- it is \"intentional policy\".  It also requires authorization, ideally granted by the emergency service operator (government) itself.\r\n\r\nOr do you mean a handset that is owned/operated by police/ambulance service, and thus should always have priority over mere citizens?  That is also \"intentional policy\".\r\n\r\nMaybe this document and/or CIDFI can improve discussing their niche which I am intending for only \"reactive policy\"?",
+          "createdAt": "2024-02-15T17:12:55Z",
+          "updatedAt": "2024-02-15T17:12:55Z"
         }
       ]
     }
@@ -217,6 +301,297 @@
       "mergeCommit": {
         "oid": "f0a1c686f7324f14cc848e8535c9c6b27152bd62"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOK0CwpM5m8Xfe",
+      "title": "downlink bitrate",
+      "url": "https://github.com/danwing/metadata/pull/9",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Generalize the metadata as this is not specific to video.  Also, add a provision to communicate the metadata to a remote peer to adjust its behavior.",
+      "createdAt": "2024-02-15T08:24:36Z",
+      "updatedAt": "2024-02-16T01:53:50Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "aa1fec82ee669f3df5c97e725fd96e88a5d6fc89",
+      "headRepository": "danwing/metadata",
+      "headRefName": "uplink-bitrate",
+      "headRefOid": "038f248e57123bd2bc6c77aa9c7ac8d64fb61bd8",
+      "closedAt": "2024-02-16T01:53:50Z",
+      "mergedAt": "2024-02-16T01:53:50Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "e34d345e127d6ad0ab3f91d70812e869a028781c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5wSNa3",
+          "commit": {
+            "abbreviatedOid": "038f248"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "Thanks for the edit -- the elimination of video improves this significantly",
+          "createdAt": "2024-02-15T20:33:28Z",
+          "updatedAt": "2024-02-15T20:33:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOK0CwpM5m9JIJ",
+      "title": "more details about the registry",
+      "url": "https://github.com/danwing/metadata/pull/10",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-15T10:16:12Z",
+      "updatedAt": "2024-02-15T20:32:00Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "aa1fec82ee669f3df5c97e725fd96e88a5d6fc89",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-2",
+      "headRefOid": "65ac399e8924a9c5ede037e58d6458f60dceb41a",
+      "closedAt": "2024-02-15T20:32:00Z",
+      "mergedAt": "2024-02-15T20:32:00Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "a6585d19f4af9e6101e77dedb0114bce616a0150"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOK0CwpM5m-bDv",
+      "title": "prefer alternate path",
+      "url": "https://github.com/danwing/metadata/pull/12",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-15T13:20:12Z",
+      "updatedAt": "2024-02-15T20:31:30Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "aa1fec82ee669f3df5c97e725fd96e88a5d6fc89",
+      "headRepository": "danwing/metadata",
+      "headRefName": "pref-alt-path",
+      "headRefOid": "307496ae05ca36264b64c3d3aeab0b5af8804391",
+      "closedAt": "2024-02-15T20:31:29Z",
+      "mergedAt": "2024-02-15T20:31:29Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "ecd6961e2b274691eb9cfdaec4db2ac7d359adb3"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOK0CwpM5nCsqv",
+      "title": "CDDL encoding",
+      "url": "https://github.com/danwing/metadata/pull/13",
+      "state": "OPEN",
+      "author": "danwing",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "First cut at using CDDL encoding\n\n",
+      "createdAt": "2024-02-16T02:28:28Z",
+      "updatedAt": "2024-02-17T04:23:39Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
+      "headRepository": "danwing/metadata",
+      "headRefName": "cddl",
+      "headRefOid": "4d9b88ff22db41ed4ec0483ce4a9906702bfaa1d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5wUaLr",
+          "commit": {
+            "abbreviatedOid": "4d9b88f"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks, Dan.",
+          "createdAt": "2024-02-16T06:35:07Z",
+          "updatedAt": "2024-02-16T07:46:42Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "```suggestion\r\n; true indicates high importance, while false indicates low importance\r\nimportance = bool\r\n```",
+              "createdAt": "2024-02-16T06:35:08Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 120,
+              "body": "```suggestion\r\n; Indicates a preference to keep a packet when set to true.\r\n; When set to false, the packet may be discarded under exceptional events\r\nprefer-keep = bool\r\n```",
+              "createdAt": "2024-02-16T07:20:13Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 146,
+              "body": "```suggestion\r\n; Have a meaning only for packets marked as reliable\r\n; Indicates realtime when set to true.\r\nrealtime = bool\r\n```",
+              "createdAt": "2024-02-16T07:29:24Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 86,
+              "body": "```suggestion\r\n; Packets can be tagged as reliable (true) or unreliable (false)\r\n; prefer-keep and realtime metadata signal other preferences\r\n; as a function of the reliability metadata \r\nreliable = {\r\n```",
+              "createdAt": "2024-02-16T07:37:30Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 87,
+              "body": "```suggestion\r\n  ( false,\r\n```",
+              "createdAt": "2024-02-16T07:37:39Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 89,
+              "body": "```suggestion\r\n  ( true,\r\n```",
+              "createdAt": "2024-02-16T07:37:47Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 120,
+              "body": "```suggestion\r\n; Have a meaning only for packets marked as unreliable \r\nprefer-keep = true / false\r\n```",
+              "createdAt": "2024-02-16T07:38:26Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 232,
+              "body": "```suggestion\r\n; Indicates whether a flow is to be offloaded to alternate\r\n; available paths.\r\npref-alt-path = true / false\r\n```",
+              "createdAt": "2024-02-16T07:44:33Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            },
+            {
+              "originalPosition": 182,
+              "body": "```suggestion\r\n; Provides information about the nominal downlink bitrate\r\n; Returning a value set to 0 (or a very low value) should trigger\r\n; the host to seek for better paths.\r\ndownlinkBitrate = {\r\n```",
+              "createdAt": "2024-02-16T07:46:26Z",
+              "updatedAt": "2024-02-16T07:46:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5wcSta",
+          "commit": {
+            "abbreviatedOid": "4d9b88f"
+          },
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-17T04:23:39Z",
+          "updatedAt": "2024-02-17T04:23:39Z",
+          "comments": [
+            {
+              "originalPosition": 189,
+              "body": "Maybe name them as following?\r\nburst-info = {\r\nbitrate: uint,      ;Mbps\r\nDuration: uint   ; milliseconds\r\n}",
+              "createdAt": "2024-02-17T04:23:39Z",
+              "updatedAt": "2024-02-17T04:23:39Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOK0CwpM5nDVmm",
+      "title": "update registry with altpath + authors list",
+      "url": "https://github.com/danwing/metadata/pull/14",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-16T06:23:15Z",
+      "updatedAt": "2024-02-16T06:23:15Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-3",
+      "headRefOid": "6a5792ac698409339bcfc9d7711a731f80386ed5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOK0CwpM5nDXNt",
+      "title": "have sconepro in the file name",
+      "url": "https://github.com/danwing/metadata/pull/15",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "for better visibility of this spec.",
+      "createdAt": "2024-02-16T06:30:08Z",
+      "updatedAt": "2024-02-16T10:00:16Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-4",
+      "headRefOid": "d56ccdbda7811d45ad1efe4b0c4a38b0e99f8bef",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOK0CwpM5nDxkZ",
+      "title": "within a flow clarification",
+      "url": "https://github.com/danwing/metadata/pull/16",
+      "state": "OPEN",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-16T08:07:02Z",
+      "updatedAt": "2024-02-16T08:07:02Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-5",
+      "headRefOid": "7333f9a8d5ff327a6538f5d923dace922c2857cc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
