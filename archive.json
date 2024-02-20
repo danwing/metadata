@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-18T01:18:03.492670+00:00",
+  "timestamp": "2024-02-20T01:12:43.627583+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -100,7 +100,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2024-02-14T09:56:35Z",
-      "updatedAt": "2024-02-17T04:41:40Z",
+      "updatedAt": "2024-02-19T13:59:59Z",
       "closedAt": null,
       "comments": [
         {
@@ -109,6 +109,13 @@
           "body": "I was thinking from another perspective. If the application tags the packets and the network applies appropriate routing/loss avoidance algorithms over the loss prone hop(s), using metadata can reduce the necessity for mechanisms like dual stream, right? This will also minimize end-to-end retransmissions.",
           "createdAt": "2024-02-17T04:41:38Z",
           "updatedAt": "2024-02-17T04:41:38Z"
+        },
+        {
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> using metadata can reduce the necessity for mechanisms like dual stream, right?\r\n\r\nYes. I would echo the arguments in the spec.\r\n\r\nGenerally, having explicit signal is superior to heuristic.",
+          "createdAt": "2024-02-19T13:59:58Z",
+          "updatedAt": "2024-02-19T13:59:58Z"
         }
       ]
     },
