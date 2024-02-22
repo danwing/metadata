@@ -305,9 +305,11 @@ Table of Contents
    by an application while the application can avoid sending that packet
    is application-specific.
 
-   prefer-keep = true / false
+; Indicates a preference to keep a packet when set to true.
+; When set to false, the packet may be discarded under exceptional events
+prefer-keep = bool
 
-                   Figure 3: CDDL Encoding of Prefer-Keep
+                Figure 3: CDDL Encoding of Prefer-Keep
 
 3.3.1.1.  Network Treatment
 
