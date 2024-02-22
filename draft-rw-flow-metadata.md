@@ -64,24 +64,46 @@ informative:
   LOSSY-QUIC: RFC9221
   RTP: RFC3550
   RELIABLE-RTP: RFC4588
+  SCONE:
+    title: SCONE Working Group Charter
+    target: https://github.com/mjoras/SCONE-PROTOCL
+    date: 2024-02-021
 
 
 --- abstract
 
-As part of host-to-network signaling, an entire flow can share the same set of
-metadata or certain packets of a flow can have specific metadata associated with those
-packets. Also, as part of network-to-host signaling, network metadata can be communicated
-to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
-the available network resources.
+This document defines per-flow and per-packet metadata for both
+network to host and host-to-network signaling in both binary format
+and JSON.  The common metadata definition allows interworking between
+signaling protocols with high fidelity. The metadata is also self-
+describing to improve interpretation by network elements and
+endpoints while reducing the need for version negotiation.
 
-This document describes the metadata exchanged in a companion
-host-to-network/network-to-host signaling protocol.  These metadata
-are intended to be applicable independent of the signaling protocol
-used between a host and a network.
 
 --- middle
 
 # Introduction
+
+Historically, metadata is defined within each protocol. While this can
+be very efficient on the wire (e.g., DSCP consumes only 6 bits) it
+suffers from inability to authorize or authenticate the metadata
+signaling. But the more signifcant problem is inability to interwork
+between signaling protocols because each have different definitions.
+Such interworking is often needed when the metadata signaling protocol
+for packets leaving a network differs from the metadata signaling
+protocol entering a different network. For example, important packets
+leaving a server and its network might be marked with DSCP (as the
+sending host is known and trusted) but the receiving network doesn't
+trust the DSCP bits in received packets because there is no
+authorization or authentication for differented treatment.
+
+By using the same metadata, both networks can communicate how packets
+should be treated and use their own signaling mechanism with their
+network elements (routers).
+
+
+
+<!--
 
 Host-to-network metadata signaling has historically been performed by
 the sender setting DSCP bits
@@ -98,12 +120,14 @@ setting the Explicit Congestion Notification (ECN) bit on packets {{?RFC3168}}. 
 the network's available bandwidth when the sending rate exceeds the network's
 available bandwidth, but are complicated for the receiver to determine the network's
 bandwidth policy rate in a timely manner.
+-->
 
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
 * IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}), or
+* SCONE {{SCONE}}, or
 * QUIC CID mapping ({{?I-D.wing-cidfi}}).
 
 An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
@@ -112,28 +136,32 @@ The metadata defined in this document is independent of the actual
 companion signaling protocol. In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols.  The
 metadata is described using {{!CDDL=RFC8610}} which can be expressed
-in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  It is
-out of scope of this document to define how the proposed encoding will
-be mapped to a specific signaling protocol.
+in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
+the JSON and CBOR encodings are self-describing.  It is out of scope
+of this document to define how the proposed encoding will be mapped to
+a specific signaling protocol.
 
+<!--
 Some applications use heuristics to determine rate-limiting policy. This document
 proposes an explicit approach that is meant to share more granular information
 so that these application adjusts their behavior in a timely manner (e.g., anticipate congestion).
+-->
 
-For host-to-network metadata, individual packets within a flow can
-contain metadata describing their drop preference or their
-reliability. The network elements aware of this metadata can apply
-preferential or deferential treatment to those packets during a
-'reactive traffic policy' event. It is also assumed that such network
-elements are provisioned with local policy that guides their behavior
-jointly with a signaled metadata. Examples of metadata signaling
-for video streaming and for remote desktop are provided in {{examples-h2n}}.
+For host-to-network metadata, if the signaling protocol supports it,
+individual packets within a flow can contain metadata describing their
+drop preference or their reliability. The network elements aware of
+this metadata can apply preferential or deferential treatment to those
+packets during a 'reactive traffic policy' event. It is also assumed
+that such network elements are provisioned with local policy that
+guides their behavior jointly with a signaled metadata. Examples of
+metadata signaling for video streaming and for remote desktop are
+provided in {{examples-h2n}}.
 
-For network-to-host metadata, the host can be informed, e.g., of the network
-bandwidth policy for the subscriber to receive streaming video. This
-policy can be used by video streaming applications on that host to
-choose video streams that fit within that policy.
-
+For network-to-host metadata the host can be informed of network
+policy for nominal downlink bandwidth.  Certain applications,
+such as most especially video streaming applications, can use
+that information to optimize their video streaming bandwidth to
+fit within that policy.
 
 
 # Conventions and Definitions
@@ -141,25 +169,26 @@ choose video streams that fit within that policy.
 {::boilerplate bcp14-tagged}
 
 Reactive policy:
-: Treatment given to a flow when an exceptional event occurs, such as diminished throughput to the host caused by radio interference or weak radio signal, congestion on the network caused by other users or other applications on the same host.
+: Treatment given to a flow when an exceptional event occurs, such as
+diminished throughput to the host caused by radio interference or weak
+radio signal, congestion on the network caused by other users or other
+applications on the same host.
 
 Intentional policy:
-: Configured bandwidth, pps, or similar throughput constraints applied to a flow, application, host, or subscriber.
+: Configured bandwidth, pps, or similar throughput constraints applied
+to a flow, application, host, or subscriber.
 
 # Host to Network Metadata
 
-Three bits are introduced. A network element desiring the simplest interpretation can use the bits as a
-3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less
-important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.
-Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.
+Three types of host-to-network metadata are introduced. A network element desiring the simplest interpretation can use the bits as a 3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.  Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.
 
 For more comprehensive interpretation, metadata is characterized into two different nature:
 
-* Network Metadata:
-    This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
+Network Metadata:
+: This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
 
-* Application Metadata:
-    This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.
+Application Metadata:
+: This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.
 
 ## Importance
 
@@ -175,7 +204,8 @@ with regards to resources usage compared to the absence of signal. An
 example of this interpretation is specified in {{examples-h2n}}.
 
 ~~~~~
-; true indicates high importance, while false indicates low importance
+; true indicates high importance
+; false indicates low importance
 importance = bool
 ~~~~~
 {: #cddl-importance title="CDDL Encoding of Importance"}
@@ -205,7 +235,7 @@ Reliable/Unreliable belongs to Application Metadata.
 ~~~~~
 ; Packets can be tagged as reliable (true) or unreliable (false)
 ; prefer-keep and realtime metadata signal other preferences
-; as a function of the reliability metadata 
+; as a function of the reliability metadata
 reliable = {
   ( false,
     prefer-keep ) /
@@ -246,8 +276,8 @@ The reasoning why a packet, marked as 'may-discard', is transmitted by an applic
 the application can avoid sending that packet is application-specific.
 
 ~~~~~
-; Indicates a preference to keep a packet when set to true.
-; When set to false, the packet may be discarded under exceptional events
+; When true, indicates a preference to keep a packet
+; When false, indicates packet may be discarded reactive policy
 prefer-keep = bool
 ~~~~~
 {: #cddl-prefer-keep title="CDDL Encoding of Prefer-Keep"}
@@ -263,11 +293,16 @@ During a reactive policy event, dropping 'may-discard' packets is preferred over
 For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.
 
 ~~~~~
-; Have a meaning only for packets marked as reliable
-; Indicates realtime when set to true.
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
 realtime = bool
 ~~~~~
 {: #cddl-realtime title="CDDL Encoding of Realtime"}
+
+An application such as a web browser might mark certain flows as realtime (e.g., the flow is
+related to dynamically updating a search box and quick responses help the user experience)
+and other flows as bulk (e.g., file download, file upload).
 
 #### Network Treatment
 
@@ -337,7 +372,7 @@ The 'pref-alt-path' metadata may be sent together with the bitrate metadata set 
 ~~~~~
 ; Indicates whether a flow is to be offloaded to alternate
 ; available paths.
-pref-alt-path = true / false
+pref-alt-path = bool
 ~~~~~
 {: #cddl-pref-alt-path title="CDDL Encoding of pref-alt-path"}
 
