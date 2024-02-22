@@ -260,7 +260,9 @@ During a reactive policy event, dropping 'may-discard' packets is preferred over
 For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.
 
 ~~~~~
-realtime = true / false
+; Have a meaning only for packets marked as reliable
+; Indicates realtime when set to true.
+realtime = bool
 ~~~~~
 {: #cddl-realtime title="CDDL Encoding of Realtime"}
 
