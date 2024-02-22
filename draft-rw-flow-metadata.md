@@ -207,7 +207,7 @@ Reliable/Unreliable belongs to Application Metadata.
 ; prefer-keep and realtime metadata signal other preferences
 ; as a function of the reliability metadata 
 reliable = {
-  ( true,
+  ( false,
     prefer-keep ) /
   ( false,
     realtime )
