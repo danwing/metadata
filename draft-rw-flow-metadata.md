@@ -332,6 +332,8 @@ with pref-alt-path=false.
 The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
 
 ~~~~~
+; Indicates whether a flow is to be offloaded to alternate
+; available paths.
 pref-alt-path = true / false
 ~~~~~
 {: #cddl-pref-alt-path title="CDDL Encoding of pref-alt-path"}
