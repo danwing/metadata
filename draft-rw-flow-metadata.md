@@ -209,7 +209,7 @@ Reliable/Unreliable belongs to Application Metadata.
 reliable = {
   ( false,
     prefer-keep ) /
-  ( false,
+  ( true,
     realtime )
 }
 ~~~~~
