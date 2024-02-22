@@ -203,6 +203,9 @@ reduce the amount of transmitted data in a network; it only defers when it appea
 Reliable/Unreliable belongs to Application Metadata.
 
 ~~~~~
+; Packets can be tagged as reliable (true) or unreliable (false)
+; prefer-keep and realtime metadata signal other preferences
+; as a function of the reliability metadata 
 reliable = {
   ( true,
     prefer-keep ) /
