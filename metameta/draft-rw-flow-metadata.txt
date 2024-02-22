@@ -5,7 +5,9 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 25 August 2024                                 22 February 2024
+Expires: 25 August 2024                                     M. Boucadair
+                                                                  Orange
+                                                        22 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -482,10 +484,17 @@ Table of Contents
    |          |                   |discard     |               |       |
    |          |                   |preference  |               |       |
    +----------+-------------------+------------+---------------+-------+
-   |    0     |  DownlinkBitrate  |Specifies   | This-Document |  1.0  |
+   |    4     |  DownlinkBitrate  |Specifies   | This-Document |  1.0  |
    |          |                   |the maximum |               |       |
    |          |                   |downlink    |               |       |
    |          |                   |bitrate     |               |       |
+   +----------+-------------------+------------+---------------+-------+
+   |    5     |   PreferAltPath   |Sollicits   | This-Document |  1.0  |
+   |          |                   |the hosts   |               |       |
+   |          |                   |to use an   |               |       |
+   |          |                   |alternate   |               |       |
+   |          |                   |path if     |               |       |
+   |          |                   |available   |               |       |
    +----------+-------------------+------------+---------------+-------+
 
                           Table 1: Initial Values
@@ -1122,3 +1131,9 @@ Authors' Addresses
    Cloud Software Group Holdings, Inc.
    United States of America
    Email: danwing@gmail.com
+
+
+   Mohamed Boucadair
+   Orange
+   France
+   Email: mohamed.boucadair@orange.com

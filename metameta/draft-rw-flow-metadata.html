@@ -7,6 +7,7 @@
 <title>Flow Metadata for Collaborative Host/Network Signaling</title>
 <meta content="Sridharan Rajagopalan" name="author">
 <meta content="Dan Wing" name="author">
+<meta content="Mohamed Boucadair" name="author">
 <meta content="
        This document defines per-flow and per-packet metadata for both
 network to host and host-to-network signaling in both binary format
@@ -1047,7 +1048,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <td class="right">February 2024</td>
 </tr></thead>
 <tfoot><tr>
-<td class="left">Rajagopalan &amp; Wing</td>
+<td class="left">Rajagopalan, et al.</td>
 <td class="center">Expires 25 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
@@ -1076,6 +1077,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <div class="author">
       <div class="author-name">D. Wing</div>
 <div class="org">Cloud Software Group</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Boucadair</div>
+<div class="org">Orange</div>
 </div>
 </dd>
 </dl>
@@ -1790,9 +1795,16 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
               <td class="text-center" rowspan="1" colspan="1">1.0</td>
             </tr>
             <tr>
-              <td class="text-center" rowspan="1" colspan="1">0</td>
+              <td class="text-center" rowspan="1" colspan="1">4</td>
               <td class="text-center" rowspan="1" colspan="1">DownlinkBitrate</td>
               <td class="text-left" rowspan="1" colspan="1">Specifies the maximum downlink bitrate</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">5</td>
+              <td class="text-center" rowspan="1" colspan="1">PreferAltPath</td>
+              <td class="text-left" rowspan="1" colspan="1">Sollicits the hosts to use an alternate path if available</td>
               <td class="text-center" rowspan="1" colspan="1">This-Document</td>
               <td class="text-center" rowspan="1" colspan="1">1.0</td>
             </tr>
@@ -2553,6 +2565,15 @@ user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:danwing@gmail.com" class="email">danwing@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mohamed Boucadair</span></div>
+<div dir="auto" class="left"><span class="org">Orange</span></div>
+<div dir="auto" class="left"><span class="country-name">France</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mohamed.boucadair@orange.com" class="email">mohamed.boucadair@orange.com</a>
 </div>
 </address>
 </section>
