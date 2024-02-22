@@ -444,6 +444,8 @@ Comprehensive Interpretation:
 | audio                                    | high       | realtime          | reliable             |
 {: #table-video-streaming-ci title="Example Values for Video Streaming Metadata - Comprehensive Interpretation"}
 
+In the following, "Simple Interpretation" associates a bit with each of the properties listed in {{table-video-streaming-ci}}.
+
 Simple Interpretation:
 
 | Traffic type      | Simple Interpretation |
@@ -601,18 +603,19 @@ traffic but a different application.
 A network element can signal the maximum bandwidth allowed for video streaming. Typically,
 this policy limit exists in cellular networks.
 
-The example below indicates the burst bandwidth (2Mbps), burst duration
-(3 seconds), and nominal (non-burst) bandwidth (1Mbps) for the requesting
+The example shown in {{ex-video-bitrate}} indicates the burst bandwidth (2 Mbps), burst duration
+(3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
 user:
 
 ~~~~~
 {
-  "videoStreamingBandwidth": {
+  "downlinkBitrate": {
+    "nominal": 1024,
     "burst": 2048,
-    "burstDuration": 3000,
-    "nominal": 1024
+    "burstDuration": 3000
   }
 }
 ~~~~~
+{: #ex-video-bitrate title="Example of Network-to-Host Metadata for Video Streaming"}
 
 
