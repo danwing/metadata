@@ -131,9 +131,13 @@ for video streaming and for remote desktop are provided in {{examples-h2n}}.
 
 For network-to-host metadata, the host can be informed, e.g., of the network
 bandwidth policy for the subscriber to receive streaming video. This
-policy can be used by video streaming applications on that host to
+policy can be used, e.g., by video streaming applications on that host to
 choose video streams that fit within that policy.
 
+The application metadata defined in this document primary target signals
+that are meant to soften implications of reactive policies. Also, these
+metadata provide hints to guide the enforcement of those policies on **packets within a flow, not between
+distinct flows or applications**.
 
 
 # Conventions and Definitions
