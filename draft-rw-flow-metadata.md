@@ -293,6 +293,9 @@ as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
 ~~~~~
+; Provides information about the nominal downlink bitrate
+; Returning a value set to 0 (or a very low value) should trigger
+; the host to seek for better paths.
 downlinkBitrate = {
   nominal: uint,        ; Mbps
   ? burst-info
