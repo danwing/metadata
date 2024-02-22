@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-20T01:12:43.627583+00:00",
+  "timestamp": "2024-02-22T01:13:28.114330+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "I_kwDOK0CwpM5_MZU2",
       "title": "Encoding",
       "url": "https://github.com/danwing/metadata/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "I really like that there are only very few metadata in the document. \r\n\r\nI would suggest that the encoding part is separated from the actual definition of the metadata (moved to an appendix). The 3-bit proposal can be listed as an implementation example, but I don't think that actually matters.",
       "createdAt": "2024-02-14T09:55:56Z",
-      "updatedAt": "2024-02-15T20:30:08Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-22T01:05:00Z",
+      "closedAt": "2024-02-22T01:05:00Z",
       "comments": [
         {
           "author": "sridharangirish91",
@@ -414,24 +414,26 @@
       "id": "PR_kwDOK0CwpM5nCsqv",
       "title": "CDDL encoding",
       "url": "https://github.com/danwing/metadata/pull/13",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "danwing",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "First cut at using CDDL encoding\n\n",
       "createdAt": "2024-02-16T02:28:28Z",
-      "updatedAt": "2024-02-17T04:23:39Z",
+      "updatedAt": "2024-02-22T01:04:59Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
       "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
       "headRepository": "danwing/metadata",
       "headRefName": "cddl",
-      "headRefOid": "4d9b88ff22db41ed4ec0483ce4a9906702bfaa1d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "af292573df374655c996bfd812d3f30471d6a7c8",
+      "closedAt": "2024-02-22T01:04:59Z",
+      "mergedAt": "2024-02-22T01:04:59Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "fd929cb6c2afe0054bce4088c076427e4d807e17"
+      },
       "comments": [],
       "reviews": [
         {
