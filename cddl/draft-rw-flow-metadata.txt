@@ -5,7 +5,7 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 19 August 2024                                 16 February 2024
+Expires: 25 August 2024                                 22 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 August 2024.
+   This Internet-Draft will expire on 25 August 2024.
 
 Copyright Notice
 
@@ -229,9 +229,10 @@ Table of Contents
    of signal.  An example of this interpretation is specified in
    Appendix A.
 
-   importance = true / false
+  ; true indicates high importance, while false indicates low importance
+  importance = bool
 
-                   Figure 1: CDDL Encoding of Importance
+                  Figure 1: CDDL Encoding of Importance
 
 3.1.1.  Network Treatment
 
