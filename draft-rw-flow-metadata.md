@@ -57,7 +57,11 @@ author:
     abbrev: Cloud Software Group
     country: United States of America
     email: ["danwing@gmail.com"]
-
+ -
+    fullname: Mohamed Boucadair
+    organization: Orange
+    country: France
+    email: mohamed.boucadair@orange.com
 
 informative:
   QUIC: RFC9000
@@ -145,6 +149,11 @@ a specific signaling protocol.
 Some applications use heuristics to determine rate-limiting policy. This document
 proposes an explicit approach that is meant to share more granular information
 so that these application adjusts their behavior in a timely manner (e.g., anticipate congestion).
+
+The application metadata defined in this document primary target signals
+that are meant to soften implications of reactive policies. Also, these
+metadata provide hints to guide the enforcement of those policies on **packets within a flow, not between
+distinct flows or applications**.
 -->
 
 For host-to-network metadata, if the signaling protocol supports it,
@@ -162,7 +171,6 @@ policy for nominal downlink bandwidth.  Certain applications,
 such as most especially video streaming applications, can use
 that information to optimize their video streaming bandwidth to
 fit within that policy.
-
 
 # Conventions and Definitions
 
@@ -431,7 +439,8 @@ The initial values of the registry are listed in {{initial-reg}}.
 | 1          | Importance        | Indicates the level of importance of a packet in a flow            | This-Document | 1.0     |
 | 2          | PacketNature      | Indicates whether a packet is reliably or unreliably transmitted   | This-Document | 1.0     |
 | 3          | DiscardPreference | Indicates a discard preference         | This-Document | 1.0     |
-| 0          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
+| 4          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
+| 5          | PreferAltPath     | Sollicits the hosts to use an alternate path if available       | This-Document | 1.0     |
 {: #initial-reg title="Initial Values"}
 
 New entries can be added to the registery using "Standards Action" policy ({{Section 4.9 of !RFC8126}}.
