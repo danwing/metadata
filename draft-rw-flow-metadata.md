@@ -243,7 +243,9 @@ The reasoning why a packet, marked as 'may-discard', is transmitted by an applic
 the application can avoid sending that packet is application-specific.
 
 ~~~~~
-prefer-keep = true / false
+; Indicates a preference to keep a packet when set to true.
+; When set to false, the packet may be discarded under exceptional events
+prefer-keep = bool
 ~~~~~
 {: #cddl-prefer-keep title="CDDL Encoding of Prefer-Keep"}
 
