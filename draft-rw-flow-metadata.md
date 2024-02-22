@@ -175,7 +175,8 @@ with regards to resources usage compared to the absence of signal. An
 example of this interpretation is specified in {{examples-h2n}}.
 
 ~~~~~
-importance = true / false
+; true indicates high importance, while false indicates low importance
+importance = bool
 ~~~~~
 {: #cddl-importance title="CDDL Encoding of Importance"}
 
