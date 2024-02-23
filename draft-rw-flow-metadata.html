@@ -9,15 +9,12 @@
 <meta content="Dan Wing" name="author">
 <meta content="Mohamed Boucadair" name="author">
 <meta content="
-       As part of host-to-network signaling, an entire flow can share the same set of
-metadata or certain packets of a flow can have specific metadata associated with those
-packets. Also, as part of network-to-host signaling, network metadata can be communicated
-to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
-the available network resources. 
-       This document describes the metadata exchanged in a companion
-host-to-network/network-to-host signaling protocol.  These metadata
-are intended to be applicable independent of the signaling protocol
-used between a host and a network. 
+       This document defines per-flow and per-packet metadata for both
+network to host and host to network signaling in CDDL which
+expresses both CBOR and JSON.  The common metadata definition allows interworking between
+signaling protocols with high fidelity. The metadata is also self-
+describing to improve interpretation by network elements and
+endpoints while reducing the need for version negotiation. 
     " name="description">
 <meta content="xml2rfc 3.19.4" name="generator">
 <meta content="user experience" name="keyword">
@@ -1091,15 +1088,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Flow Metadata for Collaborative Host/Network Signaling</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">As part of host-to-network signaling, an entire flow can share the same set of
-metadata or certain packets of a flow can have specific metadata associated with those
-packets. Also, as part of network-to-host signaling, network metadata can be communicated
-to a host, allowing the host to modulate its behavior (e.g., requested CODECs) to conform to
-the available network resources.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This document describes the metadata exchanged in a companion
-host-to-network/network-to-host signaling protocol.  These metadata
-are intended to be applicable independent of the signaling protocol
-used between a host and a network.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines per-flow and per-packet metadata for both
+network to host and host to network signaling in CDDL which
+expresses both CBOR and JSON.  The common metadata definition allows interworking between
+signaling protocols with high fidelity. The metadata is also self-
+describing to improve interpretation by network elements and
+endpoints while reducing the need for version negotiation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1294,20 +1288,21 @@ used between a host and a network.<a href="#section-abstract-2" class="pilcrow">
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Host-to-network metadata signaling has historically been performed by
-the sender setting DSCP bits
-(e.g., <span>[<a href="#RFC2475" class="cite xref">RFC2475</a>]</span>, <span>[<a href="#RFC7657" class="cite xref">RFC7657</a>]</span>, and <span>[<a href="#RFC8837" class="cite xref">RFC8837</a>]</span>). While DSCP can express
-high priority (Expedited Forwarding (EF) <span>[<a href="#RFC3246" class="cite xref">RFC3246</a>]</span>) and low priority
-(Lower-Effort Per-Hop Behavior (LE PHB) <span>[<a href="#RFC8622" class="cite xref">RFC8622</a>]</span>), DSCP bits are frequently ignored at
-congestion points or lost (stripped) while forwarded across the Internet.
-See <span><a href="https://rfc-editor.org/rfc/rfc9435#section-4" class="relref">Section 4</a> of [<a href="#RFC9435" class="cite xref">RFC9435</a>]</span> for a detailed overview of observed DSCP re-marking behaviors.
-Also, DSCP attempts to influence the packet's treatment compared to
-all other packets from other hosts.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Network-to-host metadata signaling has historically been performed by dropping packets or
-setting the Explicit Congestion Notification (ECN) bit on packets <span>[<a href="#RFC3168" class="cite xref">RFC3168</a>]</span>.  Both of these techniques work well to consume
-the network's available bandwidth when the sending rate exceeds the network's
-available bandwidth, but are complicated for the receiver to determine the network's
-bandwidth policy rate in a timely manner.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">Historically, metadata is defined within each protocol. While this can
+be very efficient on the wire (e.g., DSCP consumes only 6 bits) it
+suffers from inability to authorize or authenticate the metadata
+signaling. But the more signifcant problem is inability to interwork
+between signaling protocols because each have different definitions.
+Such interworking is often needed when the metadata signaling protocol
+for packets leaving a network differs from the metadata signaling
+protocol entering a different network. For example, important packets
+leaving a server and its network might be marked with DSCP (as the
+sending host is known and trusted) but the receiving network doesn't
+trust the DSCP bits in received packets because there is no
+authorization or authentication for differented treatment.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">By using the same metadata, both networks can communicate how packets
+should be treated and use their own signaling mechanism with their
+network elements (e.g., routers, <span>[<a href="#MASQUE" class="cite xref">MASQUE</a>]</span> proxies).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1315,10 +1310,13 @@ document is a companion to host-to-network signaling the metadata itself, such a
           <p id="section-1-4.1.1">UDP Options (e.g., <span>[<a href="#I-D.kaippallimalil-tsvwg-media-hdr-wireless" class="cite xref">I-D.kaippallimalil-tsvwg-media-hdr-wireless</a>]</span>, <span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>),<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.2">
-          <p id="section-1-4.2.1">IPv6 Hop-by-Hop Options (<span><a href="https://rfc-editor.org/rfc/rfc8200#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>), or<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.2.1">IPv6 Hop-by-Hop Options (<span><a href="https://rfc-editor.org/rfc/rfc8200#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>),<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.3">
-          <p id="section-1-4.3.1">QUIC CID mapping (<span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>).<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.3.1">SCONE <span>[<a href="#SCONE" class="cite xref">SCONE</a>]</span>, or<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.4">
+          <p id="section-1-4.4.1">QUIC CID mapping (<span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>).<a href="#section-1-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-1-5">An analysis of most of those metadata signaling mechanisms is at <span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
@@ -1326,28 +1324,24 @@ document is a companion to host-to-network signaling the metadata itself, such a
 companion signaling protocol. In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols.  The
 metadata is described using <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
-in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  It is
-out of scope of this document to define how the proposed encoding will
-be mapped to a specific signaling protocol.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">Some applications use heuristics to determine rate-limiting policy. This document
-proposes an explicit approach that is meant to share more granular information
-so that these application adjusts their behavior in a timely manner (e.g., anticipate congestion).<a href="#section-1-7" class="pilcrow">¶</a></p>
-<p id="section-1-8">For host-to-network metadata, individual packets within a flow can
-contain metadata describing their drop preference or their
-reliability. The network elements aware of this metadata can apply
-preferential or deferential treatment to those packets during a
-'reactive traffic policy' event. It is also assumed that such network
-elements are provisioned with local policy that guides their behavior
-jointly with a signaled metadata. Examples of metadata signaling
-for video streaming and for remote desktop are provided in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-1-8" class="pilcrow">¶</a></p>
-<p id="section-1-9">For network-to-host metadata, the host can be informed, e.g., of the network
-bandwidth policy for the subscriber to receive streaming video. This
-policy can be used, e.g., by video streaming applications on that host to
-choose video streams that fit within that policy.<a href="#section-1-9" class="pilcrow">¶</a></p>
-<p id="section-1-10">The application metadata defined in this document primary target signals
-that are meant to soften implications of reactive policies. Also, these
-metadata provide hints to guide the enforcement of those policies on <strong>packets within a flow, not between
-distinct flows or applications</strong>.<a href="#section-1-10" class="pilcrow">¶</a></p>
+in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  Both
+the JSON and CBOR encodings are self-describing.  It is out of scope
+of this document to define how the proposed encoding will be mapped to
+a specific signaling protocol.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">For host-to-network metadata, if the signaling protocol supports it,
+individual packets within a flow can contain metadata describing their
+drop preference or their reliability. The network elements aware of
+this metadata can apply preferential or deferential treatment to those
+packets during a 'reactive traffic policy' event. It is also assumed
+that such network elements are provisioned with local policy that
+guides their behavior jointly with a signaled metadata. Examples of
+metadata signaling for video streaming and for remote desktop are
+provided in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">For network-to-host metadata the host can be informed of network
+policy for nominal downlink bandwidth.  Certain applications,
+such as most especially video streaming applications, can use
+that information to optimize their video streaming bandwidth to
+fit within that policy.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1362,12 +1356,16 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <span class="break"></span><dl class="dlParallel" id="section-2-2">
         <dt id="section-2-2.1">Reactive policy:</dt>
         <dd style="margin-left: 1.5em" id="section-2-2.2">
-          <p id="section-2-2.2.1">Treatment given to a flow when an exceptional event occurs, such as diminished throughput to the host caused by radio interference or weak radio signal, congestion on the network caused by other users or other applications on the same host.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-2-2.2.1">Treatment given to a flow when an exceptional event occurs, such as
+diminished throughput to the host caused by radio interference or weak
+radio signal, congestion on the network caused by other users or other
+applications on the same host.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-2.3">Intentional policy:</dt>
         <dd style="margin-left: 1.5em" id="section-2-2.4">
-          <p id="section-2-2.4.1">Configured bandwidth, pps, or similar throughput constraints applied to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-2-2.4.1">Configured bandwidth, pps, or similar throughput constraints applied
+to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1378,21 +1376,20 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-host-to-network-metadata">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-host-to-network-metadata" class="section-name selfRef">Host to Network Metadata</a>
       </h2>
-<p id="section-3-1">Three bits are introduced. A network element desiring the simplest interpretation can use the bits as a
-3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less
-important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.
-Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">Three types of host-to-network metadata are introduced. A network element desiring the simplest interpretation can use the bits as a 3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.  Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">For more comprehensive interpretation, metadata is characterized into two different nature:<a href="#section-3-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-3.1">
-          <p id="section-3-3.1.1">Network Metadata:
-  This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.<a href="#section-3-3.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-3-3.2">
-          <p id="section-3-3.2.1">Application Metadata:
-  This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
+<span class="break"></span><dl class="dlParallel" id="section-3-3">
+        <dt id="section-3-3.1">Network Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-3.2">
+          <p id="section-3-3.2.1">This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-3.3">Application Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-3.4">
+          <p id="section-3-3.4.1">This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.<a href="#section-3-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
 <div id="importance">
 <section id="section-3.1">
         <h3 id="name-importance">
@@ -1411,7 +1408,8 @@ example of this interpretation is specified in <a href="#examples-h2n" class="au
 <figure id="figure-1">
           <div class="alignLeft art-text artwork" id="section-3.1-3.1">
 <pre>
-; true indicates high importance, while false indicates low importance
+; true indicates high importance
+; false indicates low importance
 importance = bool
 </pre>
 </div>
@@ -1509,8 +1507,8 @@ the application can avoid sending that packet is application-specific.<a href="#
 <figure id="figure-3">
             <div class="alignLeft art-text artwork" id="section-3.3.1-5.1">
 <pre>
-; Indicates a preference to keep a packet when set to true.
-; When set to false, the packet may be discarded under exceptional events
+; When true, indicates a preference to keep a packet
+; When false, indicates packet may be discarded reactive policy
 prefer-keep = bool
 </pre>
 </div>
@@ -1539,8 +1537,9 @@ prefer-keep = bool
 <figure id="figure-4">
             <div class="alignLeft art-text artwork" id="section-3.3.2-2.1">
 <pre>
-; Have a meaning only for packets marked as reliable
-; Indicates realtime when set to true.
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
 realtime = bool
 </pre>
 </div>
@@ -1548,6 +1547,9 @@ realtime = bool
 <a href="#name-cddl-encoding-of-realtime" class="selfRef">CDDL Encoding of Realtime</a>
             </figcaption></figure>
 </div>
+<p id="section-3.3.2-3">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
+related to dynamically updating a search box and quick responses help the user experience)
+and other flows as bulk (e.g., file download, file upload).<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
 <div id="network-treatment-3">
 <section id="section-3.3.2.1">
             <h5 id="name-network-treatment-4">
@@ -1645,7 +1647,7 @@ with pref-alt-path=false.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <pre>
 ; Indicates whether a flow is to be offloaded to alternate
 ; available paths.
-pref-alt-path = true / false
+pref-alt-path = bool
 </pre>
 </div>
 <figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
@@ -1885,6 +1887,10 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"An Unreliable Datagram Extension to QUIC"</span>, <span class="seriesInfo">RFC 9221</span>, <span class="seriesInfo">DOI 10.17487/RFC9221</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9221">https://www.rfc-editor.org/rfc/rfc9221</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="MASQUE">[MASQUE]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Rosenberg, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"QUIC-Aware Proxying Using HTTP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-masque-quic-proxy-01</span>, <time datetime="2024-02-12" class="refDate">12 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-01">https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="QUIC">[QUIC]</dt>
         <dd>
 <span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
@@ -1934,8 +1940,12 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
 <span class="refAuthor">Custura, A.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">R. Secchi</span>, <span class="refTitle">"Considerations for Assigning a New Recommended Differentiated Services Code Point (DSCP)"</span>, <span class="seriesInfo">RFC 9435</span>, <span class="seriesInfo">DOI 10.17487/RFC9435</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9435">https://www.rfc-editor.org/rfc/rfc9435</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RTP">[RTP]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Casner, S.</span>, <span class="refAuthor">Frederick, R.</span>, and <span class="refAuthor">V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3550">https://www.rfc-editor.org/rfc/rfc3550</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCONE">[SCONE]</dt>
+      <dd>
+<span class="refTitle">"SCONE Working Group Charter"</span>, <span>&lt;<a href="https://github.com/mjoras/SCONE-PROTOCL">https://github.com/mjoras/SCONE-PROTOCL</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
