@@ -1384,17 +1384,16 @@ to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pi
       <h2 id="name-host-to-network-metadata">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-host-to-network-metadata" class="section-name selfRef">Host to Network Metadata</a>
       </h2>
-<p id="section-3-1">Three types of host-to-network metadata are introduced. A network element desiring the simplest interpretation can use the bits as a 3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.  Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">For more comprehensive interpretation, metadata is characterized into two different nature:<a href="#section-3-2" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-3-3">
-        <dt id="section-3-3.1">Network Metadata:</dt>
-        <dd style="margin-left: 1.5em" id="section-3-3.2">
-          <p id="section-3-3.2.1">This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
+<p id="section-3-1">For more comprehensive interpretation, metadata is characterized into two different nature:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3-2">
+        <dt id="section-3-2.1">Network Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-2.2">
+          <p id="section-3-2.2.1">This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-3-3.3">Application Metadata:</dt>
-        <dd style="margin-left: 1.5em" id="section-3-3.4">
-          <p id="section-3-3.4.1">This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.<a href="#section-3-3.4.1" class="pilcrow">¶</a></p>
+<dt id="section-3-2.3">Application Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-2.4">
+          <p id="section-3-2.4.1">This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -1414,12 +1413,24 @@ metadata = {
 ; Application Metadata
 
 $$metadata-extensions //= (
+; true indicates packet of high importance
+; false indicates packet of low importance
   importance: bool,
+; Packets can be tagged as reliable (true) or unreliable (false)
   reliable: bool,
+; Packets can be tagged as preference to keep (true) or discard (false)
   prefer-keep: bool
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
+  realtime: bool
 )
 
 ; Network Metadata
+
+; Provides information about the nominal downlink bitrate
+; Returning a value set to 0 (or a very low value) should trigger
+; the host to seek for better paths.
 
 Bitrate =  {
   nominal: uint,  ; Mbps
@@ -1432,7 +1443,10 @@ burst-info = {
 }
 
 $$metadata-extensions //= (
-   ? downlinkBitrate =&gt; Bitrate
+   ? downlinkBitrate =&gt; Bitrate,
+; Indicates whether a flow is to be offloaded to alternate
+; available paths.
+   pref-alt-path: bool
 )
 
 downlinkBitrate = "downlinkBitrate"
@@ -1456,19 +1470,6 @@ unmarked packets or to packets marked important=false (of the same
 flow). This tagging does not provide more privileges to an application
 with regards to resources usage compared to the absence of signal. An
 example of this interpretation is specified in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-importance"></span><div id="cddl-importance">
-<figure id="figure-1">
-          <div class="alignLeft art-text artwork" id="section-3.2-3.1">
-<pre>
-; true indicates high importance
-; false indicates low importance
-importance = bool
-</pre>
-</div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-cddl-encoding-of-importance" class="selfRef">CDDL Encoding of Importance</a>
-          </figcaption></figure>
-</div>
 <div id="network-treatment">
 <section id="section-3.2.1">
           <h4 id="name-network-treatment">
@@ -1486,7 +1487,7 @@ importance=true, for the same flow.<a href="#section-3.2.1-1" class="pilcrow">¶
         <h3 id="name-reliable-unreliable">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
         </h3>
-<p id="section-3.3-1">The "Reliable" metadata indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">The "Reliable" metadata indicates if a packet is reliably transmitted by the host.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.3-2.1">
             <p id="section-3.3-2.1.1">Reliable packets are re-transmitted by the underlying transport
@@ -1497,29 +1498,8 @@ importance=true, for the same flow.<a href="#section-3.2.1-1" class="pilcrow">¶
 (e.g., UDP, <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>, <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>) and also not re-transmitted by the application (e.g., <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>).<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by
-the sender application, appearing on the network again. Thus, delaying or discarding such packets does not
-reduce the amount of transmitted data in a network; it only defers when it appears on the network.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by the sender application, appearing on the network again. Thus, delaying or discarding such packets does not reduce the amount of transmitted data in a network; it only defers when it appears on the network.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">Reliable/Unreliable belongs to Application Metadata.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-reliable"></span><div id="cddl-reliable">
-<figure id="figure-2">
-          <div class="alignLeft art-text artwork" id="section-3.3-5.1">
-<pre>
-; Packets can be tagged as reliable (true) or unreliable (false)
-; prefer-keep and realtime metadata signal other preferences
-; as a function of the reliability metadata
-reliable = {
-  ( false,
-    prefer-keep ) /
-  ( true,
-    realtime )
-}
-</pre>
-</div>
-<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-cddl-encoding-of-reliable" class="selfRef">CDDL Encoding of Reliable</a>
-          </figcaption></figure>
-</div>
 <div id="network-treatment-1">
 <section id="section-3.3.1">
           <h4 id="name-network-treatment-2">
@@ -1543,7 +1523,7 @@ only defers it until later, but this deferral can be useful.<a href="#section-3.
           <h4 id="name-unreliable-traffic">
 <a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-unreliable-traffic" class="section-name selfRef">Unreliable Traffic</a>
           </h4>
-<p id="section-3.4.1-1">Packets are marked as 'may-discard' or 'prefer-keep'.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-1">Packets are marked with 'prefer-keep' set to either true or false. When set to true, it indicates a preference to keep the packet. Conversely, when set to false, it signals that the packet may be subject to discard based on a reactive policy.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.4.1-2">Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
 Rather, applications send everything over a reliable transport (TCP or QUIC) and leave it
@@ -1553,28 +1533,15 @@ at that, as evidenced by video streaming using TCP.<a href="#section-3.4.1-2" cl
 host-to-network metadata signaling, the network can become an active assistant in such
 flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
 traffic at the expense of the less-important 'may-discard' traffic.<a href="#section-3.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.4.1-4">The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
-the application can avoid sending that packet is application-specific.<a href="#section-3.4.1-4" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-prefer-kee"></span><div id="cddl-prefer-keep">
-<figure id="figure-3">
-            <div class="alignLeft art-text artwork" id="section-3.4.1-5.1">
-<pre>
-; When true, indicates a preference to keep a packet
-; When false, indicates packet may be discarded reactive policy
-prefer-keep = bool
-</pre>
-</div>
-<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
-<a href="#name-cddl-encoding-of-prefer-kee" class="selfRef">CDDL Encoding of Prefer-Keep</a>
-            </figcaption></figure>
-</div>
+<p id="section-3.4.1-4">The reason why an application transmits a packet marked as 'prefer-keep' set to false, when the
+application has the capability to avoid sending that packet, is application-specific.<a href="#section-3.4.1-4" class="pilcrow">¶</a></p>
 <div id="network-treatment-2">
 <section id="section-3.4.1.1">
             <h5 id="name-network-treatment-3">
 <a href="#section-3.4.1.1" class="section-number selfRef">3.4.1.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
             </h5>
-<p id="section-3.4.1.1-1">During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
-'prefer-keep' packets.<a href="#section-3.4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1.1-1">During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred
+over dropping 'prefer-keep' set to true packets.<a href="#section-3.4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1584,24 +1551,10 @@ prefer-keep = bool
           <h4 id="name-reliable-traffic">
 <a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-reliable-traffic" class="section-name selfRef">Reliable Traffic</a>
           </h4>
-<p id="section-3.4.2-1">For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-realtime"></span><div id="cddl-realtime">
-<figure id="figure-4">
-            <div class="alignLeft art-text artwork" id="section-3.4.2-2.1">
-<pre>
-; Has a meaning only for packets marked as reliable
-; True indicates realtime
-; False indicates bulk (non-realtime)
-realtime = bool
-</pre>
-</div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-cddl-encoding-of-realtime" class="selfRef">CDDL Encoding of Realtime</a>
-            </figcaption></figure>
-</div>
-<p id="section-3.4.2-3">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
+<p id="section-3.4.2-1">For reliable traffic, "realtime" metadata indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-2">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
 related to dynamically updating a search box and quick responses help the user experience)
-and other flows as bulk (e.g., file download, file upload).<a href="#section-3.4.2-3" class="pilcrow">¶</a></p>
+and other flows as bulk (e.g., file download, file upload).<a href="#section-3.4.2-2" class="pilcrow">¶</a></p>
 <div id="network-treatment-3">
 <section id="section-3.4.2.1">
             <h5 id="name-network-treatment-4">
@@ -1637,28 +1590,6 @@ bitrate is calculated over the signaled interval (burst-duration).
 For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-downlink-b"></span><div id="cddl-downlink">
-<figure id="figure-5">
-          <div class="alignLeft art-text artwork" id="section-4.1-4.1">
-<pre>
-; Provides information about the nominal downlink bitrate
-; Returning a value set to 0 (or a very low value) should trigger
-; the host to seek for better paths.
-downlinkBitrate = {
-  nominal: uint,        ; Mbps
-  ? burst-info
-}
-
-burst-info = {
-  burst: uint,          ; Mbps
-  burstDuration: uint   ; milliseconds
-}
-</pre>
-</div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-cddl-encoding-of-downlink-b" class="selfRef">CDDL Encoding of Downlink Bitrate</a>
-          </figcaption></figure>
-</div>
 <div id="units">
 <section id="section-4.1.1">
           <h4 id="name-units">
@@ -1693,19 +1624,6 @@ paths, if available. An alternate path is typically an alternate network
 attachment.  After the crisis has subsided, the network should signal
 with pref-alt-path=false.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<span id="name-cddl-encoding-of-pref-alt-p"></span><div id="cddl-pref-alt-path">
-<figure id="figure-6">
-          <div class="alignLeft art-text artwork" id="section-4.2-3.1">
-<pre>
-; Indicates whether a flow is to be offloaded to alternate
-; available paths.
-pref-alt-path = bool
-</pre>
-</div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
-<a href="#name-cddl-encoding-of-pref-alt-p" class="selfRef">CDDL Encoding of pref-alt-path</a>
-          </figcaption></figure>
-</div>
 <div id="host-treatment-1">
 <section id="section-4.2.1">
           <h4 id="name-host-treatment-2">
@@ -1863,7 +1781,7 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
           </tbody>
         </table>
 </div>
-<p id="section-6.2-5">New entries can be added to the registery using "Standards Action" policy (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">New entries can be added to the registery using "Standards Action" policy <span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2585,11 +2503,11 @@ traffic but a different application.<a href="#appendix-A.3-8" class="pilcrow">¶
       </h2>
 <p id="appendix-B-1">A network element can signal the maximum bandwidth allowed for video streaming. Typically,
 this policy limit exists in cellular networks.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 7</a> indicates the burst bandwidth (2 Mbps), burst duration
+<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 1</a> indicates the burst bandwidth (2 Mbps), burst duration
 (3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
 user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <span id="name-example-of-network-to-host-m"></span><div id="ex-video-bitrate">
-<figure id="figure-7">
+<figure id="figure-1">
         <div class="alignLeft art-text artwork" id="appendix-B-3.1">
 <pre>
 {
@@ -2601,7 +2519,7 @@ user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 }
 </pre>
 </div>
-<figcaption><a href="#figure-7" class="selfRef">Figure 7</a>:
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
 <a href="#name-example-of-network-to-host-m" class="selfRef">Example of Network-to-Host Metadata for Video Streaming</a>
         </figcaption></figure>
 </div>
