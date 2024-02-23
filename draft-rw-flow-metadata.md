@@ -219,7 +219,7 @@ metadata = {
 $$metadata-extensions //= (
   importance: bool,
   reliable: bool,
-  prefer-keep:bool
+  prefer-keep: bool
 )
 
 ; Network Metadata
