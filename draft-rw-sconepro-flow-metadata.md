@@ -74,10 +74,10 @@ informative:
   LOSSY-QUIC: RFC9221
   RTP: RFC3550
   RELIABLE-RTP: RFC4588
-  SCONE:
-    title: SCONE Working Group Charter
-    target: https://github.com/mjoras/SCONE-PROTOCL
-    date: 2024-02-021
+  SCONEPRO:
+    title: SCONEPRO Working Group Charter
+    target: https://datatracker.ietf.org/group/sconepro/about/
+    date: 2024-02-02
 
 
 --- abstract
@@ -113,31 +113,12 @@ network elements (e.g., routers, {{?MASQUE=I-D.ietf-masque-quic-proxy}} proxies)
 
 
 
-<!--
-
-Host-to-network metadata signaling has historically been performed by
-the sender setting DSCP bits
-(e.g., {{?RFC2475}}, {{?RFC7657}}, and {{?RFC8837}}). While DSCP can express
-high priority (Expedited Forwarding (EF) {{?RFC3246}}) and low priority
-(Lower-Effort Per-Hop Behavior (LE PHB) {{?RFC8622}}), DSCP bits are frequently ignored at
-congestion points or lost (stripped) while forwarded across the Internet.
-See {{Section 4 of ?RFC9435}} for a detailed overview of observed DSCP re-marking behaviors.
-Also, DSCP attempts to influence the packet's treatment compared to
-all other packets from other hosts.
-
-Network-to-host metadata signaling has historically been performed by dropping packets or
-setting the Explicit Congestion Notification (ECN) bit on packets {{?RFC3168}}.  Both of these techniques work well to consume
-the network's available bandwidth when the sending rate exceeds the network's
-available bandwidth, but are complicated for the receiver to determine the network's
-bandwidth policy rate in a timely manner.
--->
-
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
 * IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}),
-* SCONE {{SCONE}}, or
+* SCONE Protocol ({{SCONEPRO}}), or
 * QUIC CID mapping ({{?I-D.wing-cidfi}}).
 
 An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
@@ -209,7 +190,8 @@ The metadata is described in CDDL {{!RFC8610}} format shown in {{meta-cddl}}.
 ~~~~~ cddl
 ; one or more metadata can be signaled.
 metadata = {
-  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  metadata-type: (0..1), ; 0 is Network Metadata
+                         ; 1 is Application Metadata
   * $$metadata-extensions
 }
 
