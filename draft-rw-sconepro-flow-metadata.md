@@ -109,7 +109,7 @@ authorization or authentication for differented treatment.
 
 By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
-network elements (e.g., routers, {{?MASQUE=I-D.draft-ietf-masque-quic-proxy}} proxies).
+network elements (e.g., routers, {{?MASQUE=I-D.ietf-masque-quic-proxy}} proxies).
 
 
 
@@ -204,9 +204,9 @@ Application Metadata:
 
 ## Metadata
 
-The metadata is described in CDDL format below.
+The metadata is described in CDDL {{!RFC8610}} format shown in {{meta-cddl}}.
 
-~~~~~
+~~~~~ cddl
 ; one or more metadata can be signaled.
 metadata = {
   metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
@@ -254,8 +254,20 @@ $$metadata-extensions //= (
 
 downlinkBitrate = "downlinkBitrate"
 burst-d = "burst-info"
-
 ~~~~~
+{: #meta-cddl title="CDDL Structure of the Metadata"}
+
+The structure shown in {{meta-cddl}} does not assume that the metadata
+will be encoded as a single blob when mapped to a signaling protocol or
+that all the metadata components will be mapped. Such matters
+are specific to the individual signaling protocols and deployment contexts.
+
+New metadata for collaborative host/network signaling MUST be registered
+in the IANA registry, "Flow Metadata Registry" {{sec-fmr}}.
+
+More details about each of these metadata are provided in the following
+sections. Both client and network intended behaviors are specified for each
+metadata.
 
 ## Importance
 
@@ -403,7 +415,7 @@ and exchanged amongst hosts and network elements.
 
 This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".
 
-## Flow Metadata Registry
+## Flow Metadata Registry {#sec-fmr}
 
 IANA is requested to create a new registry, entitled "Flow Metadata Registry", under the "Metadata for Collaborative Host/Network Signaling" registry group.
 This registry is inspired by the "Performance Metrics Registry" created by {{?RFC8911}}. The structure of the registry is as follows:
