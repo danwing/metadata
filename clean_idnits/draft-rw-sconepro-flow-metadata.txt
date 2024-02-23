@@ -613,8 +613,7 @@ Informative References
               July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
    [SCONEPRO] "SCONEPRO Working Group Charter", 2 February 2024,
-              <https://github.com/mjoras/SCONE-
-              PROTOCL/blob/main/documents/charter-stable.md>.
+              <https://datatracker.ietf.org/group/sconepro/about/>.
 
 Appendix A.  Examples of Host-to-Network Metadata
 
