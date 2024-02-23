@@ -76,7 +76,7 @@ informative:
   RELIABLE-RTP: RFC4588
   SCONEPRO:
     title: SCONEPRO Working Group Charter
-    target: https://github.com/mjoras/SCONE-PROTOCL/blob/main/documents/charter-stable.md
+    target: https://datatracker.ietf.org/group/sconepro/about/
     date: 2024-02-02
 
 
