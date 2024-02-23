@@ -206,55 +206,71 @@ Table of Contents
 
 3.1.  Metadata
 
-   The metadata is described in CDDL format below.
+   The metadata is described in CDDL [RFC8610] format shown in Figure 1.
 
-; one or more metadata can be signaled.
-metadata = {
-  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
-  * $$metadata-extensions
-}
+   ; one or more metadata can be signaled.
+   metadata = {
+     metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+     * $$metadata-extensions
+   }
 
-; Application Metadata
+   ; Application Metadata
 
-$$metadata-extensions //= (
-; true indicates packet of high importance
-; false indicates packet of low importance
-  importance: bool,
-; Packets can be tagged as reliable (true) or unreliable (false)
-  reliable: bool,
-; Packets can be tagged as preference to keep (true) or discard (false)
-  prefer-keep: bool
-; Has a meaning only for packets marked as reliable
-; True indicates realtime
-; False indicates bulk (non-realtime)
-  realtime: bool
-)
+   $$metadata-extensions //= (
+   ; true indicates packet of high importance
+   ; false indicates packet of low importance
+     importance: bool,
+   ; Packets can be tagged as reliable (true) or unreliable (false)
+     reliable: bool,
+   ; Packets can be tagged as preference to keep (true) or discard (false)
+     prefer-keep: bool
+   ; Has a meaning only for packets marked as reliable
+   ; True indicates realtime
+   ; False indicates bulk (non-realtime)
+     realtime: bool
+   )
 
-; Network Metadata
+   ; Network Metadata
 
-; Provides information about the nominal downlink bitrate
-; Returning a value set to 0 (or a very low value) should trigger
-; the host to seek for better paths.
+   ; Provides information about the nominal downlink bitrate
+   ; Returning a value set to 0 (or a very low value) should trigger
+   ; the host to seek for better paths.
 
-Bitrate =  {
-  nominal: uint,  ; Mbps
-  ? burst-d => burst-info
-}
+   Bitrate =  {
+     nominal: uint,  ; Mbps
+     ? burst-d => burst-info
+   }
 
-burst-info = {
-  burst: uint,          ; Mbps
-  burstDuration: uint   ; milliseconds
-}
+   burst-info = {
+     burst: uint,          ; Mbps
+     burstDuration: uint   ; milliseconds
+   }
 
-$$metadata-extensions //= (
-   ? downlinkBitrate => Bitrate,
-; Indicates whether a flow is to be offloaded to alternate
-; available paths.
-   pref-alt-path: bool
-)
+   $$metadata-extensions //= (
+      ? downlinkBitrate => Bitrate,
+   ; Indicates whether a flow is to be offloaded to alternate
+   ; available paths.
+      pref-alt-path: bool
+   )
 
-downlinkBitrate = "downlinkBitrate"
-burst-d = "burst-info"
+   downlinkBitrate = "downlinkBitrate"
+   burst-d = "burst-info"
+
+                  Figure 1: CDDL Structure of the Metadata
+
+   The structure shown in Figure 1 does not assume that the metadata
+   will be encoded as a single blob when mapped to a signaling protocol
+   or that all the metadata components will be mapped.  Such matters are
+   specific to the individual signaling protocols and deployment
+   contexts.
+
+   New metadata for collaborative host/network signaling MUST be
+   registered in the IANA registry, "Flow Metadata Registry"
+   Section 6.2.
+
+   More details about each of these metadata are provided in the
+   following sections.  Both client and network intended behaviors are
+   specified for each metadata.
 
 3.2.  Importance
 
@@ -527,6 +543,12 @@ Normative References
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8610]  Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
+              Definition Language (CDDL): A Notational Convention to
+              Express Concise Binary Object Representation (CBOR) and
+              JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
+              June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
 
 Informative References
 
@@ -1114,7 +1136,7 @@ Appendix B.  Example of Network-to-Host Metadata for Video Streaming
    A network element can signal the maximum bandwidth allowed for video
    streaming.  Typically, this policy limit exists in cellular networks.
 
-   The example shown in Figure 1 indicates the burst bandwidth (2 Mbps),
+   The example shown in Figure 2 indicates the burst bandwidth (2 Mbps),
    burst duration (3 seconds), and nominal (non-burst) bandwidth (1
    Mbps) for the requesting user:
 
@@ -1126,7 +1148,7 @@ Appendix B.  Example of Network-to-Host Metadata for Video Streaming
      }
    }
 
-     Figure 1: Example of Network-to-Host Metadata for Video Streaming
+     Figure 2: Example of Network-to-Host Metadata for Video Streaming
 
 Authors' Addresses
 

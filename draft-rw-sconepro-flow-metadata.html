@@ -1402,8 +1402,10 @@ to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pi
         <h3 id="name-metadata">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-metadata" class="section-name selfRef">Metadata</a>
         </h3>
-<p id="section-3.1-1">The metadata is described in CDDL format below.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.1-2">
+<p id="section-3.1-1">The metadata is described in CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> format shown in <a href="#meta-cddl" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<span id="name-cddl-structure-of-the-metad"></span><div id="meta-cddl">
+<figure id="figure-1">
+          <div class="lang-cddl sourcecode" id="section-3.1-2.1">
 <pre>
 ; one or more metadata can be signaled.
 metadata = {
@@ -1452,9 +1454,21 @@ $$metadata-extensions //= (
 
 downlinkBitrate = "downlinkBitrate"
 burst-d = "burst-info"
-
-</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</pre>
 </div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-cddl-structure-of-the-metad" class="selfRef">CDDL Structure of the Metadata</a>
+          </figcaption></figure>
+</div>
+<p id="section-3.1-3">The structure shown in <a href="#meta-cddl" class="auto internal xref">Figure 1</a> does not assume that the metadata
+will be encoded as a single blob when mapped to a signaling protocol or
+that all the metadata components will be mapped. Such matters
+are specific to the individual signaling protocols and deployment contexts.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">New metadata for collaborative host/network signaling <span class="bcp14">MUST</span> be registered
+in the IANA registry, "Flow Metadata Registry" <a href="#sec-fmr" class="auto internal xref">Section 6.2</a>.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">More details about each of these metadata are provided in the following
+sections. Both client and network intended behaviors are specified for each
+metadata.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="importance">
@@ -1667,7 +1681,7 @@ and exchanged amongst hosts and network elements.<a href="#section-5-1" class="p
 <p id="section-6.1-1">This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="flow-metadata-registry">
+<div id="sec-fmr">
 <section id="section-6.2">
         <h3 id="name-flow-metadata-registry">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-flow-metadata-registry" class="section-name selfRef">Flow Metadata Registry</a>
@@ -1819,8 +1833,12 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
 <span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+      <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2505,11 +2523,11 @@ traffic but a different application.<a href="#appendix-A.3-8" class="pilcrow">¶
       </h2>
 <p id="appendix-B-1">A network element can signal the maximum bandwidth allowed for video streaming. Typically,
 this policy limit exists in cellular networks.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 1</a> indicates the burst bandwidth (2 Mbps), burst duration
+<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 2</a> indicates the burst bandwidth (2 Mbps), burst duration
 (3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
 user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <span id="name-example-of-network-to-host-m"></span><div id="ex-video-bitrate">
-<figure id="figure-1">
+<figure id="figure-2">
         <div class="alignLeft art-text artwork" id="appendix-B-3.1">
 <pre>
 {
@@ -2521,7 +2539,7 @@ user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 }
 </pre>
 </div>
-<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-example-of-network-to-host-m" class="selfRef">Example of Network-to-Host Metadata for Video Streaming</a>
         </figcaption></figure>
 </div>
