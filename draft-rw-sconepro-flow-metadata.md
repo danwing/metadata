@@ -321,7 +321,7 @@ application has the capability to avoid sending that packet, is application-spec
 
 During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred
 over dropping 'prefer-keep' set to true packets.
-
+Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.
 
 ### Reliable Traffic
 
