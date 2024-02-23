@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 25 August 2024                                     M. Boucadair
+Expires: 26 August 2024                                     M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                        22 February 2024
+                                                        23 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 August 2024.
+   This Internet-Draft will expire on 26 August 2024.
 
 Copyright Notice
 
@@ -226,7 +226,7 @@ metadata = {
 
 $$metadata-extensions //= (
   importance: bool,
-  reliable:bool,
+  reliable: bool,
   prefer-keep:bool
 )
 
