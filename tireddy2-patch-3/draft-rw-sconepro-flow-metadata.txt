@@ -495,8 +495,8 @@ burst-d = "burst-info"
 
                           Table 1: Initial Values
 
-   New entries can be added to the registery using "Standards Action"
-   policy Section 4.9 of [RFC8126].
+   New entries can be added to the registry using "Standards Action"
+   policy (Section 4.9 of [RFC8126]).
 
 Acknowledgments
 
