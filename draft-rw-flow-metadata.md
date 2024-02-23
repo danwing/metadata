@@ -77,8 +77,8 @@ informative:
 --- abstract
 
 This document defines per-flow and per-packet metadata for both
-network to host and host-to-network signaling in both binary format
-and JSON.  The common metadata definition allows interworking between
+network to host and host-to-network signaling in both CDDL which
+expresses both CBOR and JSON.  The common metadata definition allows interworking between
 signaling protocols with high fidelity. The metadata is also self-
 describing to improve interpretation by network elements and
 endpoints while reducing the need for version negotiation.
