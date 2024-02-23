@@ -1321,7 +1321,7 @@ document is a companion to host-to-network signaling the metadata itself, such a
           <p id="section-1-4.2.1">IPv6 Hop-by-Hop Options (<span><a href="https://rfc-editor.org/rfc/rfc8200#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>),<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.3">
-          <p id="section-1-4.3.1">SCONE <span>[<a href="#SCONE" class="cite xref">SCONE</a>]</span>, or<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.3.1">SCONE Protocol (<span>[<a href="#SCONEPRO" class="cite xref">SCONEPRO</a>]</span>), or<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-4.4">
           <p id="section-1-4.4.1">QUIC CID mapping (<span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>).<a href="#section-1-4.4.1" class="pilcrow">¶</a></p>
@@ -1409,7 +1409,8 @@ to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pi
 <pre>
 ; one or more metadata can be signaled.
 metadata = {
-  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  metadata-type: (0..1), ; 0 is Network Metadata
+                         ; 1 is Application Metadata
   * $$metadata-extensions
 }
 
@@ -1889,33 +1890,9 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Rey, J.</span>, <span class="refAuthor">Leon, D.</span>, <span class="refAuthor">Miyazaki, A.</span>, <span class="refAuthor">Varsa, V.</span>, and <span class="refAuthor">R. Hakenberg</span>, <span class="refTitle">"RTP Retransmission Payload Format"</span>, <span class="seriesInfo">RFC 4588</span>, <span class="seriesInfo">DOI 10.17487/RFC4588</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4588">https://www.rfc-editor.org/rfc/rfc4588</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC2475">[RFC2475]</dt>
-        <dd>
-<span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Black, D.</span>, <span class="refAuthor">Carlson, M.</span>, <span class="refAuthor">Davies, E.</span>, <span class="refAuthor">Wang, Z.</span>, and <span class="refAuthor">W. Weiss</span>, <span class="refTitle">"An Architecture for Differentiated Services"</span>, <span class="seriesInfo">RFC 2475</span>, <span class="seriesInfo">DOI 10.17487/RFC2475</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2475">https://www.rfc-editor.org/rfc/rfc2475</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC3168">[RFC3168]</dt>
-        <dd>
-<span class="refAuthor">Ramakrishnan, K.</span>, <span class="refAuthor">Floyd, S.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"The Addition of Explicit Congestion Notification (ECN) to IP"</span>, <span class="seriesInfo">RFC 3168</span>, <span class="seriesInfo">DOI 10.17487/RFC3168</span>, <time datetime="2001-09" class="refDate">September 2001</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3168">https://www.rfc-editor.org/rfc/rfc3168</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC3246">[RFC3246]</dt>
-        <dd>
-<span class="refAuthor">Davie, B.</span>, <span class="refAuthor">Charny, A.</span>, <span class="refAuthor">Bennet, J.C.R.</span>, <span class="refAuthor">Benson, K.</span>, <span class="refAuthor">Le Boudec, J.Y.</span>, <span class="refAuthor">Courtney, W.</span>, <span class="refAuthor">Davari, S.</span>, <span class="refAuthor">Firoiu, V.</span>, and <span class="refAuthor">D. Stiliadis</span>, <span class="refTitle">"An Expedited Forwarding PHB (Per-Hop Behavior)"</span>, <span class="seriesInfo">RFC 3246</span>, <span class="seriesInfo">DOI 10.17487/RFC3246</span>, <time datetime="2002-03" class="refDate">March 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3246">https://www.rfc-editor.org/rfc/rfc3246</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7657">[RFC7657]</dt>
-        <dd>
-<span class="refAuthor">Black, D., Ed.</span> and <span class="refAuthor">P. Jones</span>, <span class="refTitle">"Differentiated Services (Diffserv) and Real-Time Communication"</span>, <span class="seriesInfo">RFC 7657</span>, <span class="seriesInfo">DOI 10.17487/RFC7657</span>, <time datetime="2015-11" class="refDate">November 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7657">https://www.rfc-editor.org/rfc/rfc7657</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8200">[RFC8200]</dt>
         <dd>
 <span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8622">[RFC8622]</dt>
-        <dd>
-<span class="refAuthor">Bless, R.</span>, <span class="refTitle">"A Lower-Effort Per-Hop Behavior (LE PHB) for Differentiated Services"</span>, <span class="seriesInfo">RFC 8622</span>, <span class="seriesInfo">DOI 10.17487/RFC8622</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8622">https://www.rfc-editor.org/rfc/rfc8622</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8837">[RFC8837]</dt>
-        <dd>
-<span class="refAuthor">Jones, P.</span>, <span class="refAuthor">Dhesikan, S.</span>, <span class="refAuthor">Jennings, C.</span>, and <span class="refAuthor">D. Druta</span>, <span class="refTitle">"Differentiated Services Code Point (DSCP) Packet Markings for WebRTC QoS"</span>, <span class="seriesInfo">RFC 8837</span>, <span class="seriesInfo">DOI 10.17487/RFC8837</span>, <time datetime="2021-01" class="refDate">January 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8837">https://www.rfc-editor.org/rfc/rfc8837</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8911">[RFC8911]</dt>
         <dd>
@@ -1925,17 +1902,13 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Eddy, W., Ed.</span>, <span class="refTitle">"Transmission Control Protocol (TCP)"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 9293</span>, <span class="seriesInfo">DOI 10.17487/RFC9293</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9293">https://www.rfc-editor.org/rfc/rfc9293</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC9435">[RFC9435]</dt>
-        <dd>
-<span class="refAuthor">Custura, A.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">R. Secchi</span>, <span class="refTitle">"Considerations for Assigning a New Recommended Differentiated Services Code Point (DSCP)"</span>, <span class="seriesInfo">RFC 9435</span>, <span class="seriesInfo">DOI 10.17487/RFC9435</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9435">https://www.rfc-editor.org/rfc/rfc9435</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RTP">[RTP]</dt>
         <dd>
 <span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Casner, S.</span>, <span class="refAuthor">Frederick, R.</span>, and <span class="refAuthor">V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3550">https://www.rfc-editor.org/rfc/rfc3550</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="SCONE">[SCONE]</dt>
+<dt id="SCONEPRO">[SCONEPRO]</dt>
       <dd>
-<span class="refTitle">"SCONE Working Group Charter"</span>, <span>&lt;<a href="https://github.com/mjoras/SCONE-PROTOCL">https://github.com/mjoras/SCONE-PROTOCL</a>&gt;</span>. </dd>
+<span class="refTitle">"SCONEPRO Working Group Charter"</span>, <time datetime="2024-02-02" class="refDate">2 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/group/sconepro/about/">https://datatracker.ietf.org/group/sconepro/about/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

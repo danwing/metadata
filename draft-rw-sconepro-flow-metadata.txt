@@ -140,7 +140,7 @@ Table of Contents
 
    *  IPv6 Hop-by-Hop Options (Section 4.3 of [RFC8200]),
 
-   *  SCONE [SCONE], or
+   *  SCONE Protocol ([SCONEPRO]), or
 
    *  QUIC CID mapping ([I-D.wing-cidfi]).
 
@@ -210,7 +210,8 @@ Table of Contents
 
    ; one or more metadata can be signaled.
    metadata = {
-     metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+     metadata-type: (0..1), ; 0 is Network Metadata
+                            ; 1 is Application Metadata
      * $$metadata-extensions
    }
 
@@ -614,40 +615,10 @@ Informative References
               DOI 10.17487/RFC4588, July 2006,
               <https://www.rfc-editor.org/rfc/rfc4588>.
 
-   [RFC2475]  Blake, S., Black, D., Carlson, M., Davies, E., Wang, Z.,
-              and W. Weiss, "An Architecture for Differentiated
-              Services", RFC 2475, DOI 10.17487/RFC2475, December 1998,
-              <https://www.rfc-editor.org/rfc/rfc2475>.
-
-   [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
-              of Explicit Congestion Notification (ECN) to IP",
-              RFC 3168, DOI 10.17487/RFC3168, September 2001,
-              <https://www.rfc-editor.org/rfc/rfc3168>.
-
-   [RFC3246]  Davie, B., Charny, A., Bennet, J.C.R., Benson, K., Le
-              Boudec, J.Y., Courtney, W., Davari, S., Firoiu, V., and D.
-              Stiliadis, "An Expedited Forwarding PHB (Per-Hop
-              Behavior)", RFC 3246, DOI 10.17487/RFC3246, March 2002,
-              <https://www.rfc-editor.org/rfc/rfc3246>.
-
-   [RFC7657]  Black, D., Ed. and P. Jones, "Differentiated Services
-              (Diffserv) and Real-Time Communication", RFC 7657,
-              DOI 10.17487/RFC7657, November 2015,
-              <https://www.rfc-editor.org/rfc/rfc7657>.
-
    [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
-
-   [RFC8622]  Bless, R., "A Lower-Effort Per-Hop Behavior (LE PHB) for
-              Differentiated Services", RFC 8622, DOI 10.17487/RFC8622,
-              June 2019, <https://www.rfc-editor.org/rfc/rfc8622>.
-
-   [RFC8837]  Jones, P., Dhesikan, S., Jennings, C., and D. Druta,
-              "Differentiated Services Code Point (DSCP) Packet Markings
-              for WebRTC QoS", RFC 8837, DOI 10.17487/RFC8837, January
-              2021, <https://www.rfc-editor.org/rfc/rfc8837>.
 
    [RFC8911]  Bagnulo, M., Claise, B., Eardley, P., Morton, A., and A.
               Akhter, "Registry for Performance Metrics", RFC 8911,
@@ -658,18 +629,13 @@ Informative References
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9293>.
 
-   [RFC9435]  Custura, A., Fairhurst, G., and R. Secchi, "Considerations
-              for Assigning a New Recommended Differentiated Services
-              Code Point (DSCP)", RFC 9435, DOI 10.17487/RFC9435, July
-              2023, <https://www.rfc-editor.org/rfc/rfc9435>.
-
    [RTP]      Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
               Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
               July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
-   [SCONE]    "SCONE Working Group Charter",
-              <https://github.com/mjoras/SCONE-PROTOCL>.
+   [SCONEPRO] "SCONEPRO Working Group Charter", 2 February 2024,
+              <https://datatracker.ietf.org/group/sconepro/about/>.
 
 Appendix A.  Examples of Host-to-Network Metadata
 
