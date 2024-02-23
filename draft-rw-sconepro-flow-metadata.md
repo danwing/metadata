@@ -231,6 +231,10 @@ $$metadata-extensions //= (
 
 ; Network Metadata
 
+; Provides information about the nominal downlink bitrate
+; Returning a value set to 0 (or a very low value) should trigger
+; the host to seek for better paths.
+
 Bitrate =  {
   nominal: uint,  ; Mbps
   ? burst-d => burst-info
@@ -283,6 +287,8 @@ The "Reliable" metadata indicates if a packet is reliably transmitted by the hos
 
 Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by the sender application, appearing on the network again. Thus, delaying or discarding such packets does not reduce the amount of transmitted data in a network; it only defers when it appears on the network.
 
+Reliable/Unreliable belongs to Application Metadata.
+
 ### Network Treatment
 
 During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
@@ -294,6 +300,8 @@ only defers it until later, but this deferral can be useful.
 This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
 ### Unreliable Traffic
+
+Packets are marked with 'prefer-keep' set to either true or false. When set to true, it indicates a preference to keep the packet. Conversely, when set to false, it signals that the packet may be subject to discard based on a reactive policy.
 
 Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
