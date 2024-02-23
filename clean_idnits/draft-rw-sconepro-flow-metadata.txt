@@ -140,7 +140,7 @@ Table of Contents
 
    *  IPv6 Hop-by-Hop Options (Section 4.3 of [RFC8200]),
 
-   *  SCONE [SCONE], or
+   *  SCONE Protocol ([SCONEPRO]), or
 
    *  QUIC CID mapping ([I-D.wing-cidfi]).
 
@@ -612,8 +612,9 @@ Informative References
               Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
               July 2003, <https://www.rfc-editor.org/rfc/rfc3550>.
 
-   [SCONE]    "SCONE Working Group Charter", 21 February 2024,
-              <https://github.com/mjoras/SCONE-PROTOCL>.
+   [SCONEPRO] "SCONEPRO Working Group Charter", 2 February 2024,
+              <https://github.com/mjoras/SCONE-
+              PROTOCL/blob/main/documents/charter-stable.md>.
 
 Appendix A.  Examples of Host-to-Network Metadata
 
