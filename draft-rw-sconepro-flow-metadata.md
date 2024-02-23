@@ -77,7 +77,7 @@ informative:
   SCONE:
     title: SCONE Working Group Charter
     target: https://github.com/mjoras/SCONE-PROTOCL
-    date: 2024-02-021
+    date: 2024-02-21
 
 
 --- abstract
@@ -112,25 +112,6 @@ should be treated and use their own signaling mechanism with their
 network elements (e.g., routers, {{?MASQUE=I-D.draft-ietf-masque-quic-proxy}} proxies).
 
 
-
-<!--
-
-Host-to-network metadata signaling has historically been performed by
-the sender setting DSCP bits
-(e.g., {{?RFC2475}}, {{?RFC7657}}, and {{?RFC8837}}). While DSCP can express
-high priority (Expedited Forwarding (EF) {{?RFC3246}}) and low priority
-(Lower-Effort Per-Hop Behavior (LE PHB) {{?RFC8622}}), DSCP bits are frequently ignored at
-congestion points or lost (stripped) while forwarded across the Internet.
-See {{Section 4 of ?RFC9435}} for a detailed overview of observed DSCP re-marking behaviors.
-Also, DSCP attempts to influence the packet's treatment compared to
-all other packets from other hosts.
-
-Network-to-host metadata signaling has historically been performed by dropping packets or
-setting the Explicit Congestion Notification (ECN) bit on packets {{?RFC3168}}.  Both of these techniques work well to consume
-the network's available bandwidth when the sending rate exceeds the network's
-available bandwidth, but are complicated for the receiver to determine the network's
-bandwidth policy rate in a timely manner.
--->
 
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
@@ -209,7 +190,8 @@ The metadata is described in CDDL format below.
 ~~~~~
 ; one or more metadata can be signaled.
 metadata = {
-  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  metadata-type: (0..1), ; 0 is Network Metadata
+                         ; 1 is Application Metadata
   * $$metadata-extensions
 }
 
