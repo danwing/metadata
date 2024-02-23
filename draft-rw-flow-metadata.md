@@ -218,7 +218,7 @@ metadata = {
 
 $$metadata-extensions //= (
   importance: bool,
-  reliable:bool,
+  reliable: bool,
   prefer-keep:bool
 )
 
