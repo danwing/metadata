@@ -62,6 +62,12 @@ author:
     organization: Orange
     country: France
     email: mohamed.boucadair@orange.com
+ -
+    fullname: Tirumaleswar Reddy
+    organization: Nokia
+    country: India
+    email: kondtir@gmail.com
+
 
 informative:
   QUIC: RFC9000
@@ -197,6 +203,46 @@ Network Metadata:
 
 Application Metadata:
 : This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.
+
+## Metadata
+
+The metadata is described in CDDL format below.
+
+~~~~~
+
+metadata = {
+  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  * $$metadata-extensions
+}
+
+; Application Metadata
+
+$$metadata-extensions //= (
+  importance: bool,
+  reliable: bool,
+  prefer-keep: bool
+)
+
+; Network Metadata
+
+Bitrate =  {
+  nominal: uint,  ; Mbps
+  ? burst-d => burst-info
+}
+
+burst-info = {
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
+}
+
+$$metadata-extensions //= (
+   ? downlinkBitrate => Bitrate
+)
+
+downlinkBitrate = "downlinkBitrate"
+burst-d = "burst-info"
+
+~~~~~
 
 ## Importance
 
