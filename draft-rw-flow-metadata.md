@@ -130,7 +130,7 @@ Both the above use cases are improved by metadata described in this document. Th
 document is a companion to host-to-network signaling the metadata itself, such as:
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
-* IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}), or
+* IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}),
 * SCONE {{SCONE}}, or
 * QUIC CID mapping ({{?I-D.wing-cidfi}}).
 
