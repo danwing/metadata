@@ -207,7 +207,7 @@ Application Metadata:
 The metadata is described in CDDL format below.
 
 ~~~~~
-
+; one or more metadata can be signaled.
 metadata = {
   metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
   * $$metadata-extensions
