@@ -1542,7 +1542,8 @@ application has the capability to avoid sending that packet, is application-spec
 <a href="#section-3.4.1.1" class="section-number selfRef">3.4.1.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
             </h5>
 <p id="section-3.4.1.1-1">During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred
-over dropping 'prefer-keep' set to true packets.<a href="#section-3.4.1.1-1" class="pilcrow">¶</a></p>
+over dropping 'prefer-keep' set to true packets.
+Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.<a href="#section-3.4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

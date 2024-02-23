@@ -339,7 +339,8 @@ burst-d = "burst-info"
 
    During a reactive policy event, dropping packets with 'prefer-keep'
    set to false is preferred over dropping 'prefer-keep' set to true
-   packets.
+   packets.  Absent such discard preference indication, the network
+   element will blindly drop packets during a reactive policy event.
 
 3.4.2.  Reliable Traffic
 
