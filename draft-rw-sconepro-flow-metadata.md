@@ -248,7 +248,7 @@ burst-info = {
 $$metadata-extensions //= (
    ? downlinkBitrate => Bitrate,
 ; Indicates whether a flow is to be offloaded to alternate
-; available paths.   
+; available paths.
    pref-alt-path: bool
 )
 
@@ -278,7 +278,7 @@ importance=true, for the same flow.
 
 ## Reliable/Unreliable
 
-The "Reliable" metadata indicates if a packet is reliably transmitted by the host. 
+The "Reliable" metadata indicates if a packet is reliably transmitted by the host.
 
 * Reliable packets are re-transmitted by the underlying transport
 (e.g., TCP {{?RFC9293}} or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
@@ -314,12 +314,12 @@ host-to-network metadata signaling, the network can become an active assistant i
 flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
 traffic at the expense of the less-important 'may-discard' traffic.
 
-The reason why an application transmits a packet marked as 'prefer-keep' set to false, when the 
+The reason why an application transmits a packet marked as 'prefer-keep' set to false, when the
 application has the capability to avoid sending that packet, is application-specific.
 
 #### Network Treatment
 
-During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred 
+During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred
 over dropping 'prefer-keep' set to true packets.
 
 
