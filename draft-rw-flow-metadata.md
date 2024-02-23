@@ -103,7 +103,7 @@ authorization or authentication for differented treatment.
 
 By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
-network elements (routers).
+network elements (e.g., routers, {{?MASQUE=I-D.draft-ietf-masque-quic-proxy}} proxies).
 
 
 
