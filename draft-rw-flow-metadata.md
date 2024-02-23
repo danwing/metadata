@@ -225,10 +225,15 @@ $$metadata-extensions //= (
 ; Network Metadata
 
 $$metadata-extensions //= (
-  nominal: uint,
-  ? burst: uint,
-  ? burstDuration: uint
-)
+  downlinkBitrate = {
+  nominal: uint,        ; Mbps
+  ? burst-info
+} )
+
+burst-info = {
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
+}
 
 
 ~~~~~
