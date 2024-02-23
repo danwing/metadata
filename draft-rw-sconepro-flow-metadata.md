@@ -74,10 +74,10 @@ informative:
   LOSSY-QUIC: RFC9221
   RTP: RFC3550
   RELIABLE-RTP: RFC4588
-  SCONE:
-    title: SCONE Working Group Charter
-    target: https://github.com/mjoras/SCONE-PROTOCL
-    date: 2024-02-21
+  SCONEPRO:
+    title: SCONEPRO Working Group Charter
+    target: https://github.com/mjoras/SCONE-PROTOCL/blob/main/documents/charter-stable.md
+    date: 2024-02-02
 
 
 --- abstract
@@ -118,7 +118,7 @@ document is a companion to host-to-network signaling the metadata itself, such a
 
 * UDP Options (e.g., {{?I-D.kaippallimalil-tsvwg-media-hdr-wireless}}, {{?I-D.reddy-tsvwg-explcit-signal}}),
 * IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}),
-* SCONE {{SCONE}}, or
+* SCONE Protocol ({{SCONEPRO}}), or
 * QUIC CID mapping ({{?I-D.wing-cidfi}}).
 
 An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
