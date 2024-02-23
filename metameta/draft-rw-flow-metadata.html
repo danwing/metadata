@@ -8,6 +8,7 @@
 <meta content="Sridharan Rajagopalan" name="author">
 <meta content="Dan Wing" name="author">
 <meta content="Mohamed Boucadair" name="author">
+<meta content="Tirumaleswar Reddy" name="author">
 <meta content="
        This document defines per-flow and per-packet metadata for both
 network to host and host to network signaling in CDDL which
@@ -1082,6 +1083,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <div class="author-name">M. Boucadair</div>
 <div class="org">Orange</div>
 </div>
+<div class="author">
+      <div class="author-name">T. Reddy</div>
+<div class="org">Nokia</div>
+</div>
 </dd>
 </dl>
 </div>
@@ -1169,37 +1174,40 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-host-to-network-metadata" class="internal xref">Host to Network Metadata</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-importance" class="internal xref">Importance</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
-                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-network-treatment" class="internal xref">Network Treatment</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-metadata" class="internal xref">Metadata</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-reliable-unreliable" class="internal xref">Reliable/Unreliable</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-importance" class="internal xref">Importance</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
-                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-network-treatment" class="internal xref">Network Treatment</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-packet-discard-preference" class="internal xref">Packet Discard Preference</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-reliable-unreliable" class="internal xref">Reliable/Unreliable</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
-                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-unreliable-traffic" class="internal xref">Unreliable Traffic</a></p>
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-packet-discard-preference" class="internal xref">Packet Discard Preference</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1.2.1">
-                        <p id="section-toc.1-1.3.2.3.2.1.2.1.1"><a href="#section-3.3.1.1" class="auto internal xref">3.3.1.1</a>.  <a href="#name-network-treatment-3" class="internal xref">Network Treatment</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.1">
+                    <p id="section-toc.1-1.3.2.4.2.1.1"><a href="#section-3.4.1" class="auto internal xref">3.4.1</a>.  <a href="#name-unreliable-traffic" class="internal xref">Unreliable Traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.1.2.1">
+                        <p id="section-toc.1-1.3.2.4.2.1.2.1.1"><a href="#section-3.4.1.1" class="auto internal xref">3.4.1.1</a>.  <a href="#name-network-treatment-3" class="internal xref">Network Treatment</a></p>
 </li>
                     </ul>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2">
-                    <p id="section-toc.1-1.3.2.3.2.2.1"><a href="#section-3.3.2" class="auto internal xref">3.3.2</a>.  <a href="#name-reliable-traffic" class="internal xref">Reliable Traffic</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.2">
+                    <p id="section-toc.1-1.3.2.4.2.2.1"><a href="#section-3.4.2" class="auto internal xref">3.4.2</a>.  <a href="#name-reliable-traffic" class="internal xref">Reliable Traffic</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.2.2.1">
-                        <p id="section-toc.1-1.3.2.3.2.2.2.1.1"><a href="#section-3.3.2.1" class="auto internal xref">3.3.2.1</a>.  <a href="#name-network-treatment-4" class="internal xref">Network Treatment</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.2.2.1">
+                        <p id="section-toc.1-1.3.2.4.2.2.2.1.1"><a href="#section-3.4.2.1" class="auto internal xref">3.4.2.1</a>.  <a href="#name-network-treatment-4" class="internal xref">Network Treatment</a></p>
 </li>
                     </ul>
 </li>
@@ -1390,23 +1398,62 @@ to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pi
 </dd>
       <dd class="break"></dd>
 </dl>
-<div id="importance">
+<div id="metadata">
 <section id="section-3.1">
-        <h3 id="name-importance">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-importance" class="section-name selfRef">Importance</a>
+        <h3 id="name-metadata">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-metadata" class="section-name selfRef">Metadata</a>
         </h3>
-<p id="section-3.1-1">The "Importance" metadata signifies if the packet is of more important (true) or
+<p id="section-3.1-1">The metadata is described in CDDL format below.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-2">
+<pre>
+metadata = {
+  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  * $$metadata-extensions
+}
+
+; Application Metadata
+
+$$metadata-extensions //= (
+  importance: bool,
+  reliable: bool,
+  prefer-keep: bool
+)
+
+; Network Metadata
+
+$$metadata-extensions //= (
+  downlinkBitrate = {
+  nominal: uint,        ; Mbps
+  ? burst-info
+} )
+
+burst-info = {
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
+}
+
+
+</pre><a href="#section-3.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="importance">
+<section id="section-3.2">
+        <h3 id="name-importance">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-importance" class="section-name selfRef">Importance</a>
+        </h3>
+<p id="section-3.2-1">The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
-same flow.  Importance belongs to Network Metadata.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">An application would mark a packet as important when it needs the
+same flow.  Importance belongs to Network Metadata.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">An application would mark a packet as important when it needs the
 network to treat the packet with greater preference compared to the
 unmarked packets or to packets marked important=false (of the same
 flow). This tagging does not provide more privileges to an application
 with regards to resources usage compared to the absence of signal. An
-example of this interpretation is specified in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+example of this interpretation is specified in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <span id="name-cddl-encoding-of-importance"></span><div id="cddl-importance">
 <figure id="figure-1">
-          <div class="alignLeft art-text artwork" id="section-3.1-3.1">
+          <div class="alignLeft art-text artwork" id="section-3.2-3.1">
 <pre>
 ; true indicates high importance
 ; false indicates low importance
@@ -1418,40 +1465,40 @@ importance = bool
           </figcaption></figure>
 </div>
 <div id="network-treatment">
-<section id="section-3.1.1">
+<section id="section-3.2.1">
           <h4 id="name-network-treatment">
-<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-network-treatment" class="section-name selfRef">Network Treatment</a>
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-network-treatment" class="section-name selfRef">Network Treatment</a>
           </h4>
-<p id="section-3.1.1-1">During a reactive policy event, a network element is encouraged to
+<p id="section-3.2.1-1">During a reactive policy event, a network element is encouraged to
 discard packets marked importance=false in favor of packets marked
-importance=true, for the same flow.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+importance=true, for the same flow.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="reliableunreliable">
-<section id="section-3.2">
+<section id="section-3.3">
         <h3 id="name-reliable-unreliable">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
         </h3>
-<p id="section-3.2-1">The "Reliable" metadata indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-1">The "Reliable" metadata indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-2.1">
-            <p id="section-3.2-2.1.1">Reliable packets are re-transmitted by the underlying transport
-(e.g., TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> or <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>) or re-transmitted by the appplication (e.g., <span>[<a href="#RELIABLE-RTP" class="cite xref">RELIABLE-RTP</a>]</span>, NTP).<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.3-2.1">
+            <p id="section-3.3-2.1.1">Reliable packets are re-transmitted by the underlying transport
+(e.g., TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> or <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>) or re-transmitted by the appplication (e.g., <span>[<a href="#RELIABLE-RTP" class="cite xref">RELIABLE-RTP</a>]</span>, NTP).<a href="#section-3.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-2.2">
-            <p id="section-3.2-2.2.1">Unreliable packets are not re-transmitted by the transport
-(e.g., UDP, <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>, <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>) and also not re-transmitted by the application (e.g., <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>).<a href="#section-3.2-2.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.3-2.2">
+            <p id="section-3.3-2.2.1">Unreliable packets are not re-transmitted by the transport
+(e.g., UDP, <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>, <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>) and also not re-transmitted by the application (e.g., <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>).<a href="#section-3.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.2-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by
+<p id="section-3.3-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by
 the sender application, appearing on the network again. Thus, delaying or discarding such packets does not
-reduce the amount of transmitted data in a network; it only defers when it appears on the network.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
-<p id="section-3.2-4">Reliable/Unreliable belongs to Application Metadata.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+reduce the amount of transmitted data in a network; it only defers when it appears on the network.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">Reliable/Unreliable belongs to Application Metadata.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <span id="name-cddl-encoding-of-reliable"></span><div id="cddl-reliable">
 <figure id="figure-2">
-          <div class="alignLeft art-text artwork" id="section-3.2-5.1">
+          <div class="alignLeft art-text artwork" id="section-3.3-5.1">
 <pre>
 ; Packets can be tagged as reliable (true) or unreliable (false)
 ; prefer-keep and realtime metadata signal other preferences
@@ -1469,43 +1516,43 @@ reliable = {
           </figcaption></figure>
 </div>
 <div id="network-treatment-1">
-<section id="section-3.2.1">
+<section id="section-3.3.1">
           <h4 id="name-network-treatment-2">
-<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-network-treatment-2" class="section-name selfRef">Network Treatment</a>
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-network-treatment-2" class="section-name selfRef">Network Treatment</a>
           </h4>
-<p id="section-3.2.1-1">During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
+<p id="section-3.3.1-1">During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
-only defers it until later, but this deferral can be useful.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+only defers it until later, but this deferral can be useful.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="packet-discard-preference">
-<section id="section-3.3">
+<section id="section-3.4">
         <h3 id="name-packet-discard-preference">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-packet-discard-preference" class="section-name selfRef">Packet Discard Preference</a>
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-packet-discard-preference" class="section-name selfRef">Packet Discard Preference</a>
         </h3>
-<p id="section-3.3-1">This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <div id="unreliable-traffic">
-<section id="section-3.3.1">
+<section id="section-3.4.1">
           <h4 id="name-unreliable-traffic">
-<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-unreliable-traffic" class="section-name selfRef">Unreliable Traffic</a>
+<a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-unreliable-traffic" class="section-name selfRef">Unreliable Traffic</a>
           </h4>
-<p id="section-3.3.1-1">Packets are marked as 'may-discard' or 'prefer-keep'.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-2">Many flows contain a mix of important packets and less-important packets, but applications
+<p id="section-3.4.1-1">Packets are marked as 'may-discard' or 'prefer-keep'.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-2">Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
 Rather, applications send everything over a reliable transport (TCP or QUIC) and leave it
-at that, as evidenced by video streaming using TCP.<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-3">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
+at that, as evidenced by video streaming using TCP.<a href="#section-3.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-3">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
 <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> unreliable traffic <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> on the same 5-tuple.  With
 host-to-network metadata signaling, the network can become an active assistant in such
 flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
-traffic at the expense of the less-important 'may-discard' traffic.<a href="#section-3.3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.3.1-4">The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
-the application can avoid sending that packet is application-specific.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
+traffic at the expense of the less-important 'may-discard' traffic.<a href="#section-3.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-4">The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
+the application can avoid sending that packet is application-specific.<a href="#section-3.4.1-4" class="pilcrow">¶</a></p>
 <span id="name-cddl-encoding-of-prefer-kee"></span><div id="cddl-prefer-keep">
 <figure id="figure-3">
-            <div class="alignLeft art-text artwork" id="section-3.3.1-5.1">
+            <div class="alignLeft art-text artwork" id="section-3.4.1-5.1">
 <pre>
 ; When true, indicates a preference to keep a packet
 ; When false, indicates packet may be discarded reactive policy
@@ -1517,25 +1564,25 @@ prefer-keep = bool
             </figcaption></figure>
 </div>
 <div id="network-treatment-2">
-<section id="section-3.3.1.1">
+<section id="section-3.4.1.1">
             <h5 id="name-network-treatment-3">
-<a href="#section-3.3.1.1" class="section-number selfRef">3.3.1.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
+<a href="#section-3.4.1.1" class="section-number selfRef">3.4.1.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
             </h5>
-<p id="section-3.3.1.1-1">During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
-'prefer-keep' packets.<a href="#section-3.3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1.1-1">During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
+'prefer-keep' packets.<a href="#section-3.4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="reliable-traffic">
-<section id="section-3.3.2">
+<section id="section-3.4.2">
           <h4 id="name-reliable-traffic">
-<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-reliable-traffic" class="section-name selfRef">Reliable Traffic</a>
+<a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-reliable-traffic" class="section-name selfRef">Reliable Traffic</a>
           </h4>
-<p id="section-3.3.2-1">For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-1">For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
 <span id="name-cddl-encoding-of-realtime"></span><div id="cddl-realtime">
 <figure id="figure-4">
-            <div class="alignLeft art-text artwork" id="section-3.3.2-2.1">
+            <div class="alignLeft art-text artwork" id="section-3.4.2-2.1">
 <pre>
 ; Has a meaning only for packets marked as reliable
 ; True indicates realtime
@@ -1547,15 +1594,15 @@ realtime = bool
 <a href="#name-cddl-encoding-of-realtime" class="selfRef">CDDL Encoding of Realtime</a>
             </figcaption></figure>
 </div>
-<p id="section-3.3.2-3">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
+<p id="section-3.4.2-3">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
 related to dynamically updating a search box and quick responses help the user experience)
-and other flows as bulk (e.g., file download, file upload).<a href="#section-3.3.2-3" class="pilcrow">¶</a></p>
+and other flows as bulk (e.g., file download, file upload).<a href="#section-3.4.2-3" class="pilcrow">¶</a></p>
 <div id="network-treatment-3">
-<section id="section-3.3.2.1">
+<section id="section-3.4.2.1">
             <h5 id="name-network-treatment-4">
-<a href="#section-3.3.2.1" class="section-number selfRef">3.3.2.1. </a><a href="#name-network-treatment-4" class="section-name selfRef">Network Treatment</a>
+<a href="#section-3.4.2.1" class="section-number selfRef">3.4.2.1. </a><a href="#name-network-treatment-4" class="section-name selfRef">Network Treatment</a>
             </h5>
-<p id="section-3.3.2.1-1">Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.2.1-1">Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-3.4.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2578,6 +2625,15 @@ user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:mohamed.boucadair@orange.com" class="email">mohamed.boucadair@orange.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tirumaleswar Reddy</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div dir="auto" class="left"><span class="country-name">India</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:kondtir@gmail.com" class="email">kondtir@gmail.com</a>
 </div>
 </address>
 </section>
