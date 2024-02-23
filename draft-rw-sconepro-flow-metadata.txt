@@ -7,6 +7,8 @@ Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
 Expires: 26 August 2024                                     M. Boucadair
                                                                   Orange
+                                                                T. Reddy
+                                                                   Nokia
                                                         23 February 2024
 
 
@@ -76,15 +78,16 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Host to Network Metadata
-     3.1.  Importance
-       3.1.1.  Network Treatment
-     3.2.  Reliable/Unreliable
+     3.1.  Metadata
+     3.2.  Importance
        3.2.1.  Network Treatment
-     3.3.  Packet Discard Preference
-       3.3.1.  Unreliable Traffic
-         3.3.1.1.  Network Treatment
-       3.3.2.  Reliable Traffic
-         3.3.2.1.  Network Treatment
+     3.3.  Reliable/Unreliable
+       3.3.1.  Network Treatment
+     3.4.  Packet Discard Preference
+       3.4.1.  Unreliable Traffic
+         3.4.1.1.  Network Treatment
+       3.4.2.  Reliable Traffic
+         3.4.2.1.  Network Treatment
    4.  Network to Host Metadata
      4.1.  Downlink Bitrate
        4.1.1.  Units
@@ -187,16 +190,6 @@ Table of Contents
 
 3.  Host to Network Metadata
 
-   Three types of host-to-network metadata are introduced.  A network
-   element desiring the simplest interpretation can use the bits as a
-   3-bit 'importance' field, where higher values indicate high
-   importance and lower values indicate less importance.  A packet
-   tagged as less important means that such a packet can be discarded
-   during a reactive policy event in favor, eventually, of a competing
-   but more important packet.  Absent such discard preference
-   indication, the network element will blindly drop packets during a
-   reactive policy event.
-
    For more comprehensive interpretation, metadata is characterized into
    two different nature:
 
@@ -211,7 +204,59 @@ Table of Contents
       comprises of two fields - Keep/Discard bit and Reliable/Unreliable
       bit.
 
-3.1.  Importance
+3.1.  Metadata
+
+   The metadata is described in CDDL format below.
+
+; one or more metadata can be signaled.
+metadata = {
+  metadata-type: (0..1), ; 0 is Network Metadata and 1 is Application Metadata
+  * $$metadata-extensions
+}
+
+; Application Metadata
+
+$$metadata-extensions //= (
+; true indicates packet of high importance
+; false indicates packet of low importance
+  importance: bool,
+; Packets can be tagged as reliable (true) or unreliable (false)
+  reliable: bool,
+; Packets can be tagged as preference to keep (true) or discard (false)
+  prefer-keep: bool
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
+  realtime: bool
+)
+
+; Network Metadata
+
+; Provides information about the nominal downlink bitrate
+; Returning a value set to 0 (or a very low value) should trigger
+; the host to seek for better paths.
+
+Bitrate =  {
+  nominal: uint,  ; Mbps
+  ? burst-d => burst-info
+}
+
+burst-info = {
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
+}
+
+$$metadata-extensions //= (
+   ? downlinkBitrate => Bitrate,
+; Indicates whether a flow is to be offloaded to alternate
+; available paths.
+   pref-alt-path: bool
+)
+
+downlinkBitrate = "downlinkBitrate"
+burst-d = "burst-info"
+
+3.2.  Importance
 
    The "Importance" metadata signifies if the packet is of more
    important (true) or less important (false) by the host, relative to
@@ -226,23 +271,16 @@ Table of Contents
    of signal.  An example of this interpretation is specified in
    Appendix A.
 
-   ; true indicates high importance
-   ; false indicates low importance
-   importance = bool
-
-                   Figure 1: CDDL Encoding of Importance
-
-3.1.1.  Network Treatment
+3.2.1.  Network Treatment
 
    During a reactive policy event, a network element is encouraged to
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-3.2.  Reliable/Unreliable
+3.3.  Reliable/Unreliable
 
-   The "Reliable" metadata indicates if a packet that carries that bit
-   is reliably transmitted by the host.  Packets are marked as
-   'unreliable' or 'reliable':
+   The "Reliable" metadata indicates if a packet is reliably transmitted
+   by the host.
 
    *  Reliable packets are re-transmitted by the underlying transport
       (e.g., TCP [RFC9293] or [QUIC]) or re-transmitted by the
@@ -260,33 +298,24 @@ Table of Contents
 
    Reliable/Unreliable belongs to Application Metadata.
 
-   ; Packets can be tagged as reliable (true) or unreliable (false)
-   ; prefer-keep and realtime metadata signal other preferences
-   ; as a function of the reliability metadata
-   reliable = {
-     ( false,
-       prefer-keep ) /
-     ( true,
-       realtime )
-   }
-
-                    Figure 2: CDDL Encoding of Reliable
-
-3.2.1.  Network Treatment
+3.3.1.  Network Treatment
 
    During a reactive policy event, dropping unreliable traffic is
    preferred over dropping reliable traffic.  The reliable traffic will
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-3.3.  Packet Discard Preference
+3.4.  Packet Discard Preference
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
 
-3.3.1.  Unreliable Traffic
+3.4.1.  Unreliable Traffic
 
-   Packets are marked as 'may-discard' or 'prefer-keep'.
+   Packets are marked with 'prefer-keep' set to either true or false.
+   When set to true, it indicates a preference to keep the packet.
+   Conversely, when set to false, it signals that the packet may be
+   subject to discard based on a reactive policy.
 
    Many flows contain a mix of important packets and less-important
    packets, but applications seldom signal that difference themselves
@@ -302,39 +331,28 @@ Table of Contents
    'prefer-keep' traffic at the expense of the less-important 'may-
    discard' traffic.
 
-   The reasoning why a packet, marked as 'may-discard', is transmitted
-   by an application while the application can avoid sending that packet
-   is application-specific.
+   The reason why an application transmits a packet marked as 'prefer-
+   keep' set to false, when the application has the capability to avoid
+   sending that packet, is application-specific.
 
-   ; When true, indicates a preference to keep a packet
-   ; When false, indicates packet may be discarded reactive policy
-   prefer-keep = bool
+3.4.1.1.  Network Treatment
 
-                   Figure 3: CDDL Encoding of Prefer-Keep
+   During a reactive policy event, dropping packets with 'prefer-keep'
+   set to false is preferred over dropping 'prefer-keep' set to true
+   packets.  Absent such discard preference indication, the network
+   element will blindly drop packets during a reactive policy event.
 
-3.3.1.1.  Network Treatment
+3.4.2.  Reliable Traffic
 
-   During a reactive policy event, dropping 'may-discard' packets is
-   preferred over dropping 'prefer-keep' packets.
-
-3.3.2.  Reliable Traffic
-
-   For reliable traffic, this metadata indicates whether the packet
-   belongs to bulk or real-time traffic.
-
-   ; Has a meaning only for packets marked as reliable
-   ; True indicates realtime
-   ; False indicates bulk (non-realtime)
-   realtime = bool
-
-                    Figure 4: CDDL Encoding of Realtime
+   For reliable traffic, "realtime" metadata indicates whether the
+   packet belongs to bulk or real-time traffic.
 
    An application such as a web browser might mark certain flows as
    realtime (e.g., the flow is related to dynamically updating a search
    box and quick responses help the user experience) and other flows as
    bulk (e.g., file download, file upload).
 
-3.3.2.1.  Network Treatment
+3.4.2.1.  Network Treatment
 
    Realtime traffic prefers lower latency network paths and bulk traffic
    prefers high throughoupt paths.
@@ -357,21 +375,6 @@ Table of Contents
    For either measurement, packets can arrive at the start of a second,
    as near as possible behind each other, and the remaining portion of
    that second could have no packets transmitted.
-
-   ; Provides information about the nominal downlink bitrate
-   ; Returning a value set to 0 (or a very low value) should trigger
-   ; the host to seek for better paths.
-   downlinkBitrate = {
-     nominal: uint,        ; Mbps
-     ? burst-info
-   }
-
-   burst-info = {
-     burst: uint,          ; Mbps
-     burstDuration: uint   ; milliseconds
-   }
-
-                Figure 5: CDDL Encoding of Downlink Bitrate
 
 4.1.1.  Units
 
@@ -400,12 +403,6 @@ Table of Contents
 
    The 'pref-alt-path' metadata may be sent together with the bitrate
    metadata set to a very low value.
-
-   ; Indicates whether a flow is to be offloaded to alternate
-   ; available paths.
-   pref-alt-path = bool
-
-                  Figure 6: CDDL Encoding of pref-alt-path
 
 4.2.1.  Host Treatment
 
@@ -500,8 +497,8 @@ Table of Contents
 
                           Table 1: Initial Values
 
-   New entries can be added to the registery using "Standards Action"
-   policy (Section 4.9 of [RFC8126].
+   New entries can be added to the registry using "Standards Action"
+   policy (Section 4.9 of [RFC8126]).
 
 Acknowledgments
 
@@ -1117,7 +1114,7 @@ Appendix B.  Example of Network-to-Host Metadata for Video Streaming
    A network element can signal the maximum bandwidth allowed for video
    streaming.  Typically, this policy limit exists in cellular networks.
 
-   The example shown in Figure 7 indicates the burst bandwidth (2 Mbps),
+   The example shown in Figure 1 indicates the burst bandwidth (2 Mbps),
    burst duration (3 seconds), and nominal (non-burst) bandwidth (1
    Mbps) for the requesting user:
 
@@ -1129,7 +1126,7 @@ Appendix B.  Example of Network-to-Host Metadata for Video Streaming
      }
    }
 
-     Figure 7: Example of Network-to-Host Metadata for Video Streaming
+     Figure 1: Example of Network-to-Host Metadata for Video Streaming
 
 Authors' Addresses
 
@@ -1149,3 +1146,9 @@ Authors' Addresses
    Orange
    France
    Email: mohamed.boucadair@orange.com
+
+
+   Tirumaleswar Reddy
+   Nokia
+   India
+   Email: kondtir@gmail.com
