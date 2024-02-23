@@ -194,8 +194,6 @@ to a flow, application, host, or subscriber.
 
 # Host to Network Metadata
 
-Three types of host-to-network metadata are introduced. A network element desiring the simplest interpretation can use the bits as a 3-bit 'importance' field, where higher values indicate high importance and lower values indicate less importance. A packet tagged as less important means that such a packet can be discarded during a reactive policy event in favor, eventually, of a competing but more important packet.  Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.
-
 For more comprehensive interpretation, metadata is characterized into two different nature:
 
 Network Metadata:
@@ -218,9 +216,17 @@ metadata = {
 ; Application Metadata
 
 $$metadata-extensions //= (
+; true indicates packet of high importance
+; false indicates packet of low importance
   importance: bool,
+; Packets can be tagged as reliable (true) or unreliable (false)
   reliable: bool,
+; Packets can be tagged as preference to keep (true) or discard (false)
   prefer-keep: bool
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
+  realtime: bool
 )
 
 ; Network Metadata
@@ -236,7 +242,10 @@ burst-info = {
 }
 
 $$metadata-extensions //= (
-   ? downlinkBitrate => Bitrate
+   ? downlinkBitrate => Bitrate,
+; Indicates whether a flow is to be offloaded to alternate
+; available paths.   
+   pref-alt-path: bool
 )
 
 downlinkBitrate = "downlinkBitrate"
@@ -257,14 +266,6 @@ flow). This tagging does not provide more privileges to an application
 with regards to resources usage compared to the absence of signal. An
 example of this interpretation is specified in {{examples-h2n}}.
 
-~~~~~
-; true indicates high importance
-; false indicates low importance
-importance = bool
-~~~~~
-{: #cddl-importance title="CDDL Encoding of Importance"}
-
-
 ### Network Treatment
 
 During a reactive policy event, a network element is encouraged to
@@ -273,31 +274,14 @@ importance=true, for the same flow.
 
 ## Reliable/Unreliable
 
-The "Reliable" metadata indicates if a packet that carries that bit is reliably transmitted by the host. Packets are marked as 'unreliable' or 'reliable':
+The "Reliable" metadata indicates if a packet is reliably transmitted by the host. 
 
 * Reliable packets are re-transmitted by the underlying transport
 (e.g., TCP {{?RFC9293}} or {{QUIC}}) or re-transmitted by the appplication (e.g., {{RELIABLE-RTP}}, NTP).
 * Unreliable packets are not re-transmitted by the transport
 (e.g., UDP, {{RTP}}, {{LOSSY-QUIC}}) and also not re-transmitted by the application (e.g., {{RTP}}).
 
-Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by
-the sender application, appearing on the network again. Thus, delaying or discarding such packets does not
-reduce the amount of transmitted data in a network; it only defers when it appears on the network.
-
-Reliable/Unreliable belongs to Application Metadata.
-
-~~~~~
-; Packets can be tagged as reliable (true) or unreliable (false)
-; prefer-keep and realtime metadata signal other preferences
-; as a function of the reliability metadata
-reliable = {
-  ( false,
-    prefer-keep ) /
-  ( true,
-    realtime )
-}
-~~~~~
-{: #cddl-reliable title="CDDL Encoding of Reliable"}
+Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by the sender application, appearing on the network again. Thus, delaying or discarding such packets does not reduce the amount of transmitted data in a network; it only defers when it appears on the network.
 
 ### Network Treatment
 
@@ -305,15 +289,11 @@ During a reactive policy event, dropping unreliable traffic is preferred over dr
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
-
-
 ## Packet Discard Preference
 
 This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
 ### Unreliable Traffic
-
-Packets are marked as 'may-discard' or 'prefer-keep'.
 
 Many flows contain a mix of important packets and less-important packets, but applications
 seldom signal that difference themselves let alone signal the difference to the network.
@@ -326,33 +306,18 @@ host-to-network metadata signaling, the network can become an active assistant i
 flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
 traffic at the expense of the less-important 'may-discard' traffic.
 
-The reasoning why a packet, marked as 'may-discard', is transmitted by an application while
-the application can avoid sending that packet is application-specific.
-
-~~~~~
-; When true, indicates a preference to keep a packet
-; When false, indicates packet may be discarded reactive policy
-prefer-keep = bool
-~~~~~
-{: #cddl-prefer-keep title="CDDL Encoding of Prefer-Keep"}
+The reason why an application transmits a packet marked as 'prefer-keep' set to false, when the 
+application has the capability to avoid sending that packet, is application-specific.
 
 #### Network Treatment
 
-During a reactive policy event, dropping 'may-discard' packets is preferred over dropping
-'prefer-keep' packets.
+During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred 
+over dropping 'prefer-keep' set to true packets.
 
 
 ### Reliable Traffic
 
-For reliable traffic, this metadata indicates whether the packet belongs to bulk or real-time traffic.
-
-~~~~~
-; Has a meaning only for packets marked as reliable
-; True indicates realtime
-; False indicates bulk (non-realtime)
-realtime = bool
-~~~~~
-{: #cddl-realtime title="CDDL Encoding of Realtime"}
+For reliable traffic, "realtime" metadata indicates whether the packet belongs to bulk or real-time traffic.
 
 An application such as a web browser might mark certain flows as realtime (e.g., the flow is
 related to dynamically updating a search box and quick responses help the user experience)
@@ -381,22 +346,6 @@ For either measurement, packets can arrive at the start of a second,
 as near as possible behind each other, and the remaining portion of
 that second could have no packets transmitted.
 
-~~~~~
-; Provides information about the nominal downlink bitrate
-; Returning a value set to 0 (or a very low value) should trigger
-; the host to seek for better paths.
-downlinkBitrate = {
-  nominal: uint,        ; Mbps
-  ? burst-info
-}
-
-burst-info = {
-  burst: uint,          ; Mbps
-  burstDuration: uint   ; milliseconds
-}
-~~~~~
-{: #cddl-downlink title="CDDL Encoding of Downlink Bitrate"}
-
 ### Units
 
 Bit rate is expressed in Mbps and duration is in milliseconds.
@@ -422,13 +371,6 @@ attachment.  After the crisis has subsided, the network should signal
 with pref-alt-path=false.
 
 The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
-
-~~~~~
-; Indicates whether a flow is to be offloaded to alternate
-; available paths.
-pref-alt-path = bool
-~~~~~
-{: #cddl-pref-alt-path title="CDDL Encoding of pref-alt-path"}
 
 ### Host Treatment
 
@@ -489,7 +431,7 @@ The initial values of the registry are listed in {{initial-reg}}.
 | 5          | PreferAltPath     | Sollicits the hosts to use an alternate path if available       | This-Document | 1.0     |
 {: #initial-reg title="Initial Values"}
 
-New entries can be added to the registery using "Standards Action" policy ({{Section 4.9 of !RFC8126}}.
+New entries can be added to the registery using "Standards Action" policy {{Section 4.9 of !RFC8126}}.
 
 # Acknowledgments
 {:numbered="false"}
