@@ -175,7 +175,7 @@ to a flow, application, host, or subscriber.
 
 # Host to Network Metadata
 
-For more comprehensive interpretation, metadata is characterized into two different nature:
+Metadata is characterized into two different nature:
 
 Network Metadata:
 : This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
@@ -459,7 +459,7 @@ is more important than video (importance=high, KD=keep, RU=reliable), video key 
 have middle importance (importance=low, discard, reliable), and both types
 of video delta frames (P-frame and B-frame) have least importance (importance=low, KD=discard, RU=unreliable).
 
-Comprehensive Interpretation:
+Video Streaming Metadata:
 
 | Traffic type                             | Importance | PacketNature      | RU                   |
 |:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
@@ -467,19 +467,7 @@ Comprehensive Interpretation:
 | video delta P-frame                      | low        | discard           | unreliable           |
 | video delta B-frame                      | low        | discard           | unreliable           |
 | audio                                    | high       | realtime          | reliable             |
-{: #table-video-streaming-ci title="Example Values for Video Streaming Metadata - Comprehensive Interpretation"}
-
-In the following, "Simple Interpretation" associates a bit with each of the properties listed in {{table-video-streaming-ci}}.
-
-Simple Interpretation:
-
-| Traffic type      | Simple Interpretation |
-|:-----------------:|:---------------------:|
-| video I-frame     | 011                   |
-| video delta frame | 001                   |
-| audio             | 111                   |
-{: #table-video-streaming-si title="Example Values for Video Streaming Metadata - Simple Interpretation"}
-
+{: #table-video-streaming title="Example Values for Video Streaming Metadata"}
 
 ## Interactive Gaming or Audio/Video  {#example-interactive-av}
 
@@ -491,37 +479,21 @@ example.  Additionally, most Internet service providers constrain
 upstream bandwidth so proper packet treatment is critical in the
 upstream direction.
 
-Comprehensive Interpretation:
+Interactive A/V, downstream Metadata:
 
 | Traffic type      | Importance | PacketNature      | RU                   |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
 | video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
 | audio             | high       | realtime          | reliable             |
-{: #table-interactive-av-downstream-ci title="Example Values for Interactive A/V, downstream - Comprehensive Interpretation"}
+{: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
 
 | Traffic type      | Importance | PacketNature      | RU                   |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
 | video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
 | audio             | high       | realtime          | reliable             |
-{: #table-video-av-upstream-ci title="Example Values for Interactive A/V, upstream - Comprehensive Interpretation"}
-
-Simple Interpretation:
-
-| Traffic type      | Simple Interpretation |
-|:-----------------:|:---------------------:|
-| video key frame   | 011                   |
-| video delta frame | 001                   |
-| audio             | 111                   |
-{: #table-interactive-av-downstream-si title="Example Values for Interactive A/V, downstream - Simple Interpretation"}
-
-| Traffic type      | Simple Interpretation |
-|:-----------------:|:---------------------:|
-| video key frame   | 011                   |
-| video delta frame | 000                   |
-| audio             | 111                   |
-{: #table-video-av-upstream-si title="Example Values for Interactive A/V, upstream - Simple Interpretation"}
+{: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
 
 Many interactive audio/video applications also support sharing the presenter's
 screen, file, video, or pictures.  During this sharing the presenter's video
@@ -537,17 +509,7 @@ Comprehensive Interpretation:
 | video delta frame | low        | discard           | unreliable           |
 | audio             | high       | realtime          | reliable             |
 | picture sharing   | high       | realtime          | reliable             |
-{: #table-video-av-sharing-ci title="Example Values for Interactive A/V, upstream - Comprehensive Interpretation"}
-
-Simple Interpretation:
-
-| Traffic type      | Simple Interpretation |
-|:-----------------:|:---------------------:|
-| video key frame   | 011                   |
-| video delta frame | 000                   |
-| audio             | 111                   |
-| picture sharing   | 111                   |
-{: #table-video-av-sharing-si title="Example Values for Interactive A/V, upstream - Simple Interpretation"}
+{: #table-video-av-sharing title="Example Values for Interactive A/V with picture sharing, upstream"}
 
 In many scenarios a game or VoIP application will want to signal different
 metadata for the same type of packet in each direction.  For example, for
@@ -560,10 +522,10 @@ than audio.
 
 Example packet metadata for Desktop Virtualization (like Citrix
 Virtual Apps and Desktops - CVAD) application.  This is shown in two
-tables, client-to-server traffic ({{table-desktop-virtualization-c2s-ci}})({{table-desktop-virtualization-c2s-si}})
-and server-to-client traffic ({{table-desktop-virtualization-s2c-ci}})({{table-desktop-virtualization-s2c-si}}).
+tables, client-to-server traffic ({{table-desktop-virtualization-c2s}})
+and server-to-client traffic ({{table-desktop-virtualization-s2c}}).
 
-Comprehensive Interpretation:
+Remote Desktop Virtualization Metadata:
 
 | Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
@@ -574,7 +536,7 @@ Comprehensive Interpretation:
 | Interactive video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
 | Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
 | Interactive video delta frame           | low        | discard            | unreliable          |   |
-{: #table-desktop-virtualization-c2s-ci title="Example Values for Remote Desktop Virtualization Metadata, client to server - Comprehensive Interpretation"}
+{: #table-desktop-virtualization-c2s title="Example Values for Remote Desktop Virtualization Metadata, client to server"}
 
 | Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
@@ -585,31 +547,7 @@ Comprehensive Interpretation:
 | File copy                  | low        | bulk            | reliable            |   |
 | Interactive (or streaming) video predictive frame     | low        | discard         | unreliable          | Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames. |
 | Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
-{: #table-desktop-virtualization-s2c-ci title="Example Values for Remote Desktop Virtualization Metadata, server to client - Comprehensive Interpretation"}
-
-Simple Interpretation:
-
-| Traffic type               | Simple Interpretation |
-|:--------------------------:|:---------------------:|
-| User typing                | 111                   |
-| Mouse click/End Position   | 111                   |
-| Interactive audio          | 110                   |
-| Authentication - Finger print, smart card | 011    |
-| Interactive video key frame            | 010       |
-| Mouse position tracking    | 000                   |
-| Interactive video delta frame           | 000      |
-{: #table-desktop-virtualization-c2s-si title="Example Values for Remote Desktop Virtualization Metadata, client to server - Simple Interpretation"}
-
-| Traffic type               | Simple Interpretation |
-|:--------------------------:|:---------------------:|
-| Glyph critical             | 111                   |
-| Interactive (or streaming) audio   | 110           |
-| Haptic feedback            | 100                   |
-| Interactive (or streaming) video key frame  | 010  |
-| File copy                  | 001                   |
-| Interactive (or streaming) video predictive frame | 000 |
-| Glyph smoothing            | 000                   |
-{: #table-desktop-virtualization-s2c-si title="Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation"}
+{: #table-desktop-virtualization-s2c title="Example Values for Remote Desktop Virtualization Metadata, server to client"}
 
 *** A video key frame should be handled differently by the network
 depending on a streaming application versus a remote desktop
