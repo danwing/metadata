@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-22T01:13:28.114330+00:00",
+  "timestamp": "2024-02-25T01:17:57.827763+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -162,15 +162,15 @@
       "id": "I_kwDOK0CwpM5_SrXG",
       "title": "Less importance packets discarded during reactive policy event can lead to retransmits",
       "url": "https://github.com/danwing/metadata/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "sridharangirish91",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In simple interpretation, we have the LSB signifying reliability. So low priority values like 1 or 3, if dropped, will be retransmitted by the application/transport layer. Will it make sense to reword it like lowest importance (0) can be dropped instead?",
       "createdAt": "2024-02-15T04:13:57Z",
-      "updatedAt": "2024-02-15T04:13:58Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-24T23:22:46Z",
+      "closedAt": "2024-02-24T23:22:46Z",
       "comments": []
     },
     {
@@ -531,24 +531,26 @@
       "id": "PR_kwDOK0CwpM5nDVmm",
       "title": "update registry with altpath + authors list",
       "url": "https://github.com/danwing/metadata/pull/14",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-16T06:23:15Z",
-      "updatedAt": "2024-02-16T06:23:15Z",
+      "updatedAt": "2024-02-22T01:30:06Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
       "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
       "headRepository": "danwing/metadata",
       "headRefName": "boucadair-patch-3",
       "headRefOid": "6a5792ac698409339bcfc9d7711a731f80386ed5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-02-22T01:30:06Z",
+      "mergedAt": "2024-02-22T01:30:05Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "6a95bda343e23de287b7e458397f5fce652cd568"
+      },
       "comments": [],
       "reviews": []
     },
@@ -557,24 +559,26 @@
       "id": "PR_kwDOK0CwpM5nDXNt",
       "title": "have sconepro in the file name",
       "url": "https://github.com/danwing/metadata/pull/15",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "for better visibility of this spec.",
       "createdAt": "2024-02-16T06:30:08Z",
-      "updatedAt": "2024-02-16T10:00:16Z",
+      "updatedAt": "2024-02-23T02:06:52Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
-      "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
+      "baseRefOid": "eec110b0314745328445505843735ffdf2b65e10",
       "headRepository": "danwing/metadata",
       "headRefName": "boucadair-patch-4",
-      "headRefOid": "d56ccdbda7811d45ad1efe4b0c4a38b0e99f8bef",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "7b22f9c66c9f8665ace1e5c232cd8bde68566169",
+      "closedAt": "2024-02-23T02:06:52Z",
+      "mergedAt": "2024-02-23T02:06:52Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "9d0102fb9feee1116e06d5b070cdf2d1c2751472"
+      },
       "comments": [],
       "reviews": []
     },
@@ -583,20 +587,570 @@
       "id": "PR_kwDOK0CwpM5nDxkZ",
       "title": "within a flow clarification",
       "url": "https://github.com/danwing/metadata/pull/16",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-16T08:07:02Z",
-      "updatedAt": "2024-02-16T08:07:02Z",
+      "updatedAt": "2024-02-22T01:29:21Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
       "baseRefOid": "e34d345e127d6ad0ab3f91d70812e869a028781c",
       "headRepository": "danwing/metadata",
       "headRefName": "boucadair-patch-5",
       "headRefOid": "7333f9a8d5ff327a6538f5d923dace922c2857cc",
+      "closedAt": "2024-02-22T01:29:20Z",
+      "mergedAt": "2024-02-22T01:29:20Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "e78d1895ae5ded81a5dad208638055d22b94ecdb"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOK0CwpM5nlwJg",
+      "title": "reword Abstract and Intro to explain this is the meta metadata definition",
+      "url": "https://github.com/danwing/metadata/pull/17",
+      "state": "MERGED",
+      "author": "danwing",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-22T01:27:09Z",
+      "updatedAt": "2024-02-23T01:54:22Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "6a95bda343e23de287b7e458397f5fce652cd568",
+      "headRepository": "danwing/metadata",
+      "headRefName": "metameta",
+      "headRefOid": "c1b1cdf81bd46030b4e745bc77c765d86c5a88dd",
+      "closedAt": "2024-02-23T01:54:21Z",
+      "mergedAt": "2024-02-23T01:54:21Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "eec110b0314745328445505843735ffdf2b65e10"
+      },
+      "comments": [
+        {
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "body": "[d683cf0](https://github.com/danwing/metadata/pull/17/commits/d683cf036bb87e1aa23c6e845e53ffa5d55fd7b2) to resolve a conflict with the main.",
+          "createdAt": "2024-02-22T07:00:11Z",
+          "updatedAt": "2024-02-22T07:00:11Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5w9GNZ",
+          "commit": {
+            "abbreviatedOid": "d683cf0"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T07:02:37Z",
+          "updatedAt": "2024-02-22T07:08:55Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "I thought we agreed to use CDDL. ",
+              "createdAt": "2024-02-22T07:02:37Z",
+              "updatedAt": "2024-02-22T07:08:55Z"
+            },
+            {
+              "originalPosition": 67,
+              "body": "```suggestion\r\n* IPv6 Hop-by-Hop Options ({{Section 4.3 of ?RFC8200}}),\r\n```",
+              "createdAt": "2024-02-22T07:05:23Z",
+              "updatedAt": "2024-02-22T07:08:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5w9CmN",
+          "commit": {
+            "abbreviatedOid": "8c14311"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T06:50:59Z",
+          "updatedAt": "2024-02-22T09:56:47Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "Replace binary format with CBOR. ",
+              "createdAt": "2024-02-22T06:50:59Z",
+              "updatedAt": "2024-02-22T09:56:47Z"
+            },
+            {
+              "originalPosition": 48,
+              "body": "Good point and we way want to elaborate how it is also useful in case of proxy (e.g., MASQUE). ",
+              "createdAt": "2024-02-22T07:02:40Z",
+              "updatedAt": "2024-02-22T09:56:47Z"
+            },
+            {
+              "originalPosition": 142,
+              "body": "This falls under the Application metadata category (you may want to move the text). I don't think the draft should define the content of the metadata in 00 version atleast but can provide examples. ",
+              "createdAt": "2024-02-22T07:07:21Z",
+              "updatedAt": "2024-02-22T09:56:47Z"
+            },
+            {
+              "originalPosition": 154,
+              "body": "It is too early to define metadata. let's first get WG members to agree. We can add examples. ",
+              "createdAt": "2024-02-22T07:24:21Z",
+              "updatedAt": "2024-02-22T09:56:47Z"
+            },
+            {
+              "originalPosition": 173,
+              "body": "I thought we will define the CDDL format something similar to https://datatracker.ietf.org/doc/draft-ietf-teep-protocol/ to add network-metadata and application-metadata. ",
+              "createdAt": "2024-02-22T09:55:07Z",
+              "updatedAt": "2024-02-22T09:56:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xABFq",
+          "commit": {
+            "abbreviatedOid": "8c14311"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T13:16:29Z",
+          "updatedAt": "2024-02-22T13:16:29Z",
+          "comments": [
+            {
+              "originalPosition": 154,
+              "body": "I would keep them in -00 because otherwise we will get comments why we need to have something extensible, generic, etc. \r\n",
+              "createdAt": "2024-02-22T13:16:29Z",
+              "updatedAt": "2024-02-22T13:16:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xAHjq",
+          "commit": {
+            "abbreviatedOid": "8c14311"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-22T13:28:25Z",
+          "updatedAt": "2024-02-22T13:28:25Z",
+          "comments": [
+            {
+              "originalPosition": 154,
+              "body": "Good point, I added the full CDDL representation of the application and network metadata, see https://github.com/danwing/metadata/pull/19. ",
+              "createdAt": "2024-02-22T13:28:25Z",
+              "updatedAt": "2024-02-22T13:28:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xFg9c",
+          "commit": {
+            "abbreviatedOid": "d683cf0"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T01:48:34Z",
+          "updatedAt": "2024-02-23T01:48:34Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "will change Abstract to say 'CDDL which expresses CBOR and JSON'",
+              "createdAt": "2024-02-23T01:48:34Z",
+              "updatedAt": "2024-02-23T01:48:34Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOK0CwpM5nnEUF",
+      "title": "align the example with the core spec",
+      "url": "https://github.com/danwing/metadata/pull/18",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-22T07:15:22Z",
+      "updatedAt": "2024-02-23T01:46:32Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "6a95bda343e23de287b7e458397f5fce652cd568",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-6",
+      "headRefOid": "eeb373e079442d21e3f5c491730560080c8f6603",
+      "closedAt": "2024-02-23T01:46:32Z",
+      "mergedAt": "2024-02-23T01:46:32Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "f9974d8325bebf6d5d072032a71563791264365f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOK0CwpM5no2Nh",
+      "title": "Added Metadata in CDDL format",
+      "url": "https://github.com/danwing/metadata/pull/19",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-22T11:57:19Z",
+      "updatedAt": "2024-02-23T01:59:34Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "metameta",
+      "baseRefOid": "d683cf036bb87e1aa23c6e845e53ffa5d55fd7b2",
+      "headRepository": "danwing/metadata",
+      "headRefName": "tireddy2-patch-1",
+      "headRefOid": "0eac0fab2aaf221e683f042ff2323c74e4bedd4f",
+      "closedAt": "2024-02-23T01:59:34Z",
+      "mergedAt": "2024-02-23T01:59:34Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "9b9a5a57f225cf11019b4ba718b8756c56921308"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5xAR8p",
+          "commit": {
+            "abbreviatedOid": "32a9176"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-02-22T13:47:50Z",
+          "updatedAt": "2024-02-22T13:57:56Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "```suggestion\r\n  reliable: bool,\r\n```",
+              "createdAt": "2024-02-22T13:47:50Z",
+              "updatedAt": "2024-02-22T13:57:56Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "```suggestion\r\n  prefer-keep: bool\r\n```",
+              "createdAt": "2024-02-22T13:48:00Z",
+              "updatedAt": "2024-02-22T13:57:56Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "for this one, I would replace the detailed element with one single entry \"downlinkBitrate\". \r\n\r\nThe structure of \"downlinkBitrate\" is then expanded in #cddl-downlink, as in the current text in main.\r\n",
+              "createdAt": "2024-02-22T13:51:01Z",
+              "updatedAt": "2024-02-22T13:57:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xFihf",
+          "commit": {
+            "abbreviatedOid": "32a9176"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T01:59:20Z",
+          "updatedAt": "2024-02-23T01:59:20Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "ok, I tried to make that commit here, if I understood how to do the downlinkBitrate properly...",
+              "createdAt": "2024-02-23T01:59:20Z",
+              "updatedAt": "2024-02-23T01:59:20Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOK0CwpM5nvCzn",
+      "title": "Fix syntax errors in CDDL",
+      "url": "https://github.com/danwing/metadata/pull/20",
+      "state": "CLOSED",
+      "author": "tireddy2",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The CDDL has syntax errors, fixed it in this PR. You will have to use the steps in https://www.rfc-editor.org/rfc/rfc8610.html#appendix-F to validate the CDDL.",
+      "createdAt": "2024-02-23T09:31:26Z",
+      "updatedAt": "2024-02-23T10:33:59Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "metameta",
+      "baseRefOid": "9b9a5a57f225cf11019b4ba718b8756c56921308",
+      "headRepository": "danwing/metadata",
+      "headRefName": "tireddy2-patch-2",
+      "headRefOid": "382663a1f85b5aa1230abdaf7963de7932a93902",
+      "closedAt": "2024-02-23T10:33:59Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tiru, you should rebase the PR on main, as metameta was merged.",
+          "createdAt": "2024-02-23T09:52:08Z",
+          "updatedAt": "2024-02-23T09:52:08Z"
+        },
+        {
+          "author": "tireddy2",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Tiru, you should rebase the PR on main, as metameta was merged.\r\n\r\nI don't think metameta is merged. ",
+          "createdAt": "2024-02-23T10:29:34Z",
+          "updatedAt": "2024-02-23T10:29:34Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOK0CwpM5nvXax",
+      "title": "Metameta",
+      "url": "https://github.com/danwing/metadata/pull/21",
+      "state": "CLOSED",
+      "author": "tireddy2",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-23T10:27:23Z",
+      "updatedAt": "2024-02-23T10:33:24Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "9d0102fb9feee1116e06d5b070cdf2d1c2751472",
+      "headRepository": "danwing/metadata",
+      "headRefName": "metameta",
+      "headRefOid": "9b9a5a57f225cf11019b4ba718b8756c56921308",
+      "closedAt": "2024-02-23T10:33:24Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOK0CwpM5nvbVH",
+      "title": "Add files via upload",
+      "url": "https://github.com/danwing/metadata/pull/22",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-23T10:38:16Z",
+      "updatedAt": "2024-02-23T16:11:08Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "9d0102fb9feee1116e06d5b070cdf2d1c2751472",
+      "headRepository": "danwing/metadata",
+      "headRefName": "tireddy2-patch-3",
+      "headRefOid": "88497005961ba7e84bf79ec7b193958a5f4a5f9d",
+      "closedAt": "2024-02-23T16:11:08Z",
+      "mergedAt": "2024-02-23T16:11:08Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "ebeea867a4f882838a7dc4e34fe51c148ea4fa2e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5xJOp6",
+          "commit": {
+            "abbreviatedOid": "af09f40"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T14:27:52Z",
+          "updatedAt": "2024-02-23T14:27:52Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "```suggestion\r\nAbsent such discard preference indication, the network element will blindly drop packets during a reactive policy event.\r\n```",
+              "createdAt": "2024-02-23T14:27:52Z",
+              "updatedAt": "2024-02-23T14:27:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xJO9g",
+          "commit": {
+            "abbreviatedOid": "af09f40"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T14:28:27Z",
+          "updatedAt": "2024-02-23T14:28:27Z",
+          "comments": [
+            {
+              "originalPosition": 231,
+              "body": "```suggestion\r\nNew entries can be added to the registry using \"Standards Action\" policy ({{Section 4.9 of !RFC8126}}).\r\n```",
+              "createdAt": "2024-02-23T14:28:27Z",
+              "updatedAt": "2024-02-23T14:28:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xJPtF",
+          "commit": {
+            "abbreviatedOid": "af09f40"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T14:29:58Z",
+          "updatedAt": "2024-02-23T14:29:58Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "```suggestion\r\n; one or more metadata can be signaled.\r\n```",
+              "createdAt": "2024-02-23T14:29:58Z",
+              "updatedAt": "2024-02-23T14:29:58Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOK0CwpM5nxhrS",
+      "title": "clean up idnits complaints and build complaints",
+      "url": "https://github.com/danwing/metadata/pull/23",
+      "state": "MERGED",
+      "author": "danwing",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-23T16:33:15Z",
+      "updatedAt": "2024-02-23T19:09:14Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "ebeea867a4f882838a7dc4e34fe51c148ea4fa2e",
+      "headRepository": "danwing/metadata",
+      "headRefName": "clean_idnits",
+      "headRefOid": "5a42c677f19d8fb1204c64b6ecc3e36aa9c69876",
+      "closedAt": "2024-02-23T19:09:13Z",
+      "mergedAt": "2024-02-23T19:09:13Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "7095b764b55a2aa1799b962acefdab3f7de0f0ce"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5xK-uH",
+          "commit": {
+            "abbreviatedOid": "3646aa5"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-23T18:27:43Z",
+          "updatedAt": "2024-02-23T18:27:44Z",
+          "comments": [
+            {
+              "originalPosition": 10,
+              "body": "```suggestion\r\n    target: https://datatracker.ietf.org/group/sconepro/about/\r\n```\r\n\r\n",
+              "createdAt": "2024-02-23T18:27:43Z",
+              "updatedAt": "2024-02-23T18:27:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xLGo0",
+          "commit": {
+            "abbreviatedOid": "5a42c67"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-23T18:49:50Z",
+          "updatedAt": "2024-02-23T18:49:50Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOK0CwpM5nyMi3",
+      "title": "clarify the intent of the encoding",
+      "url": "https://github.com/danwing/metadata/pull/24",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-23T18:49:16Z",
+      "updatedAt": "2024-02-23T19:08:59Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "ebeea867a4f882838a7dc4e34fe51c148ea4fa2e",
+      "headRepository": "danwing/metadata",
+      "headRefName": "cddl-not-a-blob-on-the-wire",
+      "headRefOid": "83ed92c311b8d7201a607f7e7adcf5031747bbb4",
+      "closedAt": "2024-02-23T19:08:58Z",
+      "mergedAt": "2024-02-23T19:08:58Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "1219b66a378667bf5afcd5b400167f4926aa3f02"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOK0CwpM5n1GYB",
+      "title": "removing complex/simple interpretation from appendix",
+      "url": "https://github.com/danwing/metadata/pull/25",
+      "state": "OPEN",
+      "author": "sridharangirish91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-24T23:21:38Z",
+      "updatedAt": "2024-02-24T23:21:38Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "7095b764b55a2aa1799b962acefdab3f7de0f0ce",
+      "headRepository": "danwing/metadata",
+      "headRefName": "sridharanr",
+      "headRefOid": "075575d017fd3745a447edd57cb23858f24fc370",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
