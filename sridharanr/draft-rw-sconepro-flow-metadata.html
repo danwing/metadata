@@ -1674,7 +1674,7 @@ with pref-alt-path=false.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
         <h3 id="name-reliable-unreliable-set-by-">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-reliable-unreliable-set-by-" class="section-name selfRef">Reliable/Unreliable set by the respective transport level protocol</a>
         </h3>
-<p id="section-5.1-1">TCP is a reliable protocol. All the packets are guarenteed to be delivered when sent over TCP. UDP, as a transport protocol, does not guarantee delivery of the packets being sent. UDP-based protocols such as QUIC implement reliability layer over UDP, guaranteeing reliability of packets. They also implement a way to send loss-tolerant packets (QUIC deploys QUIC-DGRAM for loss-tolerant packets). These packets are sent over a separate subchannel that bypasses the reliability subsystem of the protocol. Any application, utilizing such a protocol, will have to choose the respective subchannel (reliable or loss-tolerant) based on the nature of the packet being sent -- loss-tolerant packet cannot be sent over the reliable subchannel and vice-versa. Hence, based on the subchannel being chosen, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> is a reliable transport protocol, while UDP <span>[<a href="#RFC0768" class="cite xref">RFC0768</a>]</span> provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. Protocols built over UDP may implement reliability features at the "application" layer if such a transport feature is needed <span>[<a href="#RFC8304" class="cite xref">RFC8304</a>]</span>. For example, streams of reliable application data are sent using STREAM QUIC frames, while application data that do not require retransmission can be carried in DATAGRAM QUIC frames. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="offloading-loss-avoidance-to-the-network">
@@ -1924,6 +1924,10 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Rey, J.</span>, <span class="refAuthor">Leon, D.</span>, <span class="refAuthor">Miyazaki, A.</span>, <span class="refAuthor">Varsa, V.</span>, and <span class="refAuthor">R. Hakenberg</span>, <span class="refTitle">"RTP Retransmission Payload Format"</span>, <span class="seriesInfo">RFC 4588</span>, <span class="seriesInfo">DOI 10.17487/RFC4588</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4588">https://www.rfc-editor.org/rfc/rfc4588</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC0768">[RFC0768]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc768">https://www.rfc-editor.org/rfc/rfc768</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC7104">[RFC7104]</dt>
         <dd>
 <span class="refAuthor">Begen, A.</span>, <span class="refAuthor">Cai, Y.</span>, and <span class="refAuthor">H. Ou</span>, <span class="refTitle">"Duplication Grouping Semantics in the Session Description Protocol"</span>, <span class="seriesInfo">RFC 7104</span>, <span class="seriesInfo">DOI 10.17487/RFC7104</span>, <time datetime="2014-01" class="refDate">January 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7104">https://www.rfc-editor.org/rfc/rfc7104</a>&gt;</span>. </dd>
@@ -1936,9 +1940,17 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Begen, A.</span> and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"Duplicating RTP Streams"</span>, <span class="seriesInfo">RFC 7198</span>, <span class="seriesInfo">DOI 10.17487/RFC7198</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7198">https://www.rfc-editor.org/rfc/rfc7198</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8085">[RFC8085]</dt>
+        <dd>
+<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8200">[RFC8200]</dt>
         <dd>
 <span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8304">[RFC8304]</dt>
+        <dd>
+<span class="refAuthor">Fairhurst, G.</span> and <span class="refAuthor">T. Jones</span>, <span class="refTitle">"Transport Features of the User Datagram Protocol (UDP) and Lightweight UDP (UDP-Lite)"</span>, <span class="seriesInfo">RFC 8304</span>, <span class="seriesInfo">DOI 10.17487/RFC8304</span>, <time datetime="2018-02" class="refDate">February 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8304">https://www.rfc-editor.org/rfc/rfc8304</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8911">[RFC8911]</dt>
         <dd>

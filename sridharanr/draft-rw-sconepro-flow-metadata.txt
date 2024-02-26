@@ -432,21 +432,22 @@ Table of Contents
 
 5.1.  Reliable/Unreliable set by the respective transport level protocol
 
-   TCP is a reliable protocol.  All the packets are guarenteed to be
-   delivered when sent over TCP.  UDP, as a transport protocol, does not
-   guarantee delivery of the packets being sent.  UDP-based protocols
-   such as QUIC implement reliability layer over UDP, guaranteeing
-   reliability of packets.  They also implement a way to send loss-
-   tolerant packets (QUIC deploys QUIC-DGRAM for loss-tolerant packets).
-   These packets are sent over a separate subchannel that bypasses the
-   reliability subsystem of the protocol.  Any application, utilizing
-   such a protocol, will have to choose the respective subchannel
-   (reliable or loss-tolerant) based on the nature of the packet being
-   sent -- loss-tolerant packet cannot be sent over the reliable
-   subchannel and vice-versa.  Hence, based on the subchannel being
-   chosen, setting of the reliable/unreliable metadata entry can be
-   offloaded to the underlying transport protocol, unless specifically
-   overridden by the application.
+   TCP [RFC9293] is a reliable transport protocol, while UDP [RFC0768]
+   provides a minimal, unreliable, best-effort, message-passing
+   transport to applications and other protocols (such as tunnels) that
+   wish to operate over IP [RFC8085].  Protocols built over UDP may
+   implement reliability features at the "application" layer if such a
+   transport feature is needed [RFC8304].  For example, streams of
+   reliable application data are sent using STREAM QUIC frames, while
+   application data that do not require retransmission can be carried in
+   DATAGRAM QUIC frames.  Applications that are utilizing such a
+   protocol, will have to choose the delivery service (reliable or loss-
+   tolerant) based upon the nature of the packet being sent -- loss-
+   tolerant packet cannot be carried in a reliable frame and vice-versa.
+   Hence, based on the transport service being invoked, setting of the
+   reliable/unreliable metadata entry can be offloaded to the underlying
+   transport protocol, unless specifically overridden by the
+   application.
 
 5.2.  Offloading Loss-Avoidance to the network
 
@@ -648,6 +649,10 @@ Informative References
               DOI 10.17487/RFC4588, July 2006,
               <https://www.rfc-editor.org/rfc/rfc4588>.
 
+   [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
+              DOI 10.17487/RFC0768, August 1980,
+              <https://www.rfc-editor.org/rfc/rfc768>.
+
    [RFC7104]  Begen, A., Cai, Y., and H. Ou, "Duplication Grouping
               Semantics in the Session Description Protocol", RFC 7104,
               DOI 10.17487/RFC7104, January 2014,
@@ -662,10 +667,19 @@ Informative References
               RFC 7198, DOI 10.17487/RFC7198, April 2014,
               <https://www.rfc-editor.org/rfc/rfc7198>.
 
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
+
    [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
+
+   [RFC8304]  Fairhurst, G. and T. Jones, "Transport Features of the
+              User Datagram Protocol (UDP) and Lightweight UDP (UDP-
+              Lite)", RFC 8304, DOI 10.17487/RFC8304, February 2018,
+              <https://www.rfc-editor.org/rfc/rfc8304>.
 
    [RFC8911]  Bagnulo, M., Claise, B., Eardley, P., Morton, A., and A.
               Akhter, "Registry for Performance Metrics", RFC 8911,
