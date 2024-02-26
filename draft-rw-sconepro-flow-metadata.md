@@ -386,7 +386,7 @@ TCP {{?RFC9293}} is a reliable transport protocol, while UDP {{?RFC0768}} provid
 
 ## Offloading Loss-Avoidance to the network
 
-Network nodes, upon learning of the nature of the packet (reliable/keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as {{?RFC7198}}, {{?RFC7197}}, {{?RFC7104}}.
+Network nodes, upon learning of the nature of a packet (reliable/prefer-keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (e.g., using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as {{?RFC7198}}, {{?RFC7197}}, or {{?RFC7104}}.
 
 # Security Considerations
 
