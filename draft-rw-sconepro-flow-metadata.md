@@ -270,7 +270,7 @@ During a reactive policy event, a network element is encouraged to
 discard packets marked importance=false in favor of packets marked
 importance=true, for the same flow.
 
-## Reliable/Unreliable
+## Packet Type - Reliable/Unreliable
 
 The "Reliable" metadata indicates if a packet is reliably transmitted by the host.
 
@@ -289,7 +289,7 @@ During a reactive policy event, dropping unreliable traffic is preferred over dr
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
-## Packet Discard Preference
+## Packet Nature
 
 This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
@@ -378,6 +378,15 @@ The 'pref-alt-path' metadata may be sent together with the bitrate metadata set 
 
 The host offloads its connections to alternate available paths.
 
+#Implementation Impact of Metadata
+
+## Reliable/Unreliable set by the respective transport level protocol
+
+TCP is a reliable protocol. All the packets are guarenteed to be delivered when sent over TCP. UDP, as a transport protocol, does not guarantee delivery of the packets being sent. UDP-based protocols such as QUIC implement reliability layer over UDP, guaranteeing reliability of packets. They also implement a way to send loss-tolerant packets (QUIC deploys QUIC-DGRAM for loss-tolerant packets). These packets are sent over a separate subchannel that bypasses the reliability subsystem of the protocol. Any application, utilizing such a protocol, will have to choose the respective subchannel (reliable or loss-tolerant) based on the nature of the packet being sent -- loss-tolerant packet cannot be sent over the reliable subchannel and vice-versa. Hence, based on the subchannel being chosen, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.
+
+## Offloading Loss-Avoidance to the network
+
+Network nodes, upon learning of the nature of the packet (reliable/keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as {{?RFC7198}}, {{?RFC7197}}, {{?RFC7104}}.
 
 # Security Considerations
 
@@ -427,8 +436,8 @@ The initial values of the registry are listed in {{initial-reg}}.
 |:----------:|:-----------------:|:-----------------|:-------------:|:-------:|
 | 0          |                   | Reserved         | This-Document |         |
 | 1          | Importance        | Indicates the level of importance of a packet in a flow            | This-Document | 1.0     |
-| 2          | PacketNature      | Indicates whether a packet is reliably or unreliably transmitted   | This-Document | 1.0     |
-| 3          | DiscardPreference | Indicates a discard preference         | This-Document | 1.0     |
+| 2          | PacketType        | Indicates whether a packet is reliably or unreliably transmitted   | This-Document | 1.0     |
+| 3          | PacketNature      | Indicates a discard preference         | This-Document | 1.0     |
 | 4          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
 | 5          | PreferAltPath     | Sollicits the hosts to use an alternate path if available       | This-Document | 1.0     |
 {: #initial-reg title="Initial Values"}
@@ -455,13 +464,13 @@ Streaming video also contains audio frames which can be encoded
 separately and thus can be signaled separately.  Audio is more
 critical than video for almost all applications, but its importance
 (relative to other packets in the flow) is still an application decision.  In the example below, the audio
-is more important than video (importance=high, KD=keep, RU=reliable), video key frames
-have middle importance (importance=low, discard, reliable), and both types
-of video delta frames (P-frame and B-frame) have least importance (importance=low, KD=discard, RU=unreliable).
+is more important than video (importance=high, PT=keep, RU=reliable), video key frames
+have middle importance (importance=low, PT=discard, RU=reliable), and both types
+of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).
 
 Video Streaming Metadata:
 
-| Traffic type                             | Importance | PacketNature      | RU                   |
+| Traffic type                             | Importance | PacketNature      | PacketType           |
 |:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
 | video I-frame (key frame)                | low        | realtime          | reliable             |
 | video delta P-frame                      | low        | discard           | unreliable           |
@@ -481,14 +490,14 @@ upstream direction.
 
 Interactive A/V, downstream Metadata:
 
-| Traffic type      | Importance | PacketNature      | RU                   |
+| Traffic type      | Importance | PacketNature      | PacketType           |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
 | video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
 | audio             | high       | realtime          | reliable             |
 {: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
 
-| Traffic type      | Importance | PacketNature      | RU                   |
+| Traffic type      | Importance | PacketNature      | PacketType           |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
 | video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
@@ -503,7 +512,7 @@ below:
 
 Comprehensive Interpretation:
 
-| Traffic type      | Importance | PacketNature      | RU                   |
+| Traffic type      | Importance | PacketNature      | PacketType           |
 |:-----------------:|:----------:|:-----------------:|:--------------------:|
 | video key frame   | low        | realtime          | reliable             |
 | video delta frame | low        | discard           | unreliable           |
@@ -527,7 +536,7 @@ and server-to-client traffic ({{table-desktop-virtualization-s2c}}).
 
 Remote Desktop Virtualization Metadata:
 
-| Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
+| Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
 | User typing                | high       | realtime        | reliable            |           |
 | Mouse click/End Position   | high       | realtime        | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
@@ -538,7 +547,7 @@ Remote Desktop Virtualization Metadata:
 | Interactive video delta frame           | low        | discard            | unreliable          |   |
 {: #table-desktop-virtualization-c2s title="Example Values for Remote Desktop Virtualization Metadata, client to server"}
 
-| Traffic type               | Importance | PacketNature    | Reliable/Unreliable | Comments  |
+| Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
 | Glyph critical             | high       | realtime        | reliable          | The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**|
 | Interactive (or streaming) audio   | high       | keep            | unreliable          |   |
