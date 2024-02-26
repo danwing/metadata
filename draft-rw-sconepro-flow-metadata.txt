@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 26 August 2024                                     M. Boucadair
+Expires: 29 August 2024                                     M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                        23 February 2024
+                                                        26 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 August 2024.
+   This Internet-Draft will expire on 29 August 2024.
 
 Copyright Notice
 
@@ -81,9 +81,9 @@ Table of Contents
      3.1.  Metadata
      3.2.  Importance
        3.2.1.  Network Treatment
-     3.3.  Reliable/Unreliable
+     3.3.  Packet Type - Reliable/Unreliable
        3.3.1.  Network Treatment
-     3.4.  Packet Discard Preference
+     3.4.  Packet Nature
        3.4.1.  Unreliable Traffic
          3.4.1.1.  Network Treatment
        3.4.2.  Reliable Traffic
@@ -94,11 +94,15 @@ Table of Contents
        4.1.2.  Host Treatment
      4.2.  Prefer Alternate Path ('pref-alt-path')
        4.2.1.  Host Treatment
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  Metadata for Collaborative Host/Network Signaling Registry
+   5.  Implementation Impact of Metadata
+     5.1.  Reliable/Unreliable set by the respective transport level
+           protocol
+     5.2.  Offloading Loss-Avoidance to the network
+   6.  Security Considerations
+   7.  IANA Considerations
+     7.1.  Metadata for Collaborative Host/Network Signaling Registry
            Group
-     6.2.  Flow Metadata Registry
+     7.2.  Flow Metadata Registry
    Acknowledgments
    References
      Normative References
@@ -190,8 +194,7 @@ Table of Contents
 
 3.  Host to Network Metadata
 
-   For more comprehensive interpretation, metadata is characterized into
-   two different nature:
+   Metadata is characterized into two different nature:
 
    Network Metadata:  This consists of metadata that specifies how the
       network element should treat that packet.  The network metadata
@@ -267,7 +270,7 @@ Table of Contents
 
    New metadata for collaborative host/network signaling MUST be
    registered in the IANA registry, "Flow Metadata Registry"
-   Section 6.2.
+   Section 7.2.
 
    More details about each of these metadata are provided in the
    following sections.  Both client and network intended behaviors are
@@ -294,7 +297,7 @@ Table of Contents
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-3.3.  Reliable/Unreliable
+3.3.  Packet Type - Reliable/Unreliable
 
    The "Reliable" metadata indicates if a packet is reliably transmitted
    by the host.
@@ -322,7 +325,7 @@ Table of Contents
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-3.4.  Packet Discard Preference
+3.4.  Packet Nature
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
@@ -425,7 +428,39 @@ Table of Contents
 
    The host offloads its connections to alternate available paths.
 
-5.  Security Considerations
+5.  Implementation Impact of Metadata
+
+5.1.  Reliable/Unreliable set by the respective transport level protocol
+
+   TCP [RFC9293] is a reliable transport protocol, while UDP [RFC0768]
+   provides a minimal, unreliable, best-effort, message-passing
+   transport to applications and other protocols (such as tunnels) that
+   wish to operate over IP [RFC8085].  Protocols built over UDP may
+   implement reliability features at the "application" layer if such a
+   transport feature is needed [RFC8304].  For example, streams of
+   reliable application data are sent using STREAM QUIC frames, while
+   application data that do not require retransmission can be carried in
+   DATAGRAM QUIC frames.  Applications that are utilizing such a
+   protocol, will have to choose the delivery service (reliable or loss-
+   tolerant) based upon the nature of the packet being sent -- loss-
+   tolerant packet cannot be carried in a reliable frame and vice-versa.
+   Hence, based on the transport service being invoked, setting of the
+   reliable/unreliable metadata entry can be offloaded to the underlying
+   transport protocol, unless specifically overridden by the
+   application.
+
+5.2.  Offloading Loss-Avoidance to the network
+
+   Network nodes, upon learning of the nature of a packet (reliable/
+   prefer-keep) can choose to implement loss avoidance algorithms
+   between hops where there is packet loss detected (e.g., using out-of-
+   band or in-band QoS measurement, which is out of the scope of this
+   document).  By doing so, end-to-end retransmissions can be reduced/
+   avoided thereby minimizing the need for handling loss at the
+   application layer using protocols such as [RFC7198], [RFC7197], or
+   [RFC7104].
+
+6.  Security Considerations
 
    Metadata increases the information available to attackers to
    distinguish important packets from less-important packets, which the
@@ -437,14 +472,14 @@ Table of Contents
    rather in other documents describing how this metadata is encoded and
    exchanged amongst hosts and network elements.
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  Metadata for Collaborative Host/Network Signaling Registry Group
+7.1.  Metadata for Collaborative Host/Network Signaling Registry Group
 
    This document requests IANA to create a new registry group, entitled
    "Metadata for Collaborative Host/Network Signaling".
 
-6.2.  Flow Metadata Registry
+7.2.  Flow Metadata Registry
 
    IANA is requested to create a new registry, entitled "Flow Metadata
    Registry", under the "Metadata for Collaborative Host/Network
@@ -476,41 +511,41 @@ Table of Contents
 
    The initial values of the registry are listed in Table 1.
 
-   +==========+===================+============+===============+=======+
-   |Identifier|        Name       |Description |   Reference   |Version|
-   +==========+===================+============+===============+=======+
-   |    0     |                   |Reserved    | This-Document |       |
-   +----------+-------------------+------------+---------------+-------+
-   |    1     |     Importance    |Indicates   | This-Document |  1.0  |
-   |          |                   |the level   |               |       |
-   |          |                   |of          |               |       |
-   |          |                   |importance  |               |       |
-   |          |                   |of a packet |               |       |
-   |          |                   |in a flow   |               |       |
-   +----------+-------------------+------------+---------------+-------+
-   |    2     |    PacketNature   |Indicates   | This-Document |  1.0  |
-   |          |                   |whether a   |               |       |
-   |          |                   |packet is   |               |       |
-   |          |                   |reliably or |               |       |
-   |          |                   |unreliably  |               |       |
-   |          |                   |transmitted |               |       |
-   +----------+-------------------+------------+---------------+-------+
-   |    3     | DiscardPreference |Indicates a | This-Document |  1.0  |
-   |          |                   |discard     |               |       |
-   |          |                   |preference  |               |       |
-   +----------+-------------------+------------+---------------+-------+
-   |    4     |  DownlinkBitrate  |Specifies   | This-Document |  1.0  |
-   |          |                   |the maximum |               |       |
-   |          |                   |downlink    |               |       |
-   |          |                   |bitrate     |               |       |
-   +----------+-------------------+------------+---------------+-------+
-   |    5     |   PreferAltPath   |Sollicits   | This-Document |  1.0  |
-   |          |                   |the hosts   |               |       |
-   |          |                   |to use an   |               |       |
-   |          |                   |alternate   |               |       |
-   |          |                   |path if     |               |       |
-   |          |                   |available   |               |       |
-   +----------+-------------------+------------+---------------+-------+
+   +==========+=================+==============+===============+=======+
+   |Identifier|       Name      | Description  |   Reference   |Version|
+   +==========+=================+==============+===============+=======+
+   |    0     |                 | Reserved     | This-Document |       |
+   +----------+-----------------+--------------+---------------+-------+
+   |    1     |    Importance   | Indicates    | This-Document |  1.0  |
+   |          |                 | the level    |               |       |
+   |          |                 | of           |               |       |
+   |          |                 | importance   |               |       |
+   |          |                 | of a packet  |               |       |
+   |          |                 | in a flow    |               |       |
+   +----------+-----------------+--------------+---------------+-------+
+   |    2     |    PacketType   | Indicates    | This-Document |  1.0  |
+   |          |                 | whether a    |               |       |
+   |          |                 | packet is    |               |       |
+   |          |                 | reliably or  |               |       |
+   |          |                 | unreliably   |               |       |
+   |          |                 | transmitted  |               |       |
+   +----------+-----------------+--------------+---------------+-------+
+   |    3     |   PacketNature  | Indicates a  | This-Document |  1.0  |
+   |          |                 | discard      |               |       |
+   |          |                 | preference   |               |       |
+   +----------+-----------------+--------------+---------------+-------+
+   |    4     | DownlinkBitrate | Specifies    | This-Document |  1.0  |
+   |          |                 | the maximum  |               |       |
+   |          |                 | downlink     |               |       |
+   |          |                 | bitrate      |               |       |
+   +----------+-----------------+--------------+---------------+-------+
+   |    5     |  PreferAltPath  | Sollicits    | This-Document |  1.0  |
+   |          |                 | the hosts    |               |       |
+   |          |                 | to use an    |               |       |
+   |          |                 | alternate    |               |       |
+   |          |                 | path if      |               |       |
+   |          |                 | available    |               |       |
+   +----------+-----------------+--------------+---------------+-------+
 
                           Table 1: Initial Values
 
@@ -615,10 +650,37 @@ Informative References
               DOI 10.17487/RFC4588, July 2006,
               <https://www.rfc-editor.org/rfc/rfc4588>.
 
+   [RFC0768]  Postel, J., "User Datagram Protocol", STD 6, RFC 768,
+              DOI 10.17487/RFC0768, August 1980,
+              <https://www.rfc-editor.org/rfc/rfc768>.
+
+   [RFC7104]  Begen, A., Cai, Y., and H. Ou, "Duplication Grouping
+              Semantics in the Session Description Protocol", RFC 7104,
+              DOI 10.17487/RFC7104, January 2014,
+              <https://www.rfc-editor.org/rfc/rfc7104>.
+
+   [RFC7197]  Begen, A., Cai, Y., and H. Ou, "Duplication Delay
+              Attribute in the Session Description Protocol", RFC 7197,
+              DOI 10.17487/RFC7197, April 2014,
+              <https://www.rfc-editor.org/rfc/rfc7197>.
+
+   [RFC7198]  Begen, A. and C. Perkins, "Duplicating RTP Streams",
+              RFC 7198, DOI 10.17487/RFC7198, April 2014,
+              <https://www.rfc-editor.org/rfc/rfc7198>.
+
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
+
    [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", STD 86, RFC 8200,
               DOI 10.17487/RFC8200, July 2017,
               <https://www.rfc-editor.org/rfc/rfc8200>.
+
+   [RFC8304]  Fairhurst, G. and T. Jones, "Transport Features of the
+              User Datagram Protocol (UDP) and Lightweight UDP (UDP-
+              Lite)", RFC 8304, DOI 10.17487/RFC8304, February 2018,
+              <https://www.rfc-editor.org/rfc/rfc8304>.
 
    [RFC8911]  Bagnulo, M., Claise, B., Eardley, P., Morton, A., and A.
               Akhter, "Registry for Performance Metrics", RFC 8911,
@@ -651,15 +713,15 @@ A.1.  Video Streaming
    critical than video for almost all applications, but its importance
    (relative to other packets in the flow) is still an application
    decision.  In the example below, the audio is more important than
-   video (importance=high, KD=keep, RU=reliable), video key frames have
-   middle importance (importance=low, discard, reliable), and both types
-   of video delta frames (P-frame and B-frame) have least importance
-   (importance=low, KD=discard, RU=unreliable).
+   video (importance=high, PT=keep, RU=reliable), video key frames have
+   middle importance (importance=low, PT=discard, RU=reliable), and both
+   types of video delta frames (P-frame and B-frame) have least
+   importance (importance=low, PT=discard, RU=unreliable).
 
-   Comprehensive Interpretation:
+   Video Streaming Metadata:
 
         +===============+============+==============+============+
-        |  Traffic type | Importance | PacketNature |     RU     |
+        |  Traffic type | Importance | PacketNature | PacketType |
         +===============+============+==============+============+
         | video I-frame |    low     |   realtime   |  reliable  |
         |  (key frame)  |            |              |            |
@@ -673,27 +735,7 @@ A.1.  Video Streaming
         |     audio     |    high    |   realtime   |  reliable  |
         +---------------+------------+--------------+------------+
 
-          Table 2: Example Values for Video Streaming Metadata -
-                       Comprehensive Interpretation
-
-   In the following, "Simple Interpretation" associates a bit with each
-   of the properties listed in Table 2.
-
-   Simple Interpretation:
-
-               +===================+=======================+
-               |    Traffic type   | Simple Interpretation |
-               +===================+=======================+
-               |   video I-frame   |          011          |
-               +-------------------+-----------------------+
-               | video delta frame |          001          |
-               +-------------------+-----------------------+
-               |       audio       |          111          |
-               +-------------------+-----------------------+
-
-                     Table 3: Example Values for Video
-                        Streaming Metadata - Simple
-                               Interpretation
+           Table 2: Example Values for Video Streaming Metadata
 
 A.2.  Interactive Gaming or Audio/Video
 
@@ -705,23 +747,10 @@ A.2.  Interactive Gaming or Audio/Video
    constrain upstream bandwidth so proper packet treatment is critical
    in the upstream direction.
 
-   Comprehensive Interpretation:
+   Interactive A/V, downstream Metadata:
 
       +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature |     RU     |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-
-        Table 4: Example Values for Interactive A/V, downstream -
-                       Comprehensive Interpretation
-
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature |     RU     |
+      |    Traffic type   | Importance | PacketNature | PacketType |
       +===================+============+==============+============+
       |  video key frame  |    low     |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
@@ -730,36 +759,19 @@ A.2.  Interactive Gaming or Audio/Video
       |       audio       |    high    |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
 
-         Table 5: Example Values for Interactive A/V, upstream -
-                       Comprehensive Interpretation
+         Table 3: Example Values for Interactive A/V, downstream
 
-   Simple Interpretation:
+      +===================+============+==============+============+
+      |    Traffic type   | Importance | PacketNature | PacketType |
+      +===================+============+==============+============+
+      |  video key frame  |    low     |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      | video delta frame |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+      |       audio       |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
 
-               +===================+=======================+
-               |    Traffic type   | Simple Interpretation |
-               +===================+=======================+
-               |  video key frame  |          011          |
-               +-------------------+-----------------------+
-               | video delta frame |          001          |
-               +-------------------+-----------------------+
-               |       audio       |          111          |
-               +-------------------+-----------------------+
-
-                  Table 6: Example Values for Interactive
-                  A/V, downstream - Simple Interpretation
-
-               +===================+=======================+
-               |    Traffic type   | Simple Interpretation |
-               +===================+=======================+
-               |  video key frame  |          011          |
-               +-------------------+-----------------------+
-               | video delta frame |          000          |
-               +-------------------+-----------------------+
-               |       audio       |          111          |
-               +-------------------+-----------------------+
-
-                  Table 7: Example Values for Interactive
-                   A/V, upstream - Simple Interpretation
+          Table 4: Example Values for Interactive A/V, upstream
 
    Many interactive audio/video applications also support sharing the
    presenter's screen, file, video, or pictures.  During this sharing
@@ -770,7 +782,7 @@ A.2.  Interactive Gaming or Audio/Video
    Comprehensive Interpretation:
 
       +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature |     RU     |
+      |    Traffic type   | Importance | PacketNature | PacketType |
       +===================+============+==============+============+
       |  video key frame  |    low     |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
@@ -781,25 +793,8 @@ A.2.  Interactive Gaming or Audio/Video
       |  picture sharing  |    high    |   realtime   |  reliable  |
       +-------------------+------------+--------------+------------+
 
-         Table 8: Example Values for Interactive A/V, upstream -
-                       Comprehensive Interpretation
-
-   Simple Interpretation:
-
-               +===================+=======================+
-               |    Traffic type   | Simple Interpretation |
-               +===================+=======================+
-               |  video key frame  |          011          |
-               +-------------------+-----------------------+
-               | video delta frame |          000          |
-               +-------------------+-----------------------+
-               |       audio       |          111          |
-               +-------------------+-----------------------+
-               |  picture sharing  |          111          |
-               +-------------------+-----------------------+
-
-                  Table 9: Example Values for Interactive
-                   A/V, upstream - Simple Interpretation
+         Table 5: Example Values for Interactive A/V with picture
+                            sharing, upstream
 
    In many scenarios a game or VoIP application will want to signal
    different metadata for the same type of packet in each direction.
@@ -811,14 +806,13 @@ A.3.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.  This is shown in two
-   tables, client-to-server traffic (Table 10)(Table 12) and server-to-
-   client traffic (Table 11)(Table 13).
+   tables, client-to-server traffic (Table 6) and server-to-client
+   traffic (Table 7).
 
-   Comprehensive Interpretation:
+   Remote Desktop Virtualization Metadata:
 
    +================+==========+==============+==========+=============+
-   |  Traffic type  |Importance| PacketNature |Reliable/ |   Comments  |
-   |                |          |              |Unreliable|             |
+   |  Traffic type  |Importance| PacketNature |PacketType|   Comments  |
    +================+==========+==============+==========+=============+
    |  User typing   |   high   |   realtime   | reliable |             |
    +----------------+----------+--------------+----------+-------------+
@@ -912,12 +906,12 @@ A.3.  Remote Desktop Virtualization
    |     frame      |          |              |          |             |
    +----------------+----------+--------------+----------+-------------+
 
-         Table 10: Example Values for Remote Desktop Virtualization
-         Metadata, client to server - Comprehensive Interpretation
+         Table 6: Example Values for Remote Desktop Virtualization
+                         Metadata, client to server
 
    +===========+==========+==============+==========+==================+
-   |  Traffic  |Importance| PacketNature |Reliable/ |     Comments     |
-   |    type   |          |              |Unreliable|                  |
+   |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
+   |    type   |          |              |          |                  |
    +===========+==========+==============+==========+==================+
    |   Glyph   |   high   |   realtime   | reliable | The frames that  |
    |  critical |          |              |          |  form the base   |
@@ -1033,58 +1027,8 @@ A.3.  Remote Desktop Virtualization
    |           |          |              |          |    elements.     |
    +-----------+----------+--------------+----------+------------------+
 
-         Table 11: Example Values for Remote Desktop Virtualization
-         Metadata, server to client - Comprehensive Interpretation
-
-   Simple Interpretation:
-
-   +===========================================+=======================+
-   |                Traffic type               | Simple Interpretation |
-   +===========================================+=======================+
-   |                User typing                |          111          |
-   +-------------------------------------------+-----------------------+
-   |          Mouse click/End Position         |          111          |
-   +-------------------------------------------+-----------------------+
-   |             Interactive audio             |          110          |
-   +-------------------------------------------+-----------------------+
-   |          Authentication - Finger          |          011          |
-   |             print, smart card             |                       |
-   +-------------------------------------------+-----------------------+
-   |           Interactive video key           |          010          |
-   |                   frame                   |                       |
-   +-------------------------------------------+-----------------------+
-   |          Mouse position tracking          |          000          |
-   +-------------------------------------------+-----------------------+
-   |          Interactive video delta          |          000          |
-   |                   frame                   |                       |
-   +-------------------------------------------+-----------------------+
-
-         Table 12: Example Values for Remote Desktop Virtualization
-             Metadata, client to server - Simple Interpretation
-
-       +==================================+=======================+
-       |           Traffic type           | Simple Interpretation |
-       +==================================+=======================+
-       |          Glyph critical          |          111          |
-       +----------------------------------+-----------------------+
-       | Interactive (or streaming) audio |          110          |
-       +----------------------------------+-----------------------+
-       |         Haptic feedback          |          100          |
-       +----------------------------------+-----------------------+
-       | Interactive (or streaming) video |          010          |
-       |            key frame             |                       |
-       +----------------------------------+-----------------------+
-       |            File copy             |          001          |
-       +----------------------------------+-----------------------+
-       | Interactive (or streaming) video |          000          |
-       |         predictive frame         |                       |
-       +----------------------------------+-----------------------+
-       |         Glyph smoothing          |          000          |
-       +----------------------------------+-----------------------+
-
-               Table 13: Example Values for Remote Desktop
-            Virtualization Metadata, server to client - Simple
-                              Interpretation
+         Table 7: Example Values for Remote Desktop Virtualization
+                         Metadata, server to client
 
    *** A video key frame should be handled differently by the network
    depending on a streaming application versus a remote desktop

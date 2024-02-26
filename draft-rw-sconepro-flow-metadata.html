@@ -1050,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan, et al.</td>
-<td class="center">Expires 26 August 2024</td>
+<td class="center">Expires 29 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1063,12 +1063,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rw-sconepro-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-23" class="published">23 February 2024</time>
+<time datetime="2024-02-26" class="published">26 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-26">26 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-29">29 August 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1135,7 +1135,7 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1185,7 +1185,7 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-reliable-unreliable" class="internal xref">Reliable/Unreliable</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-packet-type-reliable-unreli" class="internal xref">Packet Type - Reliable/Unreliable</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
                     <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
@@ -1193,7 +1193,7 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
-                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-packet-discard-preference" class="internal xref">Packet Discard Preference</a></p>
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-packet-nature" class="internal xref">Packet Nature</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4.2.1">
                     <p id="section-toc.1-1.3.2.4.2.1.1"><a href="#section-3.4.1" class="auto internal xref">3.4.1</a>.  <a href="#name-unreliable-traffic" class="internal xref">Unreliable Traffic</a></p>
@@ -1240,52 +1240,63 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-implementation-impact-of-me" class="internal xref">Implementation Impact of Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-reliable-unreliable-set-by-" class="internal xref">Reliable/Unreliable set by the respective transport level protocol</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-offloading-loss-avoidance-t" class="internal xref">Offloading Loss-Avoidance to the network</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-metadata-for-collaborative-" class="internal xref">Metadata for Collaborative Host/Network Signaling Registry Group</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-flow-metadata-registry" class="internal xref">Flow Metadata Registry</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-metadata-for-collaborative-" class="internal xref">Metadata for Collaborative Host/Network Signaling Registry Group</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-flow-metadata-registry" class="internal xref">Flow Metadata Registry</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples-of-host-to-network" class="internal xref">Examples of Host-to-Network Metadata</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-interactive-gaming-or-audio" class="internal xref">Interactive Gaming or Audio/Video</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-example-of-network-to-host-" class="internal xref">Example of Network-to-Host Metadata for Video Streaming</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples-of-host-to-network" class="internal xref">Examples of Host-to-Network Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-interactive-gaming-or-audio" class="internal xref">Interactive Gaming or Audio/Video</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-example-of-network-to-host-" class="internal xref">Example of Network-to-Host Metadata for Video Streaming</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1384,7 +1395,7 @@ to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pi
       <h2 id="name-host-to-network-metadata">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-host-to-network-metadata" class="section-name selfRef">Host to Network Metadata</a>
       </h2>
-<p id="section-3-1">For more comprehensive interpretation, metadata is characterized into two different nature:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">Metadata is characterized into two different nature:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3-2">
         <dt id="section-3-2.1">Network Metadata:</dt>
         <dd style="margin-left: 1.5em" id="section-3-2.2">
@@ -1466,7 +1477,7 @@ will be encoded as a single blob when mapped to a signaling protocol or
 that all the metadata components will be mapped. Such matters
 are specific to the individual signaling protocols and deployment contexts.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">New metadata for collaborative host/network signaling <span class="bcp14">MUST</span> be registered
-in the IANA registry, "Flow Metadata Registry" <a href="#sec-fmr" class="auto internal xref">Section 6.2</a>.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+in the IANA registry, "Flow Metadata Registry" <a href="#sec-fmr" class="auto internal xref">Section 7.2</a>.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.1-5">More details about each of these metadata are provided in the following
 sections. Both client and network intended behaviors are specified for each
 metadata.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
@@ -1498,10 +1509,10 @@ importance=true, for the same flow.<a href="#section-3.2.1-1" class="pilcrow">¶
 </div>
 </section>
 </div>
-<div id="reliableunreliable">
+<div id="packet-type-reliableunreliable">
 <section id="section-3.3">
-        <h3 id="name-reliable-unreliable">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-reliable-unreliable" class="section-name selfRef">Reliable/Unreliable</a>
+        <h3 id="name-packet-type-reliable-unreli">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-packet-type-reliable-unreli" class="section-name selfRef">Packet Type - Reliable/Unreliable</a>
         </h3>
 <p id="section-3.3-1">The "Reliable" metadata indicates if a packet is reliably transmitted by the host.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1528,10 +1539,10 @@ only defers it until later, but this deferral can be useful.<a href="#section-3.
 </div>
 </section>
 </div>
-<div id="packet-discard-preference">
+<div id="packet-nature">
 <section id="section-3.4">
-        <h3 id="name-packet-discard-preference">
-<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-packet-discard-preference" class="section-name selfRef">Packet Discard Preference</a>
+        <h3 id="name-packet-nature">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-packet-nature" class="section-name selfRef">Packet Nature</a>
         </h3>
 <p id="section-3.4-1">This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <div id="unreliable-traffic">
@@ -1653,12 +1664,35 @@ with pref-alt-path=false.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </div>
 </section>
 </div>
-<div id="security-considerations">
+<div id="implementation-impact-of-metadata">
 <section id="section-5">
-      <h2 id="name-security-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-implementation-impact-of-me">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-implementation-impact-of-me" class="section-name selfRef">Implementation Impact of Metadata</a>
       </h2>
-<p id="section-5-1">Metadata increases the information available to attackers to
+<div id="reliableunreliable-set-by-the-respective-transport-level-protocol">
+<section id="section-5.1">
+        <h3 id="name-reliable-unreliable-set-by-">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-reliable-unreliable-set-by-" class="section-name selfRef">Reliable/Unreliable set by the respective transport level protocol</a>
+        </h3>
+<p id="section-5.1-1">TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> is a reliable transport protocol, while UDP <span>[<a href="#RFC0768" class="cite xref">RFC0768</a>]</span> provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. Protocols built over UDP may implement reliability features at the "application" layer if such a transport feature is needed <span>[<a href="#RFC8304" class="cite xref">RFC8304</a>]</span>. For example, streams of reliable application data are sent using STREAM QUIC frames, while application data that do not require retransmission can be carried in DATAGRAM QUIC frames. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="offloading-loss-avoidance-to-the-network">
+<section id="section-5.2">
+        <h3 id="name-offloading-loss-avoidance-t">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-offloading-loss-avoidance-t" class="section-name selfRef">Offloading Loss-Avoidance to the network</a>
+        </h3>
+<p id="section-5.2-1">Network nodes, upon learning of the nature of a packet (reliable/prefer-keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (e.g., using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as <span>[<a href="#RFC7198" class="cite xref">RFC7198</a>]</span>, <span>[<a href="#RFC7197" class="cite xref">RFC7197</a>]</span>, or <span>[<a href="#RFC7104" class="cite xref">RFC7104</a>]</span>.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-6">
+      <h2 id="name-security-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-6-1">Metadata increases the information available to attackers to
 distinguish important packets from less-important packets, which the
 attacker might use to attack such packets (e.g., prevent their
 delivery) or attempt to decrypt those packets. It is <span class="bcp14">RECOMMENDED</span> to
@@ -1666,77 +1700,77 @@ encrypt or obfuscate the metadata information so it is only available
 to hosts and to authorized network elements.  The method of
 encryption or obfuscation is not described in this document but
 rather in other documents describing how this metadata is encoded
-and exchanged amongst hosts and network elements.<a href="#section-5-1" class="pilcrow">¶</a></p>
+and exchanged amongst hosts and network elements.<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-iana-considerations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <div id="metadata-for-collaborative-hostnetwork-signaling-registry-group">
-<section id="section-6.1">
+<section id="section-7.1">
         <h3 id="name-metadata-for-collaborative-">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-metadata-for-collaborative-" class="section-name selfRef">Metadata for Collaborative Host/Network Signaling Registry Group</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-metadata-for-collaborative-" class="section-name selfRef">Metadata for Collaborative Host/Network Signaling Registry Group</a>
         </h3>
-<p id="section-6.1-1">This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-fmr">
-<section id="section-6.2">
+<section id="section-7.2">
         <h3 id="name-flow-metadata-registry">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-flow-metadata-registry" class="section-name selfRef">Flow Metadata Registry</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-flow-metadata-registry" class="section-name selfRef">Flow Metadata Registry</a>
         </h3>
-<p id="section-6.2-1">IANA is requested to create a new registry, entitled "Flow Metadata Registry", under the "Metadata for Collaborative Host/Network Signaling" registry group.
-This registry is inspired by the "Performance Metrics Registry" created by <span>[<a href="#RFC8911" class="cite xref">RFC8911</a>]</span>. The structure of the registry is as follows:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-6.2-2">
-          <dt id="section-6.2-2.1">Identifier:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.2">
-            <p id="section-6.2-2.2.1">A numeric identifier for the registered metadata.<a href="#section-6.2-2.2.1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">IANA is requested to create a new registry, entitled "Flow Metadata Registry", under the "Metadata for Collaborative Host/Network Signaling" registry group.
+This registry is inspired by the "Performance Metrics Registry" created by <span>[<a href="#RFC8911" class="cite xref">RFC8911</a>]</span>. The structure of the registry is as follows:<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-7.2-2">
+          <dt id="section-7.2-2.1">Identifier:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.2">
+            <p id="section-7.2-2.2.1">A numeric identifier for the registered metadata.<a href="#section-7.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.3"></dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.4">
-            <p id="section-6.2-2.4.1">The Identifier 0 is Reserved.<a href="#section-6.2-2.4.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.3"></dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.4">
+            <p id="section-7.2-2.4.1">The Identifier 0 is Reserved.<a href="#section-7.2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.5"></dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.6">
-            <p id="section-6.2-2.6.1">The Identifier values from 250 to 255 are reserved for private or experimental use.<a href="#section-6.2-2.6.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.5"></dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.6">
+            <p id="section-7.2-2.6.1">The Identifier values from 250 to 255 are reserved for private or experimental use.<a href="#section-7.2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.7">Name:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.8">
-            <p id="section-6.2-2.8.1">Name of the registered metadata.<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.7">Name:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.8">
+            <p id="section-7.2-2.8.1">Name of the registered metadata.<a href="#section-7.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.9">Description:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.10">
-            <p id="section-6.2-2.10.1">Provides a description of the intended use of the registered metadata.<a href="#section-6.2-2.10.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.9">Description:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.10">
+            <p id="section-7.2-2.10.1">Provides a description of the intended use of the registered metadata.<a href="#section-7.2-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.11">Reference:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.12">
-            <p id="section-6.2-2.12.1">Lists the authoritative reference that specifies the registered metadata.<a href="#section-6.2-2.12.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.11">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.12">
+            <p id="section-7.2-2.12.1">Lists the authoritative reference that specifies the registered metadata.<a href="#section-7.2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.13">Version:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.14">
-            <p id="section-6.2-2.14.1">Tracks the current version of the metadata.<a href="#section-6.2-2.14.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.13">Version:</dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.14">
+            <p id="section-7.2-2.14.1">Tracks the current version of the metadata.<a href="#section-7.2-2.14.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.15"></dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.16">
-            <p id="section-6.2-2.16.1">The initial version of a new registered metadata <span class="bcp14">MUST</span> be 1.0.<a href="#section-6.2-2.16.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.15"></dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.16">
+            <p id="section-7.2-2.16.1">The initial version of a new registered metadata <span class="bcp14">MUST</span> be 1.0.<a href="#section-7.2-2.16.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-6.2-2.17"></dt>
-          <dd style="margin-left: 1.5em" id="section-6.2-2.18">
-            <p id="section-6.2-2.18.1">IANA will bump the version when a new RFC that changes the format/semantic of a registered entry.<a href="#section-6.2-2.18.1" class="pilcrow">¶</a></p>
+<dt id="section-7.2-2.17"></dt>
+          <dd style="margin-left: 1.5em" id="section-7.2-2.18">
+            <p id="section-7.2-2.18.1">IANA will bump the version when a new RFC that changes the format/semantic of a registered entry.<a href="#section-7.2-2.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-6.2-3">The initial values of the registry are listed in <a href="#initial-reg" class="auto internal xref">Table 1</a>.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">The initial values of the registry are listed in <a href="#initial-reg" class="auto internal xref">Table 1</a>.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 <span id="name-initial-values"></span><div id="initial-reg">
 <table class="center" id="table-1">
           <caption>
@@ -1769,14 +1803,14 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">2</td>
-              <td class="text-center" rowspan="1" colspan="1">PacketNature</td>
+              <td class="text-center" rowspan="1" colspan="1">PacketType</td>
               <td class="text-left" rowspan="1" colspan="1">Indicates whether a packet is reliably or unreliably transmitted</td>
               <td class="text-center" rowspan="1" colspan="1">This-Document</td>
               <td class="text-center" rowspan="1" colspan="1">1.0</td>
             </tr>
             <tr>
               <td class="text-center" rowspan="1" colspan="1">3</td>
-              <td class="text-center" rowspan="1" colspan="1">DiscardPreference</td>
+              <td class="text-center" rowspan="1" colspan="1">PacketNature</td>
               <td class="text-left" rowspan="1" colspan="1">Indicates a discard preference</td>
               <td class="text-center" rowspan="1" colspan="1">This-Document</td>
               <td class="text-center" rowspan="1" colspan="1">1.0</td>
@@ -1798,25 +1832,25 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
           </tbody>
         </table>
 </div>
-<p id="section-6.2-5">New entries can be added to the registry using "Standards Action" policy (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>).<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.2-5">New entries can be added to the registry using "Standards Action" policy (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>).<a href="#section-7.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-7-1">To be completed.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">To be completed.<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-8.1">
+<section id="section-9.1">
         <h3 id="name-normative-references">
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
@@ -1845,7 +1879,7 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-8.2">
+<section id="section-9.2">
         <h3 id="name-informative-references">
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
@@ -1890,9 +1924,33 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Rey, J.</span>, <span class="refAuthor">Leon, D.</span>, <span class="refAuthor">Miyazaki, A.</span>, <span class="refAuthor">Varsa, V.</span>, and <span class="refAuthor">R. Hakenberg</span>, <span class="refTitle">"RTP Retransmission Payload Format"</span>, <span class="seriesInfo">RFC 4588</span>, <span class="seriesInfo">DOI 10.17487/RFC4588</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4588">https://www.rfc-editor.org/rfc/rfc4588</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC0768">[RFC0768]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc768">https://www.rfc-editor.org/rfc/rfc768</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7104">[RFC7104]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span>, <span class="refAuthor">Cai, Y.</span>, and <span class="refAuthor">H. Ou</span>, <span class="refTitle">"Duplication Grouping Semantics in the Session Description Protocol"</span>, <span class="seriesInfo">RFC 7104</span>, <span class="seriesInfo">DOI 10.17487/RFC7104</span>, <time datetime="2014-01" class="refDate">January 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7104">https://www.rfc-editor.org/rfc/rfc7104</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7197">[RFC7197]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span>, <span class="refAuthor">Cai, Y.</span>, and <span class="refAuthor">H. Ou</span>, <span class="refTitle">"Duplication Delay Attribute in the Session Description Protocol"</span>, <span class="seriesInfo">RFC 7197</span>, <span class="seriesInfo">DOI 10.17487/RFC7197</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7197">https://www.rfc-editor.org/rfc/rfc7197</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7198">[RFC7198]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span> and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"Duplicating RTP Streams"</span>, <span class="seriesInfo">RFC 7198</span>, <span class="seriesInfo">DOI 10.17487/RFC7198</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7198">https://www.rfc-editor.org/rfc/rfc7198</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8085">[RFC8085]</dt>
+        <dd>
+<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8200">[RFC8200]</dt>
         <dd>
 <span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8304">[RFC8304]</dt>
+        <dd>
+<span class="refAuthor">Fairhurst, G.</span> and <span class="refAuthor">T. Jones</span>, <span class="refTitle">"Transport Features of the User Datagram Protocol (UDP) and Lightweight UDP (UDP-Lite)"</span>, <span class="seriesInfo">RFC 8304</span>, <span class="seriesInfo">DOI 10.17487/RFC8304</span>, <time datetime="2018-02" class="refDate">February 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8304">https://www.rfc-editor.org/rfc/rfc8304</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8911">[RFC8911]</dt>
         <dd>
@@ -1932,22 +1990,22 @@ therefore more critical to deliver to the receiver than delta frames.<a href="#a
 separately and thus can be signaled separately.  Audio is more
 critical than video for almost all applications, but its importance
 (relative to other packets in the flow) is still an application decision.  In the example below, the audio
-is more important than video (importance=high, KD=keep, RU=reliable), video key frames
-have middle importance (importance=low, discard, reliable), and both types
-of video delta frames (P-frame and B-frame) have least importance (importance=low, KD=discard, RU=unreliable).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-3">Comprehensive Interpretation:<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming-ci">
+is more important than video (importance=high, PT=keep, RU=reliable), video key frames
+have middle importance (importance=low, PT=discard, RU=reliable), and both types
+of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3">Video Streaming Metadata:<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
 <table class="center" id="table-2">
           <caption>
 <a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata - Comprehensive Interpretation</a>
+<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">RU</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
             </tr>
           </thead>
           <tbody>
@@ -1978,36 +2036,6 @@ of video delta frames (P-frame and B-frame) have least importance (importance=lo
           </tbody>
         </table>
 </div>
-<p id="appendix-A.1-5">In the following, "Simple Interpretation" associates a bit with each of the properties listed in <a href="#_table-video-streaming-ci" class="auto internal xref">Table 2</a>.<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-6">Simple Interpretation:<a href="#appendix-A.1-6" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-video-str"></span><div id="_table-video-streaming-si">
-<table class="center" id="table-3">
-          <caption>
-<a href="#table-3" class="selfRef">Table 3</a>:
-<a href="#name-example-values-for-video-str" class="selfRef">Example Values for Video Streaming Metadata - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video I-frame</td>
-              <td class="text-center" rowspan="1" colspan="1">011</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">001</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
 </section>
 </div>
 <div id="example-interactive-av">
@@ -2022,19 +2050,55 @@ thus is a slightly more complicated use-case than the previous
 example.  Additionally, most Internet service providers constrain
 upstream bandwidth so proper packet treatment is critical in the
 upstream direction.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-2">Comprehensive Interpretation:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream-ci">
+<p id="appendix-A.2-2">Interactive A/V, downstream Metadata:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-example-values-for-interact" class="selfRef">Example Values for Interactive A/V, downstream</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<span id="name-example-values-for-interacti"></span><div id="_table-video-av-upstream">
 <table class="center" id="table-4">
           <caption>
 <a href="#table-4" class="selfRef">Table 4</a>:
-<a href="#name-example-values-for-interact" class="selfRef">Example Values for Interactive A/V, downstream - Comprehensive Interpretation</a>
+<a href="#name-example-values-for-interacti" class="selfRef">Example Values for Interactive A/V, upstream</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">RU</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
             </tr>
           </thead>
           <tbody>
@@ -2059,117 +2123,24 @@ upstream direction.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<span id="name-example-values-for-interacti"></span><div id="_table-video-av-upstream-ci">
-<table class="center" id="table-5">
-          <caption>
-<a href="#table-5" class="selfRef">Table 5</a>:
-<a href="#name-example-values-for-interacti" class="selfRef">Example Values for Interactive A/V, upstream - Comprehensive Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Importance</th>
-              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">RU</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">realtime</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">low</td>
-              <td class="text-center" rowspan="1" colspan="1">discard</td>
-              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">high</td>
-              <td class="text-center" rowspan="1" colspan="1">realtime</td>
-              <td class="text-center" rowspan="1" colspan="1">reliable</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<p id="appendix-A.2-5">Simple Interpretation:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interactiv"></span><div id="_table-interactive-av-downstream-si">
-<table class="center" id="table-6">
-          <caption>
-<a href="#table-6" class="selfRef">Table 6</a>:
-<a href="#name-example-values-for-interactiv" class="selfRef">Example Values for Interactive A/V, downstream - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">011</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">001</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<span id="name-example-values-for-interactive"></span><div id="_table-video-av-upstream-si">
-<table class="center" id="table-7">
-          <caption>
-<a href="#table-7" class="selfRef">Table 7</a>:
-<a href="#name-example-values-for-interactive" class="selfRef">Example Values for Interactive A/V, upstream - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">011</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<p id="appendix-A.2-8">Many interactive audio/video applications also support sharing the presenter's
+<p id="appendix-A.2-5">Many interactive audio/video applications also support sharing the presenter's
 screen, file, video, or pictures.  During this sharing the presenter's video
 is less important but the screen or picture is more important.  This change
 of imporance can be conveyed in metadata to the network, as in the table
-below:<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-9">Comprehensive Interpretation:<a href="#appendix-A.2-9" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interactive-"></span><div id="_table-video-av-sharing-ci">
-<table class="center" id="table-8">
+below:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-6">Comprehensive Interpretation:<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interactiv"></span><div id="_table-video-av-sharing">
+<table class="center" id="table-5">
           <caption>
-<a href="#table-8" class="selfRef">Table 8</a>:
-<a href="#name-example-values-for-interactive-" class="selfRef">Example Values for Interactive A/V, upstream - Comprehensive Interpretation</a>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-example-values-for-interactiv" class="selfRef">Example Values for Interactive A/V with picture sharing, upstream</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">RU</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
             </tr>
           </thead>
           <tbody>
@@ -2200,44 +2171,11 @@ below:<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
           </tbody>
         </table>
 </div>
-<p id="appendix-A.2-11">Simple Interpretation:<a href="#appendix-A.2-11" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-interactive-a"></span><div id="_table-video-av-sharing-si">
-<table class="center" id="table-9">
-          <caption>
-<a href="#table-9" class="selfRef">Table 9</a>:
-<a href="#name-example-values-for-interactive-a" class="selfRef">Example Values for Interactive A/V, upstream - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">011</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">audio</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">picture sharing</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<p id="appendix-A.2-13">In many scenarios a game or VoIP application will want to signal different
+<p id="appendix-A.2-8">In many scenarios a game or VoIP application will want to signal different
 metadata for the same type of packet in each direction.  For example, for
 a game, video in the server-to-client direction might be more important
 than audio, whereas input devices (e.g., keystrokes) might be more important
-than audio.<a href="#appendix-A.2-13" class="pilcrow">¶</a></p>
+than audio.<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="example-rdt">
@@ -2247,21 +2185,21 @@ than audio.<a href="#appendix-A.2-13" class="pilcrow">¶</a></p>
         </h3>
 <p id="appendix-A.3-1">Example packet metadata for Desktop Virtualization (like Citrix
 Virtual Apps and Desktops - CVAD) application.  This is shown in two
-tables, client-to-server traffic (<a href="#_table-desktop-virtualization-c2s-ci" class="auto internal xref">Table 10</a>)(<a href="#_table-desktop-virtualization-c2s-si" class="auto internal xref">Table 12</a>)
-and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c-ci" class="auto internal xref">Table 11</a>)(<a href="#_table-desktop-virtualization-s2c-si" class="auto internal xref">Table 13</a>).<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.3-2">Comprehensive Interpretation:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-c2s-ci">
-<table class="center" id="table-10">
+tables, client-to-server traffic (<a href="#_table-desktop-virtualization-c2s" class="auto internal xref">Table 6</a>)
+and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c" class="auto internal xref">Table 7</a>).<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-c2s">
+<table class="center" id="table-6">
           <caption>
-<a href="#table-10" class="selfRef">Table 10</a>:
-<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server - Comprehensive Interpretation</a>
+<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
               <th class="text-center" rowspan="1" colspan="1">Comments</th>
             </tr>
           </thead>
@@ -2318,18 +2256,18 @@ and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c-ci" cl
           </tbody>
         </table>
 </div>
-<span id="name-example-values-for-remote-de"></span><div id="_table-desktop-virtualization-s2c-ci">
-<table class="center" id="table-11">
+<span id="name-example-values-for-remote-de"></span><div id="_table-desktop-virtualization-s2c">
+<table class="center" id="table-7">
           <caption>
-<a href="#table-11" class="selfRef">Table 11</a>:
-<a href="#name-example-values-for-remote-de" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client - Comprehensive Interpretation</a>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-example-values-for-remote-de" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client</a>
           </caption>
 <thead>
             <tr>
               <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
               <th class="text-center" rowspan="1" colspan="1">Importance</th>
               <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
-              <th class="text-center" rowspan="1" colspan="1">Reliable/Unreliable</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
               <th class="text-center" rowspan="1" colspan="1">Comments</th>
             </tr>
           </thead>
@@ -2386,96 +2324,7 @@ and server-to-client traffic (<a href="#_table-desktop-virtualization-s2c-ci" cl
           </tbody>
         </table>
 </div>
-<p id="appendix-A.3-5">Simple Interpretation:<a href="#appendix-A.3-5" class="pilcrow">¶</a></p>
-<span id="name-example-values-for-remote-des"></span><div id="_table-desktop-virtualization-c2s-si">
-<table class="center" id="table-12">
-          <caption>
-<a href="#table-12" class="selfRef">Table 12</a>:
-<a href="#name-example-values-for-remote-des" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, client to server - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">User typing</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Mouse click/End Position</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive audio</td>
-              <td class="text-center" rowspan="1" colspan="1">110</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Authentication - Finger print, smart card</td>
-              <td class="text-center" rowspan="1" colspan="1">011</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">010</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Mouse position tracking</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive video delta frame</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<span id="name-example-values-for-remote-desk"></span><div id="_table-desktop-virtualization-s2c-si">
-<table class="center" id="table-13">
-          <caption>
-<a href="#table-13" class="selfRef">Table 13</a>:
-<a href="#name-example-values-for-remote-desk" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client - Simple Interpretation</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
-              <th class="text-center" rowspan="1" colspan="1">Simple Interpretation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
-              <td class="text-center" rowspan="1" colspan="1">111</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) audio</td>
-              <td class="text-center" rowspan="1" colspan="1">110</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
-              <td class="text-center" rowspan="1" colspan="1">100</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video key frame</td>
-              <td class="text-center" rowspan="1" colspan="1">010</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">File copy</td>
-              <td class="text-center" rowspan="1" colspan="1">001</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video predictive frame</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-            <tr>
-              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
-              <td class="text-center" rowspan="1" colspan="1">000</td>
-            </tr>
-          </tbody>
-        </table>
-</div>
-<p id="appendix-A.3-8">*** A video key frame should be handled differently by the network
+<p id="appendix-A.3-5">*** A video key frame should be handled differently by the network
 depending on a streaming application versus a remote desktop
 application.  The video streaming application's primary and only
 nature of traffic is video and audio.  In contrast, a remote desktop
@@ -2484,7 +2333,7 @@ the same time the user is editing a document.  The user's keystrokes
 and those glyphs need to be prioritized over the video lest the user
 think their inputs are being ignored (and type the same characters
 again). Hence, the values are different even for the same nature of
-traffic but a different application.<a href="#appendix-A.3-8" class="pilcrow">¶</a></p>
+traffic but a different application.<a href="#appendix-A.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
