@@ -111,8 +111,6 @@ By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
 network elements (e.g., routers, {{?MASQUE=I-D.ietf-masque-quic-proxy}} proxies).
 
-
-
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
 
@@ -121,12 +119,16 @@ document is a companion to host-to-network signaling the metadata itself, such a
 * SCONE Protocol ({{SCONEPRO}}), or
 * QUIC CID mapping ({{?I-D.wing-cidfi}}).
 
-An analysis of most of those metadata signaling mechanisms is at {{?I-D.herbert-host2netsig}}.
+{{?I-D.herbert-host2netsig}} provides an analysis of most of those metadata signaling mechanisms.
 
-The metadata defined in this document is independent of the actual
-companion signaling protocol. In doing so, we ensure that consistent
-metadata definitions are used by the various signaling protocols.  The
-metadata is described using {{!CDDL=RFC8610}} which can be expressed
+This document does not assume nor preclude any companion signaling protocol.
+As such, the metadata in this document is defined to be independent of the
+signaling protocol. In doing so, we ensure that consistent
+metadata definitions are used by the various signaling protocols. Also,
+this approach allows to factorize key considerations such as security and operational
+considerations.
+
+The metadata is described using {{!CDDL=RFC8610}} which can be expressed
 in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
 the JSON and CBOR encodings are self-describing.  It is out of scope
 of this document to define how the proposed encoding will be mapped to
@@ -143,7 +145,7 @@ metadata provide hints to guide the enforcement of those policies on **packets w
 distinct flows or applications**.
 -->
 
-For host-to-network metadata, if the signaling protocol supports it,
+If the companion signaling protocol supports host-to-network metadata,
 individual packets within a flow can contain metadata describing their
 drop preference or their reliability. The network elements aware of
 this metadata can apply preferential or deferential treatment to those
@@ -153,8 +155,8 @@ guides their behavior jointly with a signaled metadata. Examples of
 metadata signaling for video streaming and for remote desktop are
 provided in {{examples-h2n}}.
 
-For network-to-host metadata the host can be informed of network
-policy for nominal downlink bandwidth.  Certain applications,
+For network-to-host metadata, a host can be informed of network
+policy for nominal downlink bandwidth. Certain applications,
 such as most especially video streaming applications, can use
 that information to optimize their video streaming bandwidth to
 fit within that policy.
@@ -173,17 +175,7 @@ Intentional policy:
 : Configured bandwidth, pps, or similar throughput constraints applied
 to a flow, application, host, or subscriber.
 
-# Host to Network Metadata
-
-Metadata is characterized into two different nature:
-
-Network Metadata:
-: This consists of metadata that specifies how the network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
-
-Application Metadata:
-: This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two fields - Keep/Discard bit and Reliable/Unreliable bit.
-
-## Metadata
+# Metadata Structure
 
 The metadata is described in CDDL {{!RFC8610}} format shown in {{meta-cddl}}.
 
@@ -247,9 +239,19 @@ are specific to the individual signaling protocols and deployment contexts.
 New metadata for collaborative host/network signaling MUST be registered
 in the IANA registry, "Flow Metadata Registry" {{sec-fmr}}.
 
-More details about each of these metadata are provided in the following
-sections. Both client and network intended behaviors are specified for each
+More details about each of these metadata are provided in {{sec-h2n}} and {{sec-n2h}}.
+Both client and network intended behaviors are specified for each
 metadata.
+
+# Host to Network Metadata {#sec-h2n}
+
+Metadata is characterized into two different nature:
+
+Network Metadata:
+: This consists of metadata that specifies how a network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
+
+Application Metadata:
+: This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two components - Keep/Discard bit and Reliable/Unreliable bit.
 
 ## Importance
 
@@ -330,9 +332,9 @@ and other flows as bulk (e.g., file download, file upload).
 Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.
 
 
-# Network to Host Metadata
+# Network to Host Metadata {#sec-n2h}
 
-## Downlink Bitrate
+## Downlink Bitrate {#sec-dbr}
 
 Monthly data quotas on cellular networks can be easily exceeded by video streaming, in particular, if the
 client chooses excessively high quality or routinely abandons watching videos that were
@@ -372,21 +374,31 @@ paths, if available. An alternate path is typically an alternate network
 attachment.  After the crisis has subsided, the network should signal
 with pref-alt-path=false.
 
-The 'pref-alt-path' metadata may be sent together with the bitrate metadata set to a very low value.
+The 'pref-alt-path' metadata may be sent together with the bitrate metadata ({{sec-dbr}}) set to a very low value.
 
 ### Host Treatment
 
 The host offloads its connections to alternate available paths.
 
-#Implementation Impact of Metadata
+# Guidance For Mapping Metadata to Specific Signaling Protocols
+
+TBC.
+
+# Implementation Impact of Metadata
 
 ## Reliable/Unreliable set by the respective transport level protocol
 
-TCP {{?RFC9293}} is a reliable transport protocol, while UDP {{?RFC0768}} provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP {{?RFC8085}}. Protocols built over UDP may implement reliability features at the "application" layer if such a transport feature is needed {{?RFC8304}}. For example, streams of reliable application data are sent using STREAM QUIC frames, while application data that do not require retransmission can be carried in DATAGRAM QUIC frames. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.
+TCP {{?RFC9293}} is a reliable transport protocol, while UDP {{?RFC0768}} provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP {{?RFC8085}}. Protocols built over UDP may implement reliability features at the "application" layer if such a transport feature is needed {{?RFC8304}}. For example, streams of reliable application data are sent using STREAM QUIC frames ({{Section 19.8 of ?RFC9000}}), while application data that do not require retransmission can be carried in DATAGRAM QUIC frames {{?RFC9221}}. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.
 
 ## Offloading Loss-Avoidance to the network
 
 Network nodes, upon learning of the nature of a packet (reliable/prefer-keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (e.g., using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as {{?RFC7198}}, {{?RFC7197}}, or {{?RFC7104}}.
+
+# Manageability Considerations
+
+## Impact on Network Operation
+
+TBC.
 
 # Security Considerations
 
