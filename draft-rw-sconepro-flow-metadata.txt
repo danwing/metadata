@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 29 August 2024                                     M. Boucadair
+Expires: 30 August 2024                                     M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                        26 February 2024
+                                                        27 February 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2024.
+   This Internet-Draft will expire on 30 August 2024.
 
 Copyright Notice
 
@@ -77,32 +77,35 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Host to Network Metadata
-     3.1.  Metadata
-     3.2.  Importance
-       3.2.1.  Network Treatment
-     3.3.  Packet Type - Reliable/Unreliable
-       3.3.1.  Network Treatment
-     3.4.  Packet Nature
-       3.4.1.  Unreliable Traffic
-         3.4.1.1.  Network Treatment
-       3.4.2.  Reliable Traffic
-         3.4.2.1.  Network Treatment
-   4.  Network to Host Metadata
-     4.1.  Downlink Bitrate
-       4.1.1.  Units
-       4.1.2.  Host Treatment
-     4.2.  Prefer Alternate Path ('pref-alt-path')
-       4.2.1.  Host Treatment
-   5.  Implementation Impact of Metadata
-     5.1.  Reliable/Unreliable set by the respective transport level
+   3.  Metadata Structure
+   4.  Host to Network Metadata
+     4.1.  Importance
+       4.1.1.  Network Treatment
+     4.2.  Packet Type - Reliable/Unreliable
+       4.2.1.  Network Treatment
+     4.3.  Packet Nature
+       4.3.1.  Unreliable Traffic
+         4.3.1.1.  Network Treatment
+       4.3.2.  Reliable Traffic
+         4.3.2.1.  Network Treatment
+   5.  Network to Host Metadata
+     5.1.  Downlink Bitrate
+       5.1.1.  Units
+       5.1.2.  Host Treatment
+     5.2.  Prefer Alternate Path ('pref-alt-path')
+       5.2.1.  Host Treatment
+   6.  Guidance For Mapping Metadata to Specific Signaling Protocols
+   7.  Implementation Impact of Metadata
+     7.1.  Reliable/Unreliable set by the respective transport level
            protocol
-     5.2.  Offloading Loss-Avoidance to the network
-   6.  Security Considerations
-   7.  IANA Considerations
-     7.1.  Metadata for Collaborative Host/Network Signaling Registry
-           Group
-     7.2.  Flow Metadata Registry
+     7.2.  Offloading Loss-Avoidance to the network
+   8.  Manageability Considerations
+     8.1.  Impact on Network Operation
+   9.  Security Considerations
+   10. IANA Considerations
+     10.1.  Metadata for Collaborative Host/Network Signaling Registry
+            Group
+     10.2.  Flow Metadata Registry
    Acknowledgments
    References
      Normative References
@@ -148,29 +151,33 @@ Table of Contents
 
    *  QUIC CID mapping ([I-D.wing-cidfi]).
 
-   An analysis of most of those metadata signaling mechanisms is at
-   [I-D.herbert-host2netsig].
+   [I-D.herbert-host2netsig] provides an analysis of most of those
+   metadata signaling mechanisms.
 
-   The metadata defined in this document is independent of the actual
-   companion signaling protocol.  In doing so, we ensure that consistent
-   metadata definitions are used by the various signaling protocols.
+   This document does not assume nor preclude any companion signaling
+   protocol.  As such, the metadata in this document is defined to be
+   independent of the signaling protocol.  In doing so, we ensure that
+   consistent metadata definitions are used by the various signaling
+   protocols.  Also, this approach allows to factorize key
+   considerations such as security and operational considerations.
+
    The metadata is described using [CDDL] which can be expressed in both
    [JSON] and binary using [CBOR].  Both the JSON and CBOR encodings are
    self-describing.  It is out of scope of this document to define how
    the proposed encoding will be mapped to a specific signaling
    protocol.
 
-   For host-to-network metadata, if the signaling protocol supports it,
-   individual packets within a flow can contain metadata describing
-   their drop preference or their reliability.  The network elements
-   aware of this metadata can apply preferential or deferential
+   If the companion signaling protocol supports host-to-network
+   metadata, individual packets within a flow can contain metadata
+   describing their drop preference or their reliability.  The network
+   elements aware of this metadata can apply preferential or deferential
    treatment to those packets during a 'reactive traffic policy' event.
    It is also assumed that such network elements are provisioned with
    local policy that guides their behavior jointly with a signaled
    metadata.  Examples of metadata signaling for video streaming and for
    remote desktop are provided in Appendix A.
 
-   For network-to-host metadata the host can be informed of network
+   For network-to-host metadata, a host can be informed of network
    policy for nominal downlink bandwidth.  Certain applications, such as
    most especially video streaming applications, can use that
    information to optimize their video streaming bandwidth to fit within
@@ -192,22 +199,7 @@ Table of Contents
    Intentional policy:  Configured bandwidth, pps, or similar throughput
       constraints applied to a flow, application, host, or subscriber.
 
-3.  Host to Network Metadata
-
-   Metadata is characterized into two different nature:
-
-   Network Metadata:  This consists of metadata that specifies how the
-      network element should treat that packet.  The network metadata
-      comprises of the importance field and is specified in the MSB and
-      of size 1 bit.  This field indicates if the packet is more
-      important or less important.
-
-   Application Metadata:  This consists of metadata that specifies how
-      the application treats that packet.  The appplication metadata
-      comprises of two fields - Keep/Discard bit and Reliable/Unreliable
-      bit.
-
-3.1.  Metadata
+3.  Metadata Structure
 
    The metadata is described in CDDL [RFC8610] format shown in Figure 1.
 
@@ -270,13 +262,28 @@ Table of Contents
 
    New metadata for collaborative host/network signaling MUST be
    registered in the IANA registry, "Flow Metadata Registry"
-   Section 7.2.
+   Section 10.2.
 
-   More details about each of these metadata are provided in the
-   following sections.  Both client and network intended behaviors are
+   More details about each of these metadata are provided in Section 4
+   and Section 5.  Both client and network intended behaviors are
    specified for each metadata.
 
-3.2.  Importance
+4.  Host to Network Metadata
+
+   Metadata is characterized into two different nature:
+
+   Network Metadata:  This consists of metadata that specifies how a
+      network element should treat that packet.  The network metadata
+      comprises of the importance field and is specified in the MSB and
+      of size 1 bit.  This field indicates if the packet is more
+      important or less important.
+
+   Application Metadata:  This consists of metadata that specifies how
+      the application treats that packet.  The appplication metadata
+      comprises of two components - Keep/Discard bit and Reliable/
+      Unreliable bit.
+
+4.1.  Importance
 
    The "Importance" metadata signifies if the packet is of more
    important (true) or less important (false) by the host, relative to
@@ -291,13 +298,13 @@ Table of Contents
    of signal.  An example of this interpretation is specified in
    Appendix A.
 
-3.2.1.  Network Treatment
+4.1.1.  Network Treatment
 
    During a reactive policy event, a network element is encouraged to
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-3.3.  Packet Type - Reliable/Unreliable
+4.2.  Packet Type - Reliable/Unreliable
 
    The "Reliable" metadata indicates if a packet is reliably transmitted
    by the host.
@@ -318,19 +325,19 @@ Table of Contents
 
    Reliable/Unreliable belongs to Application Metadata.
 
-3.3.1.  Network Treatment
+4.2.1.  Network Treatment
 
    During a reactive policy event, dropping unreliable traffic is
    preferred over dropping reliable traffic.  The reliable traffic will
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-3.4.  Packet Nature
+4.3.  Packet Nature
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
 
-3.4.1.  Unreliable Traffic
+4.3.1.  Unreliable Traffic
 
    Packets are marked with 'prefer-keep' set to either true or false.
    When set to true, it indicates a preference to keep the packet.
@@ -355,14 +362,14 @@ Table of Contents
    keep' set to false, when the application has the capability to avoid
    sending that packet, is application-specific.
 
-3.4.1.1.  Network Treatment
+4.3.1.1.  Network Treatment
 
    During a reactive policy event, dropping packets with 'prefer-keep'
    set to false is preferred over dropping 'prefer-keep' set to true
    packets.  Absent such discard preference indication, the network
    element will blindly drop packets during a reactive policy event.
 
-3.4.2.  Reliable Traffic
+4.3.2.  Reliable Traffic
 
    For reliable traffic, "realtime" metadata indicates whether the
    packet belongs to bulk or real-time traffic.
@@ -372,14 +379,14 @@ Table of Contents
    box and quick responses help the user experience) and other flows as
    bulk (e.g., file download, file upload).
 
-3.4.2.1.  Network Treatment
+4.3.2.1.  Network Treatment
 
    Realtime traffic prefers lower latency network paths and bulk traffic
    prefers high throughoupt paths.
 
-4.  Network to Host Metadata
+5.  Network to Host Metadata
 
-4.1.  Downlink Bitrate
+5.1.  Downlink Bitrate
 
    Monthly data quotas on cellular networks can be easily exceeded by
    video streaming, in particular, if the client chooses excessively
@@ -396,11 +403,11 @@ Table of Contents
    as near as possible behind each other, and the remaining portion of
    that second could have no packets transmitted.
 
-4.1.1.  Units
+5.1.1.  Units
 
    Bit rate is expressed in Mbps and duration is in milliseconds.
 
-4.1.2.  Host Treatment
+5.1.2.  Host Treatment
 
    The host chooses a video streaming bit rate at or below the signaled
    rate.
@@ -411,7 +418,7 @@ Table of Contents
 
    An example of the encoding is in Appendix B.
 
-4.2.  Prefer Alternate Path ('pref-alt-path')
+5.2.  Prefer Alternate Path ('pref-alt-path')
 
    There are also crisis cases where nominal network resources cannot be
    used at maximum to handle packets.  A network would thus seek to
@@ -422,15 +429,19 @@ Table of Contents
    subsided, the network should signal with pref-alt-path=false.
 
    The 'pref-alt-path' metadata may be sent together with the bitrate
-   metadata set to a very low value.
+   metadata (Section 5.1) set to a very low value.
 
-4.2.1.  Host Treatment
+5.2.1.  Host Treatment
 
    The host offloads its connections to alternate available paths.
 
-5.  Implementation Impact of Metadata
+6.  Guidance For Mapping Metadata to Specific Signaling Protocols
 
-5.1.  Reliable/Unreliable set by the respective transport level protocol
+   TBC.
+
+7.  Implementation Impact of Metadata
+
+7.1.  Reliable/Unreliable set by the respective transport level protocol
 
    TCP [RFC9293] is a reliable transport protocol, while UDP [RFC0768]
    provides a minimal, unreliable, best-effort, message-passing
@@ -438,18 +449,19 @@ Table of Contents
    wish to operate over IP [RFC8085].  Protocols built over UDP may
    implement reliability features at the "application" layer if such a
    transport feature is needed [RFC8304].  For example, streams of
-   reliable application data are sent using STREAM QUIC frames, while
-   application data that do not require retransmission can be carried in
-   DATAGRAM QUIC frames.  Applications that are utilizing such a
-   protocol, will have to choose the delivery service (reliable or loss-
-   tolerant) based upon the nature of the packet being sent -- loss-
-   tolerant packet cannot be carried in a reliable frame and vice-versa.
-   Hence, based on the transport service being invoked, setting of the
-   reliable/unreliable metadata entry can be offloaded to the underlying
+   reliable application data are sent using STREAM QUIC frames
+   (Section 19.8 of [RFC9000]), while application data that do not
+   require retransmission can be carried in DATAGRAM QUIC frames
+   [RFC9221].  Applications that are utilizing such a protocol, will
+   have to choose the delivery service (reliable or loss-tolerant) based
+   upon the nature of the packet being sent -- loss-tolerant packet
+   cannot be carried in a reliable frame and vice-versa.  Hence, based
+   on the transport service being invoked, setting of the reliable/
+   unreliable metadata entry can be offloaded to the underlying
    transport protocol, unless specifically overridden by the
    application.
 
-5.2.  Offloading Loss-Avoidance to the network
+7.2.  Offloading Loss-Avoidance to the network
 
    Network nodes, upon learning of the nature of a packet (reliable/
    prefer-keep) can choose to implement loss avoidance algorithms
@@ -460,7 +472,13 @@ Table of Contents
    application layer using protocols such as [RFC7198], [RFC7197], or
    [RFC7104].
 
-6.  Security Considerations
+8.  Manageability Considerations
+
+8.1.  Impact on Network Operation
+
+   TBC.
+
+9.  Security Considerations
 
    Metadata increases the information available to attackers to
    distinguish important packets from less-important packets, which the
@@ -472,14 +490,14 @@ Table of Contents
    rather in other documents describing how this metadata is encoded and
    exchanged amongst hosts and network elements.
 
-7.  IANA Considerations
+10.  IANA Considerations
 
-7.1.  Metadata for Collaborative Host/Network Signaling Registry Group
+10.1.  Metadata for Collaborative Host/Network Signaling Registry Group
 
    This document requests IANA to create a new registry group, entitled
    "Metadata for Collaborative Host/Network Signaling".
 
-7.2.  Flow Metadata Registry
+10.2.  Flow Metadata Registry
 
    IANA is requested to create a new registry, entitled "Flow Metadata
    Registry", under the "Metadata for Collaborative Host/Network
@@ -686,6 +704,16 @@ Informative References
               Akhter, "Registry for Performance Metrics", RFC 8911,
               DOI 10.17487/RFC8911, November 2021,
               <https://www.rfc-editor.org/rfc/rfc8911>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RFC9221]  Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
+              Datagram Extension to QUIC", RFC 9221,
+              DOI 10.17487/RFC9221, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9221>.
 
    [RFC9293]  Eddy, W., Ed., "Transmission Control Protocol (TCP)",
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
