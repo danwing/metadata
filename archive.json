@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-25T01:17:57.827763+00:00",
+  "timestamp": "2024-02-27T01:12:41.098928+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -93,15 +93,15 @@
       "id": "I_kwDOK0CwpM5_MZtY",
       "title": "Interaction with mechanisms such as RFC7198",
       "url": "https://github.com/danwing/metadata/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-14T09:56:35Z",
-      "updatedAt": "2024-02-19T13:59:59Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-26T21:07:24Z",
+      "closedAt": "2024-02-26T21:07:24Z",
       "comments": [
         {
           "author": "sridharangirish91",
@@ -116,6 +116,13 @@
           "body": "> using metadata can reduce the necessity for mechanisms like dual stream, right?\r\n\r\nYes. I would echo the arguments in the spec.\r\n\r\nGenerally, having explicit signal is superior to heuristic.",
           "createdAt": "2024-02-19T13:59:58Z",
           "updatedAt": "2024-02-19T13:59:58Z"
+        },
+        {
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Added some initial text to tackle this!",
+          "createdAt": "2024-02-26T01:28:21Z",
+          "updatedAt": "2024-02-26T01:28:21Z"
         }
       ]
     },
@@ -1135,28 +1142,110 @@
     {
       "number": 25,
       "id": "PR_kwDOK0CwpM5n1GYB",
-      "title": "removing complex/simple interpretation from appendix",
+      "title": "removing complex/simple interpretation from appendix. Added text to indicate implementation impact. Reworded PacketType and PacketNature to better suit the parameters",
       "url": "https://github.com/danwing/metadata/pull/25",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "sridharangirish91",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-02-24T23:21:38Z",
-      "updatedAt": "2024-02-24T23:21:38Z",
+      "updatedAt": "2024-02-26T21:07:23Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
       "baseRefOid": "7095b764b55a2aa1799b962acefdab3f7de0f0ce",
       "headRepository": "danwing/metadata",
       "headRefName": "sridharanr",
-      "headRefOid": "075575d017fd3745a447edd57cb23858f24fc370",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "93a9aeb056709ff2e41620b1c4ec587824cd5f31",
+      "closedAt": "2024-02-26T21:07:23Z",
+      "mergedAt": "2024-02-26T21:07:23Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "4dbf515b72debb5a5174ddb5ec26b55d197998f7"
+      },
+      "comments": [
+        {
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Thanks @sridharangirish91.\r\n> \r\n> Please find some change proposals\r\n\r\nUpdated the doc, thanks for the review :)",
+          "createdAt": "2024-02-26T18:52:58Z",
+          "updatedAt": "2024-02-26T18:52:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5xPsjA",
+          "commit": {
+            "abbreviatedOid": "519eb1f"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-02-26T04:34:29Z",
+          "updatedAt": "2024-02-26T04:34:29Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xPtSB",
+          "commit": {
+            "abbreviatedOid": "519eb1f"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-02-26T04:39:14Z",
+          "updatedAt": "2024-02-26T04:44:58Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "It is more accurate to say that TCP aims to provide reliable and ordered delivery, but it doesn't guarantee delivery (e.g., extremely congested network).",
+              "createdAt": "2024-02-26T04:39:14Z",
+              "updatedAt": "2024-02-26T04:44:58Z"
+            },
+            {
+              "originalPosition": 26,
+              "body": "The term \"subchannel\" does not look correct to me, as QUIC doesn't have a concept of separate subchannels but rather uses streams for different purposes.",
+              "createdAt": "2024-02-26T04:40:17Z",
+              "updatedAt": "2024-02-26T04:44:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM5xQH-j",
+          "commit": {
+            "abbreviatedOid": "519eb1f"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks @sridharangirish91. \r\n\r\nPlease find some change proposals\r\n",
+          "createdAt": "2024-02-26T06:42:32Z",
+          "updatedAt": "2024-02-26T06:47:56Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\nTCP {{?RFC9293}} is a reliable transport protocol, while UDP {{?RFC0768}} provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP {{?RFC8085}}. Protocols built over UDP may implement reliability features at the \"application\" layer if such a transport feature is needed {{?RFC8304}}. For example, streams of reliable application data are sent using STREAM QUIC frames, while application data that do not require retransmission can be carried in DATAGRAM QUIC frames. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.\r\n```",
+              "createdAt": "2024-02-26T06:42:32Z",
+              "updatedAt": "2024-02-26T06:47:56Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\r\nNetwork nodes, upon learning of the nature of a packet (reliable/prefer-keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (e.g., using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as {{?RFC7198}}, {{?RFC7197}}, or {{?RFC7104}}.\r\n```",
+              "createdAt": "2024-02-26T06:44:47Z",
+              "updatedAt": "2024-02-26T06:47:56Z"
+            },
+            {
+              "originalPosition": 39,
+              "body": "What \"QoS measurement\" you have in mind? ",
+              "createdAt": "2024-02-26T06:47:31Z",
+              "updatedAt": "2024-02-26T06:47:56Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
