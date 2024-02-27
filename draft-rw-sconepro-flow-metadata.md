@@ -105,7 +105,7 @@ protocol entering a different network. For example, important packets
 leaving a server and its network might be marked with DSCP (as the
 sending host is known and trusted) but the receiving network doesn't
 trust the DSCP bits in received packets because there is no
-authorization or authentication for differented treatment. 
+authorization or authentication for differented treatment.
 
 By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
