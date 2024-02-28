@@ -4,7 +4,7 @@ abbrev: "Flow Metadata"
 category: std
 
 
-docname: draft-rw-sconepro-flow-metadata-latest
+docname: draft-rwbr-sconepro-flow-metadata-latest
 submissiontype: IETF
 v: 3
 area: "Network"
@@ -31,7 +31,7 @@ venue:
   mail: "tsvwg@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/tsvwg/"
   github: "danwing/metadata"
-  latest: "https://danwing.github.io/metadata/draft-rw-flow-metadata.md.html"
+  latest: "https://danwing.github.io/metadata/draft-rwbr-flow-metadata.md.html"
 
 stand_alone: yes
 pi:
