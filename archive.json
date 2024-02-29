@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-27T01:12:41.098928+00:00",
+  "timestamp": "2024-02-29T01:12:57.237149+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -1246,6 +1246,62 @@
           ]
         }
       ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOK0CwpM5oBwOd",
+      "title": "Some fixes",
+      "url": "https://github.com/danwing/metadata/pull/26",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Move the metadata structure upper as this applies for both h2n and n2h\r\n\r\nAdd some placeholders",
+      "createdAt": "2024-02-27T10:43:30Z",
+      "updatedAt": "2024-02-27T15:04:49Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "4dbf515b72debb5a5174ddb5ec26b55d197998f7",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-7",
+      "headRefOid": "5fc1bae99b59ed36e104c82e214c84330be19de5",
+      "closedAt": "2024-02-27T15:04:49Z",
+      "mergedAt": "2024-02-27T15:04:49Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "297d8a133436a61bc16014755861ea119c65c227"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOK0CwpM5oMBdP",
+      "title": "rename to RWBR",
+      "url": "https://github.com/danwing/metadata/pull/27",
+      "state": "MERGED",
+      "author": "danwing",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-28T15:41:48Z",
+      "updatedAt": "2024-02-28T15:43:24Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "297d8a133436a61bc16014755861ea119c65c227",
+      "headRepository": "danwing/metadata",
+      "headRefName": "rename",
+      "headRefOid": "ce932371fe0cb6db8e7e21de99223cf1325bf55d",
+      "closedAt": "2024-02-28T15:43:24Z",
+      "mergedAt": "2024-02-28T15:43:24Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "400d6f233e7bfd43fa1d3a32e37bcb7e0e79f8cf"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
