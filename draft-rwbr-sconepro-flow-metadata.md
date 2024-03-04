@@ -255,12 +255,12 @@ metadata.
 Metadata is characterized into two different nature:
 
 Network Metadata:
-: This consists of metadata that specifies how a network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.
+: This consists of metadata that specifies how a network element should treat that packet. The network metadata comprises of the importance metadata. This field indicates whether a packet is more important or less important.
 
 Application Metadata:
-: This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two components - Keep/Discard bit and Reliable/Unreliable bit.
+: This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two components: Keep/Discard and Reliable/Unreliable.
 
-## Packet Importance ('Importance')
+## Packet Importance ('Importance') {#sec-importance}
 
 The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
@@ -348,7 +348,7 @@ client chooses excessively high quality or routinely abandons watching videos th
 downloaded. The network can assist the client by informing the client of the network's
 bandwidth policy.
 
-If the video is encoded with variable bit rate, the bitrate cannot exceed the indicated
+If the video is encoded with variable bitrate, the bitrate cannot exceed the indicated
 bitrate.
 
 The nominal bitrate is calculated over each second, whereas the burst
@@ -359,11 +359,11 @@ that second could have no packets transmitted.
 
 ### Units
 
-Bit rate is expressed in Mbps and duration is in milliseconds.
+Bitrate is expressed in Mbps and duration is in milliseconds.
 
 ### Host Treatment
 
-The host chooses a video streaming bit rate at or below the signaled rate.
+The host chooses a video streaming bitrate at or below the signaled rate.
 
 The host may also choose to signal the received bitrate to the remote peer. The remote
 peer will adapt its transmission behavior to comply with the received bitrate.
