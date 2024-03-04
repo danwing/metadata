@@ -156,12 +156,12 @@ Table of Contents
 
    This document does not assume nor preclude any companion signaling
    protocol.  Also, the document does not preclude API-based approaches
-   to control flows, packets, applications, etc. that are bound a given
-   metadata and which will benefit from the differentiated behavior.  As
-   such, *the metadata in this document is defined to be independent of
-   the signaling protocol* (Section 3).  In doing so, we ensure that
-   consistent metadata definitions are used by the various signaling
-   protocols.  Also, this approach allows to factorize key
+   to control flows, packets, applications, etc. that are bound to a
+   given metadata and which will benefit from the differentiated
+   behavior.  As such, *the metadata in this document is defined to be
+   independent of the signaling protocol* (Section 3).  In doing so, we
+   ensure that consistent metadata definitions are used by the various
+   signaling protocols.  Also, this approach allows to factorize key
    considerations such as security and operational considerations.  This
    approach also ease passing policies between controllers of domains
    involved in packet delivery (e.g., RAN, Core, and Transport domains).
