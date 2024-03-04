@@ -475,7 +475,7 @@ To be completed.
 
 Video Streaming Metadata:
 
-The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
+The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
 
 | Traffic type                             | Importance | PacketNature      | PacketType           |
 |:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
@@ -527,7 +527,7 @@ metadata = {
 
 ## Interactive Gaming or Audio/Video  {#example-interactive-av}
 
-The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
+The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
 
 Interactive A/V, downstream Metadata:
 
@@ -586,7 +586,7 @@ Virtual Apps and Desktops - CVAD) application.
 
 Remote Desktop Virtualization Metadata:
 
-The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
+The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
 
 | Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
