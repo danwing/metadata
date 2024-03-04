@@ -122,11 +122,13 @@ document is a companion to host-to-network signaling the metadata itself, such a
 {{?I-D.herbert-host2netsig}} provides an analysis of most of those metadata signaling mechanisms.
 
 This document does not assume nor preclude any companion signaling protocol.
-As such, **the metadata in this document is defined to be independent of the
+Also, the document does not preclude API-based approaches to
+control flows, packets, applications, etc. that are bound a given metadata and which
+will benefit from the differentiated behavior. As such, **the metadata in this document is defined to be independent of the
 signaling protocol** ({{sec-meta}}). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
-considerations.
+considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, and Transport domains).
 
 The metadata is described using Concise Data Definition Language (CDDL) {{!CDDL=RFC8610}} which can be expressed
 in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
