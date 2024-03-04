@@ -83,7 +83,7 @@ informative:
 --- abstract
 
 This document defines per-flow and per-packet metadata for both
-network to host and host to network signaling in CDDL which
+network-to-host and host-to-network signaling in Concise Data Definition Language (CDDL) which
 expresses both CBOR and JSON.  The common metadata definition allows interworking between
 signaling protocols with high fidelity. The metadata is also self-
 describing to improve interpretation by network elements and
@@ -122,13 +122,13 @@ document is a companion to host-to-network signaling the metadata itself, such a
 {{?I-D.herbert-host2netsig}} provides an analysis of most of those metadata signaling mechanisms.
 
 This document does not assume nor preclude any companion signaling protocol.
-As such, the metadata in this document is defined to be independent of the
-signaling protocol. In doing so, we ensure that consistent
+As such, **the metadata in this document is defined to be independent of the
+signaling protocol** ({{sec-meta}}). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
 considerations.
 
-The metadata is described using {{!CDDL=RFC8610}} which can be expressed
+The metadata is described using Concise Data Definition Language (CDDL) {{!CDDL=RFC8610}} which can be expressed
 in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
 the JSON and CBOR encodings are self-describing.  It is out of scope
 of this document to define how the proposed encoding will be mapped to
@@ -161,9 +161,14 @@ such as most especially video streaming applications, can use
 that information to optimize their video streaming bandwidth to
 fit within that policy.
 
+To track metadata that are defined for host/network signalling,
+a new IANA registry is defined: "Flow Metadata Registry" {{sec-fmr}}.
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
+
+This document uses the following terms:
 
 Reactive policy:
 : Treatment given to a flow when an exceptional event occurs, such as
@@ -175,7 +180,7 @@ Intentional policy:
 : Configured bandwidth, pps, or similar throughput constraints applied
 to a flow, application, host, or subscriber.
 
-# Metadata Structure
+# Metadata Structure {#sec-meta}
 
 The metadata is described in CDDL {{!RFC8610}} format shown in {{meta-cddl}}.
 
@@ -519,6 +524,7 @@ metadata = {
   }
 }
 ~~~~~
+
 ## Interactive Gaming or Audio/Video  {#example-interactive-av}
 
 The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
