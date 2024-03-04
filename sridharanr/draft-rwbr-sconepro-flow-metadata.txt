@@ -18,12 +18,12 @@ Expires: 5 September 2024                                   M. Boucadair
 Abstract
 
    This document defines per-flow and per-packet metadata for both
-   network to host and host to network signaling in CDDL which expresses
-   both CBOR and JSON.  The common metadata definition allows
-   interworking between signaling protocols with high fidelity.  The
-   metadata is also self- describing to improve interpretation by
-   network elements and endpoints while reducing the need for version
-   negotiation.
+   network-to-host and host-to-network signaling in Concise Data
+   Definition Language (CDDL) which expresses both CBOR and JSON.  The
+   common metadata definition allows interworking between signaling
+   protocols with high fidelity.  The metadata is also self- describing
+   to improve interpretation by network elements and endpoints while
+   reducing the need for version negotiation.
 
 About This Document
 
@@ -78,18 +78,18 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Metadata Structure
-   4.  Host to Network Metadata
-     4.1.  Importance
+   4.  Host-to-Network Metadata
+     4.1.  Packet Importance ('Importance')
        4.1.1.  Network Treatment
-     4.2.  Packet Type - Reliable/Unreliable
+     4.2.  Packet Type - Reliable/Unreliable ('PacketType')
        4.2.1.  Network Treatment
-     4.3.  Packet Nature
+     4.3.  Packet Nature ('PacketNature')
        4.3.1.  Unreliable Traffic
          4.3.1.1.  Network Treatment
        4.3.2.  Reliable Traffic
          4.3.2.1.  Network Treatment
    5.  Network to Host Metadata
-     5.1.  Downlink Bitrate
+     5.1.  Downlink Bitrate ('DownlinkBitrate')
        5.1.1.  Units
        5.1.2.  Host Treatment
      5.2.  Prefer Alternate Path ('pref-alt-path')
@@ -110,7 +110,7 @@ Table of Contents
    References
      Normative References
      Informative References
-   Appendix A.  Examples of Host-to-Network Metadata
+   Appendix A.  Examples of Host-to-Network Metadata Encoding
      A.1.  Video Streaming
      A.2.  Interactive Gaming or Audio/Video
      A.3.  Remote Desktop Virtualization
@@ -155,17 +155,17 @@ Table of Contents
    metadata signaling mechanisms.
 
    This document does not assume nor preclude any companion signaling
-   protocol.  As such, the metadata in this document is defined to be
-   independent of the signaling protocol.  In doing so, we ensure that
-   consistent metadata definitions are used by the various signaling
-   protocols.  Also, this approach allows to factorize key
+   protocol.  As such, *the metadata in this document is defined to be
+   independent of the signaling protocol* (Section 3).  In doing so, we
+   ensure that consistent metadata definitions are used by the various
+   signaling protocols.  Also, this approach allows to factorize key
    considerations such as security and operational considerations.
 
-   The metadata is described using [CDDL] which can be expressed in both
-   [JSON] and binary using [CBOR].  Both the JSON and CBOR encodings are
-   self-describing.  It is out of scope of this document to define how
-   the proposed encoding will be mapped to a specific signaling
-   protocol.
+   The metadata is described using Concise Data Definition Language
+   (CDDL) [CDDL] which can be expressed in both [JSON] and binary using
+   [CBOR].  Both the JSON and CBOR encodings are self-describing.  It is
+   out of scope of this document to define how the proposed encoding
+   will be mapped to a specific signaling protocol.
 
    If the companion signaling protocol supports host-to-network
    metadata, individual packets within a flow can contain metadata
@@ -183,6 +183,9 @@ Table of Contents
    information to optimize their video streaming bandwidth to fit within
    that policy.
 
+   To track metadata that are defined for host/network signalling, a new
+   IANA registry is defined: "Flow Metadata Registry" Section 10.2.
+
 2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -190,6 +193,8 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+   This document uses the following terms:
 
    Reactive policy:  Treatment given to a flow when an exceptional event
       occurs, such as diminished throughput to the host caused by radio
@@ -268,7 +273,7 @@ Table of Contents
    and Section 5.  Both client and network intended behaviors are
    specified for each metadata.
 
-4.  Host to Network Metadata
+4.  Host-to-Network Metadata
 
    Metadata is characterized into two different nature:
 
@@ -283,7 +288,7 @@ Table of Contents
       comprises of two components - Keep/Discard bit and Reliable/
       Unreliable bit.
 
-4.1.  Importance
+4.1.  Packet Importance ('Importance')
 
    The "Importance" metadata signifies if the packet is of more
    important (true) or less important (false) by the host, relative to
@@ -304,7 +309,7 @@ Table of Contents
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-4.2.  Packet Type - Reliable/Unreliable
+4.2.  Packet Type - Reliable/Unreliable ('PacketType')
 
    The "Reliable" metadata indicates if a packet is reliably transmitted
    by the host.
@@ -332,7 +337,7 @@ Table of Contents
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-4.3.  Packet Nature
+4.3.  Packet Nature ('PacketNature')
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
@@ -386,7 +391,7 @@ Table of Contents
 
 5.  Network to Host Metadata
 
-5.1.  Downlink Bitrate
+5.1.  Downlink Bitrate ('DownlinkBitrate')
 
    Monthly data quotas on cellular networks can be easily exceeded by
    video streaming, in particular, if the client chooses excessively
@@ -416,7 +421,7 @@ Table of Contents
    peer.  The remote peer will adapt its transmission behavior to comply
    with the received bitrate.
 
-   An example of the encoding is in Appendix B.
+   An example of the encoding is provided in Appendix B.
 
 5.2.  Prefer Alternate Path ('pref-alt-path')
 
@@ -564,11 +569,15 @@ Table of Contents
    |          |                 | path if      |               |       |
    |          |                 | available    |               |       |
    +----------+-----------------+--------------+---------------+-------+
+   | 250-255  |       Exp       | Reserved     | This-Document |  1.0  |
+   |          |                 | for private  |               |       |
+   |          |                 | use          |               |       |
+   +----------+-----------------+--------------+---------------+-------+
 
                           Table 1: Initial Values
 
-   New entries can be added to the registry using "Standards Action"
-   policy (Section 4.9 of [RFC8126]).
+   New values in the 6-249 range can be assigned using "Standards
+   Action" policy (Section 4.9 of [RFC8126]).
 
 Acknowledgments
 
@@ -632,6 +641,9 @@ Informative References
               signal-01, 7 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
+
+   [I-D.rwbr-tsvwg-signaling-use-cases]
+              "*** BROKEN REFERENCE ***".
 
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
@@ -727,26 +739,14 @@ Informative References
    [SCONEPRO] "SCONEPRO Working Group Charter", 2 February 2024,
               <https://datatracker.ietf.org/group/sconepro/about/>.
 
-Appendix A.  Examples of Host-to-Network Metadata
+Appendix A.  Examples of Host-to-Network Metadata Encoding
 
 A.1.  Video Streaming
 
-   Streaming video contains the occasional key frame ("i-frame")
-   containing a full video frame.  These are necessary to rebuild
-   receiver state after loss of delta frames.  The key frames are
-   therefore more critical to deliver to the receiver than delta frames.
-
-   Streaming video also contains audio frames which can be encoded
-   separately and thus can be signaled separately.  Audio is more
-   critical than video for almost all applications, but its importance
-   (relative to other packets in the flow) is still an application
-   decision.  In the example below, the audio is more important than
-   video (importance=high, PT=keep, RU=reliable), video key frames have
-   middle importance (importance=low, PT=discard, RU=reliable), and both
-   types of video delta frames (P-frame and B-frame) have least
-   importance (importance=low, PT=discard, RU=unreliable).
-
    Video Streaming Metadata:
+
+   The use case requirements and the table values below explained in
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
         +===============+============+==============+============+
         |  Traffic type | Importance | PacketNature | PacketType |
@@ -765,15 +765,44 @@ A.1.  Video Streaming
 
            Table 2: Example Values for Video Streaming Metadata
 
+   The encoding of the metadata in CDDL for the traffic will look like:
+   Video I-frame:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Audio:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Video delta P-frame:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
 A.2.  Interactive Gaming or Audio/Video
 
-   Both gaming (video in both directions, audio in both directions,
-   input devices from client to server) and interactive audio/video
-   (VoIP, video conference) involves important traffic in both
-   directions -- thus is a slightly more complicated use-case than the
-   previous example.  Additionally, most Internet service providers
-   constrain upstream bandwidth so proper packet treatment is critical
-   in the upstream direction.
+   The use case requirements and the table values below explained in
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    Interactive A/V, downstream Metadata:
 
@@ -789,153 +818,50 @@ A.2.  Interactive Gaming or Audio/Video
 
          Table 3: Example Values for Interactive A/V, downstream
 
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature | PacketType |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
+   Encoding:
 
-          Table 4: Example Values for Interactive A/V, upstream
+   Video key frame:
 
-   Many interactive audio/video applications also support sharing the
-   presenter's screen, file, video, or pictures.  During this sharing
-   the presenter's video is less important but the screen or picture is
-   more important.  This change of imporance can be conveyed in metadata
-   to the network, as in the table below:
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": true
+     }
+   }
 
-   Comprehensive Interpretation:
+   Video delta frame:
 
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature | PacketType |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      |  picture sharing  |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
 
-         Table 5: Example Values for Interactive A/V with picture
-                            sharing, upstream
+   Audio:
 
-   In many scenarios a game or VoIP application will want to signal
-   different metadata for the same type of packet in each direction.
-   For example, for a game, video in the server-to-client direction
-   might be more important than audio, whereas input devices (e.g.,
-   keystrokes) might be more important than audio.
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
 
 A.3.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
-   Virtual Apps and Desktops - CVAD) application.  This is shown in two
-   tables, client-to-server traffic (Table 6) and server-to-client
-   traffic (Table 7).
+   Virtual Apps and Desktops - CVAD) application.
 
    Remote Desktop Virtualization Metadata:
 
-   +================+==========+==============+==========+=============+
-   |  Traffic type  |Importance| PacketNature |PacketType|   Comments  |
-   +================+==========+==============+==========+=============+
-   |  User typing   |   high   |   realtime   | reliable |             |
-   +----------------+----------+--------------+----------+-------------+
-   |  Mouse click/  |   high   |   realtime   | reliable |  The start  |
-   |  End Position  |          |              |          | and endpoint|
-   |                |          |              |          |    of the   |
-   |                |          |              |          |   pointer   |
-   |                |          |              |          | movement is |
-   |                |          |              |          |   vital to  |
-   |                |          |              |          | ensure user |
-   |                |          |              |          |  action is  |
-   |                |          |              |          |  completed  |
-   |                |          |              |          |  correctly. |
-   |                |          |              |          |   So, the   |
-   |                |          |              |          |  endpoints  |
-   |                |          |              |          |  have to be |
-   |                |          |              |          |   reliably  |
-   |                |          |              |          | transmitted |
-   |                |          |              |          |  with real- |
-   |                |          |              |          |     time    |
-   |                |          |              |          | priority. **|
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   high   |     keep     |unreliable|             |
-   |     audio      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-   | Authentication |   low    |   realtime   | reliable |             |
-   |    - Finger    |          |              |          |             |
-   |  print, smart  |          |              |          |             |
-   |      card      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   low    |     keep     |unreliable|  Video key  |
-   |   video key    |          |              |          | frames form |
-   |     frame      |          |              |          |   the base  |
-   |                |          |              |          | frames of a |
-   |                |          |              |          |  video upon |
-   |                |          |              |          |  which the  |
-   |                |          |              |          |   next 'n'  |
-   |                |          |              |          | timeframe of|
-   |                |          |              |          |    video    |
-   |                |          |              |          |  updates is |
-   |                |          |              |          | applied on. |
-   |                |          |              |          |    These    |
-   |                |          |              |          | frames, are |
-   |                |          |              |          |    hence,   |
-   |                |          |              |          | critical and|
-   |                |          |              |          |   without   |
-   |                |          |              |          |  them, the  |
-   |                |          |              |          | video would |
-   |                |          |              |          |    not be   |
-   |                |          |              |          |   coherent  |
-   |                |          |              |          |  until the  |
-   |                |          |              |          |     next    |
-   |                |          |              |          |   critical  |
-   |                |          |              |          |   frame is  |
-   |                |          |              |          |  received.  |
-   |                |          |              |          | Retransmits |
-   |                |          |              |          | of these are|
-   |                |          |              |          |  harmful to |
-   |                |          |              |          | the UX. *** |
-   +----------------+----------+--------------+----------+-------------+
-   | Mouse position |   low    |   discard    |unreliable|   When the  |
-   |    tracking    |          |              |          |  pointer is |
-   |                |          |              |          |  moved from |
-   |                |          |              |          | one point to|
-   |                |          |              |          | another, the|
-   |                |          |              |          | coordinates |
-   |                |          |              |          |    of the   |
-   |                |          |              |          |   pointers  |
-   |                |          |              |          | between the |
-   |                |          |              |          |  two points |
-   |                |          |              |          | can be lost |
-   |                |          |              |          | without much|
-   |                |          |              |          | of an impact|
-   |                |          |              |          | to the UX as|
-   |                |          |              |          | long as the |
-   |                |          |              |          |  start and  |
-   |                |          |              |          |   endpoint  |
-   |                |          |              |          |   reaches.  |
-   |                |          |              |          |  This would |
-   |                |          |              |          |  ensure the |
-   |                |          |              |          | user action |
-   |                |          |              |          |      is     |
-   |                |          |              |          |  completed, |
-   |                |          |              |          | even if the |
-   |                |          |              |          |  experience |
-   |                |          |              |          |    seems    |
-   |                |          |              |          |   glitchy.  |
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   low    |   discard    |unreliable|             |
-   |  video delta   |          |              |          |             |
-   |     frame      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-
-         Table 6: Example Values for Remote Desktop Virtualization
-                         Metadata, client to server
+   The use case requirements and the table values below explained in
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    +===========+==========+==============+==========+==================+
    |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
@@ -1055,19 +981,65 @@ A.3.  Remote Desktop Virtualization
    |           |          |              |          |    elements.     |
    +-----------+----------+--------------+----------+------------------+
 
-         Table 7: Example Values for Remote Desktop Virtualization
+         Table 4: Example Values for Remote Desktop Virtualization
                          Metadata, server to client
 
-   *** A video key frame should be handled differently by the network
-   depending on a streaming application versus a remote desktop
-   application.  The video streaming application's primary and only
-   nature of traffic is video and audio.  In contrast, a remote desktop
-   application might be playing a video and its associated audio while
-   at the same time the user is editing a document.  The user's
-   keystrokes and those glyphs need to be prioritized over the video
-   lest the user think their inputs are being ignored (and type the same
-   characters again).  Hence, the values are different even for the same
-   nature of traffic but a different application.
+   Encoding:
+
+   Glyph critical:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Glyph smoothing:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
+   Interactive Audio:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": false,
+       "prefer-keep": true
+     }
+   }
+
+   Haptic feedback:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
+   File copy:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": false
+     }
+   }
 
 Appendix B.  Example of Network-to-Host Metadata for Video Streaming
 
