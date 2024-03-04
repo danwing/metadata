@@ -463,24 +463,13 @@ To be completed.
 
 --- back
 
-# Examples of Host-to-Network Metadata {#examples-h2n}
+# Examples of Host-to-Network Metadata Encoding {#examples-h2n}
 
 ## Video Streaming {#example-video-streaming}
 
-Streaming video contains the occasional key frame ("i-frame")
-containing a full video frame.  These are necessary to rebuild
-receiver state after loss of delta frames.  The key frames are
-therefore more critical to deliver to the receiver than delta frames.
-
-Streaming video also contains audio frames which can be encoded
-separately and thus can be signaled separately.  Audio is more
-critical than video for almost all applications, but its importance
-(relative to other packets in the flow) is still an application decision.  In the example below, the audio
-is more important than video (importance=high, PT=keep, RU=reliable), video key frames
-have middle importance (importance=low, PT=discard, RU=reliable), and both types
-of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).
-
 Video Streaming Metadata:
+
+The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
 
 | Traffic type                             | Importance | PacketNature      | PacketType           |
 |:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
@@ -490,15 +479,48 @@ Video Streaming Metadata:
 | audio                                    | high       | realtime          | reliable             |
 {: #table-video-streaming title="Example Values for Video Streaming Metadata"}
 
+The encoding of the metadata in CDDL for the traffic will look like:
+Video I-frame:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": true
+  }
+}
+~~~~~
+
+Audio:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+~~~~~
+
+Video delta P-frame:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+~~~~~
 ## Interactive Gaming or Audio/Video  {#example-interactive-av}
 
-Both gaming (video in both directions, audio in both directions, input
-devices from client to server) and interactive audio/video (VoIP,
-video conference) involves important traffic in both directions --
-thus is a slightly more complicated use-case than the previous
-example.  Additionally, most Internet service providers constrain
-upstream bandwidth so proper packet treatment is critical in the
-upstream direction.
+The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
 
 Interactive A/V, downstream Metadata:
 
@@ -509,55 +531,55 @@ Interactive A/V, downstream Metadata:
 | audio             | high       | realtime          | reliable             |
 {: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
 
-| Traffic type      | Importance | PacketNature      | PacketType           |
-|:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | realtime          | reliable             |
-| video delta frame | low        | discard           | unreliable           |
-| audio             | high       | realtime          | reliable             |
-{: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
+Encoding:
 
-Many interactive audio/video applications also support sharing the presenter's
-screen, file, video, or pictures.  During this sharing the presenter's video
-is less important but the screen or picture is more important.  This change
-of imporance can be conveyed in metadata to the network, as in the table
-below:
+Video key frame:
 
-Comprehensive Interpretation:
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": true
+  }
+}
+~~~~~
 
-| Traffic type      | Importance | PacketNature      | PacketType           |
-|:-----------------:|:----------:|:-----------------:|:--------------------:|
-| video key frame   | low        | realtime          | reliable             |
-| video delta frame | low        | discard           | unreliable           |
-| audio             | high       | realtime          | reliable             |
-| picture sharing   | high       | realtime          | reliable             |
-{: #table-video-av-sharing title="Example Values for Interactive A/V with picture sharing, upstream"}
+Video delta frame:
 
-In many scenarios a game or VoIP application will want to signal different
-metadata for the same type of packet in each direction.  For example, for
-a game, video in the server-to-client direction might be more important
-than audio, whereas input devices (e.g., keystrokes) might be more important
-than audio.
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+~~~~~
 
+Audio:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+~~~~~
 
 ## Remote Desktop Virtualization {#example-rdt}
 
 Example packet metadata for Desktop Virtualization (like Citrix
-Virtual Apps and Desktops - CVAD) application.  This is shown in two
-tables, client-to-server traffic ({{table-desktop-virtualization-c2s}})
-and server-to-client traffic ({{table-desktop-virtualization-s2c}}).
+Virtual Apps and Desktops - CVAD) application.
 
 Remote Desktop Virtualization Metadata:
 
-| Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
-|:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
-| User typing                | high       | realtime        | reliable            |           |
-| Mouse click/End Position   | high       | realtime        | reliable            | The start and endpoint of the pointer movement is vital to ensure user action is completed correctly. So, the endpoints have to be reliably transmitted with real-time priority. **|
-| Interactive audio          | high       | keep            | unreliable          |   |
-| Authentication - Finger print, smart card | low | realtime | reliable |  |
-| Interactive video key frame            | low        | keep            | unreliable          | Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***|
-| Mouse position tracking    | low        | discard         | unreliable          | When the pointer is moved from one point to another, the coordinates of the pointers between the two points can be lost without much of an impact to the UX as long as the start and endpoint reaches. This would ensure the user action is completed, even if the experience seems glitchy. |
-| Interactive video delta frame           | low        | discard            | unreliable          |   |
-{: #table-desktop-virtualization-c2s title="Example Values for Remote Desktop Virtualization Metadata, client to server"}
+The use case requirements and the table values below explained in detail in {{?I-D.draft-rwbr-tsvwg-signaling-use-cases-latest}}.
 
 | Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
@@ -570,17 +592,73 @@ Remote Desktop Virtualization Metadata:
 | Glyph smoothing            | low        | discard         | Unreliable          | The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements. |
 {: #table-desktop-virtualization-s2c title="Example Values for Remote Desktop Virtualization Metadata, server to client"}
 
-*** A video key frame should be handled differently by the network
-depending on a streaming application versus a remote desktop
-application.  The video streaming application's primary and only
-nature of traffic is video and audio.  In contrast, a remote desktop
-application might be playing a video and its associated audio while at
-the same time the user is editing a document.  The user's keystrokes
-and those glyphs need to be prioritized over the video lest the user
-think their inputs are being ignored (and type the same characters
-again). Hence, the values are different even for the same nature of
-traffic but a different application.
 
+Encoding:
+
+Glyph critical:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+~~~~~
+
+Glyph smoothing:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+~~~~~
+
+Interactive Audio:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": false,
+    "prefer-keep": true
+  }
+}
+~~~~~
+
+Haptic feedback:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+~~~~~
+
+File copy:
+
+~~~~~ cddl
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": false
+  }
+}
+~~~~~
 
 # Example of Network-to-Host Metadata for Video Streaming {#examples-n2h}
 
