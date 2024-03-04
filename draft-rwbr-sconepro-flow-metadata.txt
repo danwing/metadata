@@ -78,18 +78,18 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Metadata Structure
-   4.  Host to Network Metadata
-     4.1.  Importance
+   4.  Host-to-Network Metadata
+     4.1.  Packet Importance ('Importance')
        4.1.1.  Network Treatment
-     4.2.  Packet Type - Reliable/Unreliable
+     4.2.  Packet Type - Reliable/Unreliable ('PacketType')
        4.2.1.  Network Treatment
-     4.3.  Packet Nature
+     4.3.  Packet Nature ('PacketNature')
        4.3.1.  Unreliable Traffic
          4.3.1.1.  Network Treatment
        4.3.2.  Reliable Traffic
          4.3.2.1.  Network Treatment
    5.  Network to Host Metadata
-     5.1.  Downlink Bitrate
+     5.1.  Downlink Bitrate ('DownlinkBitrate')
        5.1.1.  Units
        5.1.2.  Host Treatment
      5.2.  Prefer Alternate Path ('pref-alt-path')
@@ -273,7 +273,7 @@ Table of Contents
    and Section 5.  Both client and network intended behaviors are
    specified for each metadata.
 
-4.  Host to Network Metadata
+4.  Host-to-Network Metadata
 
    Metadata is characterized into two different nature:
 
@@ -288,7 +288,7 @@ Table of Contents
       comprises of two components - Keep/Discard bit and Reliable/
       Unreliable bit.
 
-4.1.  Importance
+4.1.  Packet Importance ('Importance')
 
    The "Importance" metadata signifies if the packet is of more
    important (true) or less important (false) by the host, relative to
@@ -309,7 +309,7 @@ Table of Contents
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-4.2.  Packet Type - Reliable/Unreliable
+4.2.  Packet Type - Reliable/Unreliable ('PacketType')
 
    The "Reliable" metadata indicates if a packet is reliably transmitted
    by the host.
@@ -337,7 +337,7 @@ Table of Contents
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-4.3.  Packet Nature
+4.3.  Packet Nature ('PacketNature')
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
@@ -391,7 +391,7 @@ Table of Contents
 
 5.  Network to Host Metadata
 
-5.1.  Downlink Bitrate
+5.1.  Downlink Bitrate ('DownlinkBitrate')
 
    Monthly data quotas on cellular networks can be easily exceeded by
    video streaming, in particular, if the client chooses excessively
@@ -421,7 +421,7 @@ Table of Contents
    peer.  The remote peer will adapt its transmission behavior to comply
    with the received bitrate.
 
-   An example of the encoding is in Appendix B.
+   An example of the encoding is provided in Appendix B.
 
 5.2.  Prefer Alternate Path ('pref-alt-path')
 
