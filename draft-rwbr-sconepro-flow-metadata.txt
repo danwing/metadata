@@ -563,11 +563,15 @@ Table of Contents
    |          |                 | path if      |               |       |
    |          |                 | available    |               |       |
    +----------+-----------------+--------------+---------------+-------+
+   | 250-255  |       Exp       | Reserved     | This-Document |  1.0  |
+   |          |                 | for private  |               |       |
+   |          |                 | use          |               |       |
+   +----------+-----------------+--------------+---------------+-------+
 
                           Table 1: Initial Values
 
-   New entries can be added to the registry using "Standards Action"
-   policy (Section 4.9 of [RFC8126]).
+   New values in the 6-249 range can be assigned using "Standards
+   Action" policy (Section 4.9 of [RFC8126]).
 
 Acknowledgments
 
