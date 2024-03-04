@@ -452,9 +452,10 @@ The initial values of the registry are listed in {{initial-reg}}.
 | 3          | PacketNature      | Indicates a discard preference         | This-Document | 1.0     |
 | 4          | DownlinkBitrate   | Specifies the maximum downlink bitrate         | This-Document | 1.0     |
 | 5          | PreferAltPath     | Sollicits the hosts to use an alternate path if available       | This-Document | 1.0     |
+| 250-255    | Exp               | Reserved for private use       | This-Document | 1.0     |
 {: #initial-reg title="Initial Values"}
 
-New entries can be added to the registry using "Standards Action" policy ({{Section 4.9 of !RFC8126}}).
+New values in the 6-249 range can be assigned using "Standards Action" policy ({{Section 4.9 of !RFC8126}}).
 
 # Acknowledgments
 {:numbered="false"}
