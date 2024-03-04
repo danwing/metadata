@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Flow Metadata for Collaborative Host/Network Signaling</title>
+<meta content="Sridharan Rajagopalan" name="author">
+<meta content="Dan Wing" name="author">
+<meta content="Mohamed Boucadair" name="author">
+<meta content="Tirumaleswar Reddy" name="author">
+<meta content="
+       This document defines per-flow and per-packet metadata for both
+network to host and host to network signaling in CDDL which
+expresses both CBOR and JSON.  The common metadata definition allows interworking between
+signaling protocols with high fidelity. The metadata is also self-
+describing to improve interpretation by network elements and
+endpoints while reducing the need for version negotiation. 
+    " name="description">
+<meta content="xml2rfc 3.20.0" name="generator">
+<meta content="user experience" name="keyword">
+<meta content="bandwidth" name="keyword">
+<meta content="priority" name="keyword">
+<meta content="enriched feedback" name="keyword">
+<meta content="media streaming" name="keyword">
+<meta content="realtime media" name="keyword">
+<meta content="QoS" name="keyword">
+<meta content="5G" name="keyword">
+<meta content="Wi-Fi" name="keyword">
+<meta content="WiFi" name="keyword">
+<meta content="DTLS Connection Identifier" name="keyword">
+<meta content="DTLS-SRTP" name="keyword">
+<meta content="QUIC Connection Identifier" name="keyword">
+<meta content="QUIC" name="keyword">
+<meta content="draft-rwbr-sconepro-flow-metadata-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.20.0
+    Python 3.11.8
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 4.2.0
+    pycountry 22.3.5
+    PyYAML 6.0.1
+    requests 2.31.0
+    setuptools 68.2.2
+    six 1.16.0
+    wcwidth 0.2.13
+-->
+<link href="draft-rwbr-sconepro-flow-metadata.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 2px 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Flow Metadata</td>
+<td class="right">March 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Rajagopalan, et al.</td>
+<td class="center">Expires 5 September 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Network Working Group</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-rwbr-sconepro-flow-metadata-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-03-04" class="published">4 March 2024</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-09-05">5 September 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">S. Rajagopalan</div>
+<div class="org">Cloud Software Group</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Wing</div>
+<div class="org">Cloud Software Group</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Boucadair</div>
+<div class="org">Orange</div>
+</div>
+<div class="author">
+      <div class="author-name">T. Reddy</div>
+<div class="org">Nokia</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Flow Metadata for Collaborative Host/Network Signaling</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines per-flow and per-packet metadata for both
+network to host and host to network signaling in CDDL which
+expresses both CBOR and JSON.  The common metadata definition allows interworking between
+signaling protocols with high fidelity. The metadata is also self-
+describing to improve interpretation by network elements and
+endpoints while reducing the need for version negotiation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        The latest revision of this draft can be found at <span><a href="https://danwing.github.io/metadata/draft-rwbr-flow-metadata.md.html">https://danwing.github.io/metadata/draft-rwbr-flow-metadata.md.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-rwbr-sconepro-flow-metadata/">https://datatracker.ietf.org/doc/draft-rwbr-sconepro-flow-metadata/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">
+        Discussion of this document takes place on the
+        TSV Working Group mailing list (<span><a href="mailto:tsvwg@ietf.org">mailto:tsvwg@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/tsvwg/">https://mailarchive.ietf.org/arch/browse/tsvwg/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/tsvwg/">https://www.ietf.org/mailman/listinfo/tsvwg/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/danwing/metadata">https://github.com/danwing/metadata</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 5 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2024 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-metadata-structure" class="internal xref">Metadata Structure</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-host-to-network-metadata" class="internal xref">Host to Network Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-importance" class="internal xref">Importance</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-network-treatment" class="internal xref">Network Treatment</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-packet-type-reliable-unreli" class="internal xref">Packet Type - Reliable/Unreliable</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-network-treatment-2" class="internal xref">Network Treatment</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-packet-nature" class="internal xref">Packet Nature</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.1">
+                    <p id="section-toc.1-1.4.2.3.2.1.1"><a href="#section-4.3.1" class="auto internal xref">4.3.1</a>.  <a href="#name-unreliable-traffic" class="internal xref">Unreliable Traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.1.2.1">
+                        <p id="section-toc.1-1.4.2.3.2.1.2.1.1"><a href="#section-4.3.1.1" class="auto internal xref">4.3.1.1</a>.  <a href="#name-network-treatment-3" class="internal xref">Network Treatment</a></p>
+</li>
+                    </ul>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.2">
+                    <p id="section-toc.1-1.4.2.3.2.2.1"><a href="#section-4.3.2" class="auto internal xref">4.3.2</a>.  <a href="#name-reliable-traffic" class="internal xref">Reliable Traffic</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.2.2.1">
+                        <p id="section-toc.1-1.4.2.3.2.2.2.1.1"><a href="#section-4.3.2.1" class="auto internal xref">4.3.2.1</a>.  <a href="#name-network-treatment-4" class="internal xref">Network Treatment</a></p>
+</li>
+                    </ul>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-network-to-host-metadata" class="internal xref">Network to Host Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-downlink-bitrate" class="internal xref">Downlink Bitrate</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-units" class="internal xref">Units</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-host-treatment" class="internal xref">Host Treatment</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-prefer-alternate-path-pref-" class="internal xref">Prefer Alternate Path ('pref-alt-path')</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-host-treatment-2" class="internal xref">Host Treatment</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-guidance-for-mapping-metada" class="internal xref">Guidance For Mapping Metadata to Specific Signaling Protocols</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-implementation-impact-of-me" class="internal xref">Implementation Impact of Metadata</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-reliable-unreliable-set-by-" class="internal xref">Reliable/Unreliable set by the respective transport level protocol</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-offloading-loss-avoidance-t" class="internal xref">Offloading Loss-Avoidance to the network</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-manageability-consideration" class="internal xref">Manageability Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-impact-on-network-operation" class="internal xref">Impact on Network Operation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-metadata-for-collaborative-" class="internal xref">Metadata for Collaborative Host/Network Signaling Registry Group</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-flow-metadata-registry" class="internal xref">Flow Metadata Registry</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples-of-host-to-network" class="internal xref">Examples of Host-to-Network Metadata Encoding</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-example-of-network-to-host-" class="internal xref">Example of Network-to-Host Metadata for Video Streaming</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Historically, metadata is defined within each protocol. While this can
+be very efficient on the wire (e.g., DSCP consumes only 6 bits) it
+suffers from inability to authorize or authenticate the metadata
+signaling. But the more signifcant problem is inability to interwork
+between signaling protocols because each have different definitions.
+Such interworking is often needed when the metadata signaling protocol
+for packets leaving a network differs from the metadata signaling
+protocol entering a different network. For example, important packets
+leaving a server and its network might be marked with DSCP (as the
+sending host is known and trusted) but the receiving network doesn't
+trust the DSCP bits in received packets because there is no
+authorization or authentication for differented treatment.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">By using the same metadata, both networks can communicate how packets
+should be treated and use their own signaling mechanism with their
+network elements (e.g., routers, <span>[<a href="#MASQUE" class="cite xref">MASQUE</a>]</span> proxies).<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Both the above use cases are improved by metadata described in this document. This
+document is a companion to host-to-network signaling the metadata itself, such as:<a href="#section-1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-4.1">
+          <p id="section-1-4.1.1">UDP Options (e.g., <span>[<a href="#I-D.kaippallimalil-tsvwg-media-hdr-wireless" class="cite xref">I-D.kaippallimalil-tsvwg-media-hdr-wireless</a>]</span>, <span>[<a href="#I-D.reddy-tsvwg-explcit-signal" class="cite xref">I-D.reddy-tsvwg-explcit-signal</a>]</span>),<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.2">
+          <p id="section-1-4.2.1">IPv6 Hop-by-Hop Options (<span><a href="https://rfc-editor.org/rfc/rfc8200#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>),<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.3">
+          <p id="section-1-4.3.1">SCONE Protocol (<span>[<a href="#SCONEPRO" class="cite xref">SCONEPRO</a>]</span>), or<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-4.4">
+          <p id="section-1-4.4.1">QUIC CID mapping (<span>[<a href="#I-D.wing-cidfi" class="cite xref">I-D.wing-cidfi</a>]</span>).<a href="#section-1-4.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-5"><span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span> provides an analysis of most of those metadata signaling mechanisms.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This document does not assume nor preclude any companion signaling protocol.
+As such, the metadata in this document is defined to be independent of the
+signaling protocol. In doing so, we ensure that consistent
+metadata definitions are used by the various signaling protocols. Also,
+this approach allows to factorize key considerations such as security and operational
+considerations.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">The metadata is described using <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
+in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  Both
+the JSON and CBOR encodings are self-describing.  It is out of scope
+of this document to define how the proposed encoding will be mapped to
+a specific signaling protocol.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-8">If the companion signaling protocol supports host-to-network metadata,
+individual packets within a flow can contain metadata describing their
+drop preference or their reliability. The network elements aware of
+this metadata can apply preferential or deferential treatment to those
+packets during a 'reactive traffic policy' event. It is also assumed
+that such network elements are provisioned with local policy that
+guides their behavior jointly with a signaled metadata. Examples of
+metadata signaling for video streaming and for remote desktop are
+provided in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+<p id="section-1-9">For network-to-host metadata, a host can be informed of network
+policy for nominal downlink bandwidth. Certain applications,
+such as most especially video streaming applications, can use
+that information to optimize their video streaming bandwidth to
+fit within that policy.<a href="#section-1-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-2-2">
+        <dt id="section-2-2.1">Reactive policy:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.2">
+          <p id="section-2-2.2.1">Treatment given to a flow when an exceptional event occurs, such as
+diminished throughput to the host caused by radio interference or weak
+radio signal, congestion on the network caused by other users or other
+applications on the same host.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-2.3">Intentional policy:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-2.4">
+          <p id="section-2-2.4.1">Configured bandwidth, pps, or similar throughput constraints applied
+to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="metadata-structure">
+<section id="section-3">
+      <h2 id="name-metadata-structure">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-metadata-structure" class="section-name selfRef">Metadata Structure</a>
+      </h2>
+<p id="section-3-1">The metadata is described in CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> format shown in <a href="#meta-cddl" class="auto internal xref">Figure 1</a>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<span id="name-cddl-structure-of-the-metad"></span><div id="meta-cddl">
+<figure id="figure-1">
+        <div class="lang-cddl sourcecode" id="section-3-2.1">
+<pre>
+; one or more metadata can be signaled.
+metadata = {
+  metadata-type: (0..1), ; 0 is Network Metadata
+                         ; 1 is Application Metadata
+  * $$metadata-extensions
+}
+
+; Application Metadata
+
+$$metadata-extensions //= (
+; true indicates packet of high importance
+; false indicates packet of low importance
+  importance: bool,
+; Packets can be tagged as reliable (true) or unreliable (false)
+  reliable: bool,
+; Packets can be tagged as preference to keep (true) or discard (false)
+  prefer-keep: bool
+; Has a meaning only for packets marked as reliable
+; True indicates realtime
+; False indicates bulk (non-realtime)
+  realtime: bool
+)
+
+; Network Metadata
+
+; Provides information about the nominal downlink bitrate
+; Returning a value set to 0 (or a very low value) should trigger
+; the host to seek for better paths.
+
+Bitrate =  {
+  nominal: uint,  ; Mbps
+  ? burst-d =&gt; burst-info
+}
+
+burst-info = {
+  burst: uint,          ; Mbps
+  burstDuration: uint   ; milliseconds
+}
+
+$$metadata-extensions //= (
+   ? downlinkBitrate =&gt; Bitrate,
+; Indicates whether a flow is to be offloaded to alternate
+; available paths.
+   pref-alt-path: bool
+)
+
+downlinkBitrate = "downlinkBitrate"
+burst-d = "burst-info"
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-cddl-structure-of-the-metad" class="selfRef">CDDL Structure of the Metadata</a>
+        </figcaption></figure>
+</div>
+<p id="section-3-3">The structure shown in <a href="#meta-cddl" class="auto internal xref">Figure 1</a> does not assume that the metadata
+will be encoded as a single blob when mapped to a signaling protocol or
+that all the metadata components will be mapped. Such matters
+are specific to the individual signaling protocols and deployment contexts.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">New metadata for collaborative host/network signaling <span class="bcp14">MUST</span> be registered
+in the IANA registry, "Flow Metadata Registry" <a href="#sec-fmr" class="auto internal xref">Section 10.2</a>.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">More details about each of these metadata are provided in <a href="#sec-h2n" class="auto internal xref">Section 4</a> and <a href="#sec-n2h" class="auto internal xref">Section 5</a>.
+Both client and network intended behaviors are specified for each
+metadata.<a href="#section-3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-h2n">
+<section id="section-4">
+      <h2 id="name-host-to-network-metadata">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-host-to-network-metadata" class="section-name selfRef">Host to Network Metadata</a>
+      </h2>
+<p id="section-4-1">Metadata is characterized into two different nature:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-4-2">
+        <dt id="section-4-2.1">Network Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-4-2.2">
+          <p id="section-4-2.2.1">This consists of metadata that specifies how a network element should treat that packet. The network metadata comprises of the importance field and is specified in the MSB and of size 1 bit. This field indicates if the packet is more important or less important.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-4-2.3">Application Metadata:</dt>
+        <dd style="margin-left: 1.5em" id="section-4-2.4">
+          <p id="section-4-2.4.1">This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two components - Keep/Discard bit and Reliable/Unreliable bit.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<div id="importance">
+<section id="section-4.1">
+        <h3 id="name-importance">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-importance" class="section-name selfRef">Importance</a>
+        </h3>
+<p id="section-4.1-1">The "Importance" metadata signifies if the packet is of more important (true) or
+less important (false) by the host, relative to other packets in the
+same flow.  Importance belongs to Network Metadata.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">An application would mark a packet as important when it needs the
+network to treat the packet with greater preference compared to the
+unmarked packets or to packets marked important=false (of the same
+flow). This tagging does not provide more privileges to an application
+with regards to resources usage compared to the absence of signal. An
+example of this interpretation is specified in <a href="#examples-h2n" class="auto internal xref">Appendix A</a>.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<div id="network-treatment">
+<section id="section-4.1.1">
+          <h4 id="name-network-treatment">
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-network-treatment" class="section-name selfRef">Network Treatment</a>
+          </h4>
+<p id="section-4.1.1-1">During a reactive policy event, a network element is encouraged to
+discard packets marked importance=false in favor of packets marked
+importance=true, for the same flow.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="packet-type-reliableunreliable">
+<section id="section-4.2">
+        <h3 id="name-packet-type-reliable-unreli">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-packet-type-reliable-unreli" class="section-name selfRef">Packet Type - Reliable/Unreliable</a>
+        </h3>
+<p id="section-4.2-1">The "Reliable" metadata indicates if a packet is reliably transmitted by the host.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2-2.1">
+            <p id="section-4.2-2.1.1">Reliable packets are re-transmitted by the underlying transport
+(e.g., TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> or <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>) or re-transmitted by the appplication (e.g., <span>[<a href="#RELIABLE-RTP" class="cite xref">RELIABLE-RTP</a>]</span>, NTP).<a href="#section-4.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-2.2">
+            <p id="section-4.2-2.2.1">Unreliable packets are not re-transmitted by the transport
+(e.g., UDP, <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>, <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>) and also not re-transmitted by the application (e.g., <span>[<a href="#RTP" class="cite xref">RTP</a>]</span>).<a href="#section-4.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-4.2-3">Packets marked reliable, if delayed excessively or dropped outright, will be re-transmitted (up to a maximum retries) by the sender application, appearing on the network again. Thus, delaying or discarding such packets does not reduce the amount of transmitted data in a network; it only defers when it appears on the network.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">Reliable/Unreliable belongs to Application Metadata.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<div id="network-treatment-1">
+<section id="section-4.2.1">
+          <h4 id="name-network-treatment-2">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-network-treatment-2" class="section-name selfRef">Network Treatment</a>
+          </h4>
+<p id="section-4.2.1-1">During a reactive policy event, dropping unreliable traffic is preferred over dropping reliable
+traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
+only defers it until later, but this deferral can be useful.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="packet-nature">
+<section id="section-4.3">
+        <h3 id="name-packet-nature">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-packet-nature" class="section-name selfRef">Packet Nature</a>
+        </h3>
+<p id="section-4.3-1">This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<div id="unreliable-traffic">
+<section id="section-4.3.1">
+          <h4 id="name-unreliable-traffic">
+<a href="#section-4.3.1" class="section-number selfRef">4.3.1. </a><a href="#name-unreliable-traffic" class="section-name selfRef">Unreliable Traffic</a>
+          </h4>
+<p id="section-4.3.1-1">Packets are marked with 'prefer-keep' set to either true or false. When set to true, it indicates a preference to keep the packet. Conversely, when set to false, it signals that the packet may be subject to discard based on a reactive policy.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-2">Many flows contain a mix of important packets and less-important packets, but applications
+seldom signal that difference themselves let alone signal the difference to the network.
+Rather, applications send everything over a reliable transport (TCP or QUIC) and leave it
+at that, as evidenced by video streaming using TCP.<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-3">With the advent of <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span>, applications can send both <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> reliable traffic and
+<span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> unreliable traffic <span>[<a href="#LOSSY-QUIC" class="cite xref">LOSSY-QUIC</a>]</span> on the same 5-tuple.  With
+host-to-network metadata signaling, the network can become an active assistant in such
+flows during a reactive policy event by endeavouring to send the more-important 'prefer-keep'
+traffic at the expense of the less-important 'may-discard' traffic.<a href="#section-4.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-4">The reason why an application transmits a packet marked as 'prefer-keep' set to false, when the
+application has the capability to avoid sending that packet, is application-specific.<a href="#section-4.3.1-4" class="pilcrow">¶</a></p>
+<div id="network-treatment-2">
+<section id="section-4.3.1.1">
+            <h5 id="name-network-treatment-3">
+<a href="#section-4.3.1.1" class="section-number selfRef">4.3.1.1. </a><a href="#name-network-treatment-3" class="section-name selfRef">Network Treatment</a>
+            </h5>
+<p id="section-4.3.1.1-1">During a reactive policy event, dropping packets with 'prefer-keep' set to false is preferred
+over dropping 'prefer-keep' set to true packets.
+Absent such discard preference indication, the network element will blindly drop packets during a reactive policy event.<a href="#section-4.3.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="reliable-traffic">
+<section id="section-4.3.2">
+          <h4 id="name-reliable-traffic">
+<a href="#section-4.3.2" class="section-number selfRef">4.3.2. </a><a href="#name-reliable-traffic" class="section-name selfRef">Reliable Traffic</a>
+          </h4>
+<p id="section-4.3.2-1">For reliable traffic, "realtime" metadata indicates whether the packet belongs to bulk or real-time traffic.<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.3.2-2">An application such as a web browser might mark certain flows as realtime (e.g., the flow is
+related to dynamically updating a search box and quick responses help the user experience)
+and other flows as bulk (e.g., file download, file upload).<a href="#section-4.3.2-2" class="pilcrow">¶</a></p>
+<div id="network-treatment-3">
+<section id="section-4.3.2.1">
+            <h5 id="name-network-treatment-4">
+<a href="#section-4.3.2.1" class="section-number selfRef">4.3.2.1. </a><a href="#name-network-treatment-4" class="section-name selfRef">Network Treatment</a>
+            </h5>
+<p id="section-4.3.2.1-1">Realtime traffic prefers lower latency network paths and bulk traffic prefers high throughoupt paths.<a href="#section-4.3.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-n2h">
+<section id="section-5">
+      <h2 id="name-network-to-host-metadata">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-network-to-host-metadata" class="section-name selfRef">Network to Host Metadata</a>
+      </h2>
+<div id="sec-dbr">
+<section id="section-5.1">
+        <h3 id="name-downlink-bitrate">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-downlink-bitrate" class="section-name selfRef">Downlink Bitrate</a>
+        </h3>
+<p id="section-5.1-1">Monthly data quotas on cellular networks can be easily exceeded by video streaming, in particular, if the
+client chooses excessively high quality or routinely abandons watching videos that were
+downloaded. The network can assist the client by informing the client of the network's
+bandwidth policy.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">If the video is encoded with variable bit rate, the bitrate cannot exceed the indicated
+bitrate.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The nominal bitrate is calculated over each second, whereas the burst
+bitrate is calculated over the signaled interval (burst-duration).
+For either measurement, packets can arrive at the start of a second,
+as near as possible behind each other, and the remaining portion of
+that second could have no packets transmitted.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<div id="units">
+<section id="section-5.1.1">
+          <h4 id="name-units">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-units" class="section-name selfRef">Units</a>
+          </h4>
+<p id="section-5.1.1-1">Bit rate is expressed in Mbps and duration is in milliseconds.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="host-treatment">
+<section id="section-5.1.2">
+          <h4 id="name-host-treatment">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-host-treatment" class="section-name selfRef">Host Treatment</a>
+          </h4>
+<p id="section-5.1.2-1">The host chooses a video streaming bit rate at or below the signaled rate.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-2">The host may also choose to signal the received bitrate to the remote peer. The remote
+peer will adapt its transmission behavior to comply with the received bitrate.<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-3">An example of the encoding is in <a href="#examples-n2h" class="auto internal xref">Appendix B</a>.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="prefer-alternate-path-pref-alt-path">
+<section id="section-5.2">
+        <h3 id="name-prefer-alternate-path-pref-">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-prefer-alternate-path-pref-" class="section-name selfRef">Prefer Alternate Path ('pref-alt-path')</a>
+        </h3>
+<p id="section-5.2-1">There are also crisis cases where nominal network resources cannot be
+used at maximum to handle packets. A network would thus seek to offload some of the
+traffic during these events. Under such exceptional events, a network
+element may signal to a host that it is preferrable to use alternate
+paths, if available. An alternate path is typically an alternate network
+attachment.  After the crisis has subsided, the network should signal
+with pref-alt-path=false.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">The 'pref-alt-path' metadata may be sent together with the bitrate metadata (<a href="#sec-dbr" class="auto internal xref">Section 5.1</a>) set to a very low value.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<div id="host-treatment-1">
+<section id="section-5.2.1">
+          <h4 id="name-host-treatment-2">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-host-treatment-2" class="section-name selfRef">Host Treatment</a>
+          </h4>
+<p id="section-5.2.1-1">The host offloads its connections to alternate available paths.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="guidance-for-mapping-metadata-to-specific-signaling-protocols">
+<section id="section-6">
+      <h2 id="name-guidance-for-mapping-metada">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-guidance-for-mapping-metada" class="section-name selfRef">Guidance For Mapping Metadata to Specific Signaling Protocols</a>
+      </h2>
+<p id="section-6-1">TBC.<a href="#section-6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="implementation-impact-of-metadata">
+<section id="section-7">
+      <h2 id="name-implementation-impact-of-me">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-implementation-impact-of-me" class="section-name selfRef">Implementation Impact of Metadata</a>
+      </h2>
+<div id="reliableunreliable-set-by-the-respective-transport-level-protocol">
+<section id="section-7.1">
+        <h3 id="name-reliable-unreliable-set-by-">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-reliable-unreliable-set-by-" class="section-name selfRef">Reliable/Unreliable set by the respective transport level protocol</a>
+        </h3>
+<p id="section-7.1-1">TCP <span>[<a href="#RFC9293" class="cite xref">RFC9293</a>]</span> is a reliable transport protocol, while UDP <span>[<a href="#RFC0768" class="cite xref">RFC0768</a>]</span> provides a minimal, unreliable, best-effort, message-passing transport to applications and other protocols (such as tunnels) that wish to operate over IP <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. Protocols built over UDP may implement reliability features at the "application" layer if such a transport feature is needed <span>[<a href="#RFC8304" class="cite xref">RFC8304</a>]</span>. For example, streams of reliable application data are sent using STREAM QUIC frames (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-19.8" class="relref">Section 19.8</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>), while application data that do not require retransmission can be carried in DATAGRAM QUIC frames <span>[<a href="#RFC9221" class="cite xref">RFC9221</a>]</span>. Applications that are utilizing such a protocol, will have to choose the delivery service (reliable or loss-tolerant) based upon the nature of the packet being sent -- loss-tolerant packet cannot be carried in a reliable frame and vice-versa. Hence, based on the transport service being invoked, setting of the reliable/unreliable metadata entry can be offloaded to the underlying transport protocol, unless specifically overridden by the application.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="offloading-loss-avoidance-to-the-network">
+<section id="section-7.2">
+        <h3 id="name-offloading-loss-avoidance-t">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-offloading-loss-avoidance-t" class="section-name selfRef">Offloading Loss-Avoidance to the network</a>
+        </h3>
+<p id="section-7.2-1">Network nodes, upon learning of the nature of a packet (reliable/prefer-keep) can choose to implement loss avoidance algorithms between hops where there is packet loss detected (e.g., using out-of-band or in-band QoS measurement, which is out of the scope of this document). By doing so, end-to-end retransmissions can be reduced/avoided thereby minimizing the need for handling loss at the application layer using protocols such as <span>[<a href="#RFC7198" class="cite xref">RFC7198</a>]</span>, <span>[<a href="#RFC7197" class="cite xref">RFC7197</a>]</span>, or <span>[<a href="#RFC7104" class="cite xref">RFC7104</a>]</span>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="manageability-considerations">
+<section id="section-8">
+      <h2 id="name-manageability-consideration">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-manageability-consideration" class="section-name selfRef">Manageability Considerations</a>
+      </h2>
+<div id="impact-on-network-operation">
+<section id="section-8.1">
+        <h3 id="name-impact-on-network-operation">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-impact-on-network-operation" class="section-name selfRef">Impact on Network Operation</a>
+        </h3>
+<p id="section-8.1-1">TBC.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-9">
+      <h2 id="name-security-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-9-1">Metadata increases the information available to attackers to
+distinguish important packets from less-important packets, which the
+attacker might use to attack such packets (e.g., prevent their
+delivery) or attempt to decrypt those packets. It is <span class="bcp14">RECOMMENDED</span> to
+encrypt or obfuscate the metadata information so it is only available
+to hosts and to authorized network elements.  The method of
+encryption or obfuscation is not described in this document but
+rather in other documents describing how this metadata is encoded
+and exchanged amongst hosts and network elements.<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-10">
+      <h2 id="name-iana-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="metadata-for-collaborative-hostnetwork-signaling-registry-group">
+<section id="section-10.1">
+        <h3 id="name-metadata-for-collaborative-">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-metadata-for-collaborative-" class="section-name selfRef">Metadata for Collaborative Host/Network Signaling Registry Group</a>
+        </h3>
+<p id="section-10.1-1">This document requests IANA to create a new registry group, entitled "Metadata for Collaborative Host/Network Signaling".<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-fmr">
+<section id="section-10.2">
+        <h3 id="name-flow-metadata-registry">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-flow-metadata-registry" class="section-name selfRef">Flow Metadata Registry</a>
+        </h3>
+<p id="section-10.2-1">IANA is requested to create a new registry, entitled "Flow Metadata Registry", under the "Metadata for Collaborative Host/Network Signaling" registry group.
+This registry is inspired by the "Performance Metrics Registry" created by <span>[<a href="#RFC8911" class="cite xref">RFC8911</a>]</span>. The structure of the registry is as follows:<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-10.2-2">
+          <dt id="section-10.2-2.1">Identifier:</dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.2">
+            <p id="section-10.2-2.2.1">A numeric identifier for the registered metadata.<a href="#section-10.2-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.3"></dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.4">
+            <p id="section-10.2-2.4.1">The Identifier 0 is Reserved.<a href="#section-10.2-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.5"></dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.6">
+            <p id="section-10.2-2.6.1">The Identifier values from 250 to 255 are reserved for private or experimental use.<a href="#section-10.2-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.7">Name:</dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.8">
+            <p id="section-10.2-2.8.1">Name of the registered metadata.<a href="#section-10.2-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.9">Description:</dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.10">
+            <p id="section-10.2-2.10.1">Provides a description of the intended use of the registered metadata.<a href="#section-10.2-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.11">Reference:</dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.12">
+            <p id="section-10.2-2.12.1">Lists the authoritative reference that specifies the registered metadata.<a href="#section-10.2-2.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.13">Version:</dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.14">
+            <p id="section-10.2-2.14.1">Tracks the current version of the metadata.<a href="#section-10.2-2.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.15"></dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.16">
+            <p id="section-10.2-2.16.1">The initial version of a new registered metadata <span class="bcp14">MUST</span> be 1.0.<a href="#section-10.2-2.16.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.2-2.17"></dt>
+          <dd style="margin-left: 1.5em" id="section-10.2-2.18">
+            <p id="section-10.2-2.18.1">IANA will bump the version when a new RFC that changes the format/semantic of a registered entry.<a href="#section-10.2-2.18.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-10.2-3">The initial values of the registry are listed in <a href="#initial-reg" class="auto internal xref">Table 1</a>.<a href="#section-10.2-3" class="pilcrow">¶</a></p>
+<span id="name-initial-values"></span><div id="initial-reg">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-initial-values" class="selfRef">Initial Values</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Identifier</th>
+              <th class="text-center" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+              <th class="text-center" rowspan="1" colspan="1">Reference</th>
+              <th class="text-center" rowspan="1" colspan="1">Version</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">0</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">1</td>
+              <td class="text-center" rowspan="1" colspan="1">Importance</td>
+              <td class="text-left" rowspan="1" colspan="1">Indicates the level of importance of a packet in a flow</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">PacketType</td>
+              <td class="text-left" rowspan="1" colspan="1">Indicates whether a packet is reliably or unreliably transmitted</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+              <td class="text-center" rowspan="1" colspan="1">PacketNature</td>
+              <td class="text-left" rowspan="1" colspan="1">Indicates a discard preference</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">4</td>
+              <td class="text-center" rowspan="1" colspan="1">DownlinkBitrate</td>
+              <td class="text-left" rowspan="1" colspan="1">Specifies the maximum downlink bitrate</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">5</td>
+              <td class="text-center" rowspan="1" colspan="1">PreferAltPath</td>
+              <td class="text-left" rowspan="1" colspan="1">Sollicits the hosts to use an alternate path if available</td>
+              <td class="text-center" rowspan="1" colspan="1">This-Document</td>
+              <td class="text-center" rowspan="1" colspan="1">1.0</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="section-10.2-5">New entries can be added to the registry using "Standards Action" policy (<span><a href="https://rfc-editor.org/rfc/rfc8126#section-4.9" class="relref">Section 4.9</a> of [<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>).<a href="#section-10.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-11">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-11-1">To be completed.<a href="#section-11-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-12">
+      <h2 id="name-references">
+<a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-12.1">
+        <h3 id="name-normative-references">
+<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="CDDL">[CDDL]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+      <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-12.2">
+        <h3 id="name-informative-references">
+<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="CBOR">[CBOR]</dt>
+        <dd>
+<span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.draft-rwbr-tsvwg-signaling-use-cases-latest">[I-D.draft-rwbr-tsvwg-signaling-use-cases-latest]</dt>
+        <dd>
+<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.herbert-host2netsig">[I-D.herbert-host2netsig]</dt>
+        <dd>
+<span class="refAuthor">Herbert, T.</span>, <span class="refTitle">"Host to Network Signaling"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-herbert-host2netsig-00</span>, <time datetime="2023-10-04" class="refDate">4 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00">https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.kaippallimalil-tsvwg-media-hdr-wireless">[I-D.kaippallimalil-tsvwg-media-hdr-wireless]</dt>
+        <dd>
+<span class="refAuthor">Kaippallimalil, J.</span>, <span class="refAuthor">Gundavelli, S.</span>, and <span class="refAuthor">S. Dawkins</span>, <span class="refTitle">"Media Handling Considerations for Wireless Networks"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kaippallimalil-tsvwg-media-hdr-wireless-04</span>, <time datetime="2024-02-14" class="refDate">14 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-04">https://datatracker.ietf.org/doc/html/draft-kaippallimalil-tsvwg-media-hdr-wireless-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.reddy-tsvwg-explcit-signal">[I-D.reddy-tsvwg-explcit-signal]</dt>
+        <dd>
+<span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Wing, D.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"An Approach for Encrypted Transport Protocol Path Explicit Signals"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-reddy-tsvwg-explcit-signal-01</span>, <time datetime="2023-07-07" class="refDate">7 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01">https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.wing-cidfi">[I-D.wing-cidfi]</dt>
+        <dd>
+<span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Reddy.K, T.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"Framework for CID Flow Indicator (CIDFI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-wing-cidfi-04</span>, <time datetime="2023-12-14" class="refDate">14 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04">https://datatracker.ietf.org/doc/html/draft-wing-cidfi-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="JSON">[JSON]</dt>
+        <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LOSSY-QUIC">[LOSSY-QUIC]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"An Unreliable Datagram Extension to QUIC"</span>, <span class="seriesInfo">RFC 9221</span>, <span class="seriesInfo">DOI 10.17487/RFC9221</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9221">https://www.rfc-editor.org/rfc/rfc9221</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="MASQUE">[MASQUE]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Rosenberg, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"QUIC-Aware Proxying Using HTTP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-masque-quic-proxy-01</span>, <time datetime="2024-02-12" class="refDate">12 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-01">https://datatracker.ietf.org/doc/html/draft-ietf-masque-quic-proxy-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="QUIC">[QUIC]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RELIABLE-RTP">[RELIABLE-RTP]</dt>
+        <dd>
+<span class="refAuthor">Rey, J.</span>, <span class="refAuthor">Leon, D.</span>, <span class="refAuthor">Miyazaki, A.</span>, <span class="refAuthor">Varsa, V.</span>, and <span class="refAuthor">R. Hakenberg</span>, <span class="refTitle">"RTP Retransmission Payload Format"</span>, <span class="seriesInfo">RFC 4588</span>, <span class="seriesInfo">DOI 10.17487/RFC4588</span>, <time datetime="2006-07" class="refDate">July 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4588">https://www.rfc-editor.org/rfc/rfc4588</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC0768">[RFC0768]</dt>
+        <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"User Datagram Protocol"</span>, <span class="seriesInfo">STD 6</span>, <span class="seriesInfo">RFC 768</span>, <span class="seriesInfo">DOI 10.17487/RFC0768</span>, <time datetime="1980-08" class="refDate">August 1980</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc768">https://www.rfc-editor.org/rfc/rfc768</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7104">[RFC7104]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span>, <span class="refAuthor">Cai, Y.</span>, and <span class="refAuthor">H. Ou</span>, <span class="refTitle">"Duplication Grouping Semantics in the Session Description Protocol"</span>, <span class="seriesInfo">RFC 7104</span>, <span class="seriesInfo">DOI 10.17487/RFC7104</span>, <time datetime="2014-01" class="refDate">January 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7104">https://www.rfc-editor.org/rfc/rfc7104</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7197">[RFC7197]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span>, <span class="refAuthor">Cai, Y.</span>, and <span class="refAuthor">H. Ou</span>, <span class="refTitle">"Duplication Delay Attribute in the Session Description Protocol"</span>, <span class="seriesInfo">RFC 7197</span>, <span class="seriesInfo">DOI 10.17487/RFC7197</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7197">https://www.rfc-editor.org/rfc/rfc7197</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7198">[RFC7198]</dt>
+        <dd>
+<span class="refAuthor">Begen, A.</span> and <span class="refAuthor">C. Perkins</span>, <span class="refTitle">"Duplicating RTP Streams"</span>, <span class="seriesInfo">RFC 7198</span>, <span class="seriesInfo">DOI 10.17487/RFC7198</span>, <time datetime="2014-04" class="refDate">April 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7198">https://www.rfc-editor.org/rfc/rfc7198</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8085">[RFC8085]</dt>
+        <dd>
+<span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Fairhurst, G.</span>, and <span class="refAuthor">G. Shepherd</span>, <span class="refTitle">"UDP Usage Guidelines"</span>, <span class="seriesInfo">BCP 145</span>, <span class="seriesInfo">RFC 8085</span>, <span class="seriesInfo">DOI 10.17487/RFC8085</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8085">https://www.rfc-editor.org/rfc/rfc8085</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8200">[RFC8200]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8304">[RFC8304]</dt>
+        <dd>
+<span class="refAuthor">Fairhurst, G.</span> and <span class="refAuthor">T. Jones</span>, <span class="refTitle">"Transport Features of the User Datagram Protocol (UDP) and Lightweight UDP (UDP-Lite)"</span>, <span class="seriesInfo">RFC 8304</span>, <span class="seriesInfo">DOI 10.17487/RFC8304</span>, <time datetime="2018-02" class="refDate">February 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8304">https://www.rfc-editor.org/rfc/rfc8304</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8911">[RFC8911]</dt>
+        <dd>
+<span class="refAuthor">Bagnulo, M.</span>, <span class="refAuthor">Claise, B.</span>, <span class="refAuthor">Eardley, P.</span>, <span class="refAuthor">Morton, A.</span>, and <span class="refAuthor">A. Akhter</span>, <span class="refTitle">"Registry for Performance Metrics"</span>, <span class="seriesInfo">RFC 8911</span>, <span class="seriesInfo">DOI 10.17487/RFC8911</span>, <time datetime="2021-11" class="refDate">November 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8911">https://www.rfc-editor.org/rfc/rfc8911</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9000">[RFC9000]</dt>
+        <dd>
+<span class="refAuthor">Iyengar, J., Ed.</span> and <span class="refAuthor">M. Thomson, Ed.</span>, <span class="refTitle">"QUIC: A UDP-Based Multiplexed and Secure Transport"</span>, <span class="seriesInfo">RFC 9000</span>, <span class="seriesInfo">DOI 10.17487/RFC9000</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9000">https://www.rfc-editor.org/rfc/rfc9000</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9221">[RFC9221]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, and <span class="refAuthor">D. Schinazi</span>, <span class="refTitle">"An Unreliable Datagram Extension to QUIC"</span>, <span class="seriesInfo">RFC 9221</span>, <span class="seriesInfo">DOI 10.17487/RFC9221</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9221">https://www.rfc-editor.org/rfc/rfc9221</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9293">[RFC9293]</dt>
+        <dd>
+<span class="refAuthor">Eddy, W., Ed.</span>, <span class="refTitle">"Transmission Control Protocol (TCP)"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 9293</span>, <span class="seriesInfo">DOI 10.17487/RFC9293</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9293">https://www.rfc-editor.org/rfc/rfc9293</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RTP">[RTP]</dt>
+        <dd>
+<span class="refAuthor">Schulzrinne, H.</span>, <span class="refAuthor">Casner, S.</span>, <span class="refAuthor">Frederick, R.</span>, and <span class="refAuthor">V. Jacobson</span>, <span class="refTitle">"RTP: A Transport Protocol for Real-Time Applications"</span>, <span class="seriesInfo">STD 64</span>, <span class="seriesInfo">RFC 3550</span>, <span class="seriesInfo">DOI 10.17487/RFC3550</span>, <time datetime="2003-07" class="refDate">July 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3550">https://www.rfc-editor.org/rfc/rfc3550</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SCONEPRO">[SCONEPRO]</dt>
+      <dd>
+<span class="refTitle">"SCONEPRO Working Group Charter"</span>, <time datetime="2024-02-02" class="refDate">2 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/group/sconepro/about/">https://datatracker.ietf.org/group/sconepro/about/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+<div id="examples-h2n">
+<section id="appendix-A">
+      <h2 id="name-examples-of-host-to-network">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-examples-of-host-to-network" class="section-name selfRef">Examples of Host-to-Network Metadata Encoding</a>
+      </h2>
+<div id="example-video-streaming">
+<section id="appendix-A.1">
+        <h3 id="name-video-streaming">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-video-streaming" class="section-name selfRef">Video Streaming</a>
+        </h3>
+<p id="appendix-A.1-1">Video Streaming Metadata:<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
+<table class="center" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-example-values-for-video-st" class="selfRef">Example Values for Video Streaming Metadata</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video I-frame (key frame)</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta P-frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta B-frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.1-4">The encoding of the metadata in CDDL for the traffic will look like:
+Video I-frame:<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-5">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": true
+  }
+}
+</pre><a href="#appendix-A.1-5" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-6">Audio:<a href="#appendix-A.1-6" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-7">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+</pre><a href="#appendix-A.1-7" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-8">Video delta P-frame:<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-9">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+</pre><a href="#appendix-A.1-9" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-10">## Interactive Gaming or Audio/Video  {#example-interactive-av}<a href="#appendix-A.1-10" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-11">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.1-11" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-12">Interactive A/V, downstream Metadata:<a href="#appendix-A.1-12" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream">
+<table class="center" id="table-3">
+          <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-example-values-for-interact" class="selfRef">Example Values for Interactive A/V, downstream</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.1-14">Encoding:<a href="#appendix-A.1-14" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-15">Video key frame:<a href="#appendix-A.1-15" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-16">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": true
+  }
+}
+</pre><a href="#appendix-A.1-16" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-17">Video delta frame:<a href="#appendix-A.1-17" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-18">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+</pre><a href="#appendix-A.1-18" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1-19">Audio:<a href="#appendix-A.1-19" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-20">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+</pre><a href="#appendix-A.1-20" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="example-rdt">
+<section id="appendix-A.2">
+        <h3 id="name-remote-desktop-virtualizati">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
+        </h3>
+<p id="appendix-A.2-1">Example packet metadata for Desktop Virtualization (like Citrix
+Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-3">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.2-3" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-s2c">
+<table class="center" id="table-4">
+          <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+              <th class="text-center" rowspan="1" colspan="1">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph critical</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1">The frames that form the base for the image is more critical and needs to be transmitted as reliably as possible. Retransmits of these are harmful to the UX.**</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Haptic feedback</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Virtualizing haptic feedback is real-time and high importance although the feedback being delivered late is of no use. So dropping the packet altogether and not retransmitting it makes more sense</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">keep</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Video key frames form the base frames of a video upon which the next 'n' timeframe of video updates is applied on. These frames, are hence, critical and without them, the video would not be coherent until the next critical frame is received. Retransmits of these are harmful to the UX. ***</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">File copy</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">bulk</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+              <td class="text-center" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Interactive (or streaming) video predictive frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">Video predictive frames can be lost, which would result in minor glitch but not compromise the user activity and video would still be coherent and useful. The reception of subsequent video key frame would mitigate the loss in quality caused by lost predictive frames.</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">Glyph smoothing</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">Unreliable</td>
+              <td class="text-center" rowspan="1" colspan="1">The smoothing elements of the glyph can be lost and would still present a recognizable image, although with a lesser quality. Hence, these can be marked as loss tolerant as the user action is still completed with a small compromise to the UX. Moreover, with the reception of the next glyph critical frame would mitigate the loss in quality caused by lost glyph smoothing elements.</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-5">Encoding:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-6">Glyph critical:<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-7">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": true,
+    "realtime": true
+  }
+}
+</pre><a href="#appendix-A.2-7" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.2-8">Glyph smoothing:<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-9">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+</pre><a href="#appendix-A.2-9" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.2-10">Interactive Audio:<a href="#appendix-A.2-10" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-11">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": false,
+    "prefer-keep": true
+  }
+}
+</pre><a href="#appendix-A.2-11" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.2-12">Haptic feedback:<a href="#appendix-A.2-12" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-13">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": true,
+    "reliable": false,
+    "prefer-keep": false
+  }
+}
+</pre><a href="#appendix-A.2-13" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.2-14">File copy:<a href="#appendix-A.2-14" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-15">
+<pre>
+metadata = {
+  "metadata-type": 1,
+  "Application Metadata": {
+    "importance": false,
+    "reliable": true,
+    "realtime": false
+  }
+}
+</pre><a href="#appendix-A.2-15" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="examples-n2h">
+<section id="appendix-B">
+      <h2 id="name-example-of-network-to-host-">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-example-of-network-to-host-" class="section-name selfRef">Example of Network-to-Host Metadata for Video Streaming</a>
+      </h2>
+<p id="appendix-B-1">A network element can signal the maximum bandwidth allowed for video streaming. Typically,
+this policy limit exists in cellular networks.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 2</a> indicates the burst bandwidth (2 Mbps), burst duration
+(3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
+user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<span id="name-example-of-network-to-host-m"></span><div id="ex-video-bitrate">
+<figure id="figure-2">
+        <div class="alignLeft art-text artwork" id="appendix-B-3.1">
+<pre>
+{
+  "downlinkBitrate": {
+    "nominal": 1024,
+    "burst": 2048,
+    "burstDuration": 3000
+  }
+}
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-example-of-network-to-host-m" class="selfRef">Example of Network-to-Host Metadata for Video Streaming</a>
+        </figcaption></figure>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Sridharan Rajagopalan</span></div>
+<div dir="auto" class="left"><span class="org">Cloud Software Group Holdings, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:sridharan.girish@gmail.com" class="email">sridharan.girish@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Dan Wing</span></div>
+<div dir="auto" class="left"><span class="org">Cloud Software Group Holdings, Inc.</span></div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:danwing@gmail.com" class="email">danwing@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Mohamed Boucadair</span></div>
+<div dir="auto" class="left"><span class="org">Orange</span></div>
+<div dir="auto" class="left"><span class="country-name">France</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mohamed.boucadair@orange.com" class="email">mohamed.boucadair@orange.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tirumaleswar Reddy</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div dir="auto" class="left"><span class="country-name">India</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:kondtir@gmail.com" class="email">kondtir@gmail.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
