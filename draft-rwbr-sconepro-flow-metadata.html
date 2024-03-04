@@ -1351,11 +1351,13 @@ document is a companion to host-to-network signaling the metadata itself, such a
       </ul>
 <p id="section-1-5"><span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span> provides an analysis of most of those metadata signaling mechanisms.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This document does not assume nor preclude any companion signaling protocol.
-As such, <strong>the metadata in this document is defined to be independent of the
+Also, the document does not preclude API-based approaches to
+control flows, packets, applications, etc. that are bound a given metadata and which
+will benefit from the differentiated behavior. As such, <strong>the metadata in this document is defined to be independent of the
 signaling protocol</strong> (<a href="#sec-meta" class="auto internal xref">Section 3</a>). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
-considerations.<a href="#section-1-6" class="pilcrow">¶</a></p>
+considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, and Transport domains).<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">The metadata is described using Concise Data Definition Language (CDDL) <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
 in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  Both
 the JSON and CBOR encodings are self-describing.  It is out of scope
