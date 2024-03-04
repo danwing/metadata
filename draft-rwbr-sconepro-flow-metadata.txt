@@ -620,9 +620,6 @@ Informative References
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
-   [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest]
-              "*** BROKEN REFERENCE ***".
-
    [I-D.herbert-host2netsig]
               Herbert, T., "Host to Network Signaling", Work in
               Progress, Internet-Draft, draft-herbert-host2netsig-00, 4
@@ -644,6 +641,9 @@ Informative References
               signal-01, 7 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
+
+   [I-D.rwbr-tsvwg-signaling-use-cases]
+              "*** BROKEN REFERENCE ***".
 
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
@@ -746,7 +746,7 @@ A.1.  Video Streaming
    Video Streaming Metadata:
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
         +===============+============+==============+============+
         |  Traffic type | Importance | PacketNature | PacketType |
@@ -802,7 +802,7 @@ A.1.  Video Streaming
 A.2.  Interactive Gaming or Audio/Video
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    Interactive A/V, downstream Metadata:
 
@@ -861,7 +861,7 @@ A.3.  Remote Desktop Virtualization
    Remote Desktop Virtualization Metadata:
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    +===========+==========+==============+==========+==================+
    |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
