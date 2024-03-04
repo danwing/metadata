@@ -123,7 +123,7 @@ document is a companion to host-to-network signaling the metadata itself, such a
 
 This document does not assume nor preclude any companion signaling protocol.
 Also, the document does not preclude API-based approaches to
-control flows, packets, applications, etc. that are bound a given metadata and which
+control flows, packets, applications, etc. that are bound to a given metadata and which
 will benefit from the differentiated behavior. As such, **the metadata in this document is defined to be independent of the
 signaling protocol** ({{sec-meta}}). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
