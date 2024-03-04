@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 31 August 2024                                     M. Boucadair
+Expires: 5 September 2024                                   M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                        28 February 2024
+                                                            4 March 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -110,10 +110,9 @@ Table of Contents
    References
      Normative References
      Informative References
-   Appendix A.  Examples of Host-to-Network Metadata
+   Appendix A.  Examples of Host-to-Network Metadata Encoding
      A.1.  Video Streaming
-     A.2.  Interactive Gaming or Audio/Video
-     A.3.  Remote Desktop Virtualization
+     A.2.  Remote Desktop Virtualization
    Appendix B.  Example of Network-to-Host Metadata for Video
            Streaming
    Authors' Addresses
@@ -611,6 +610,9 @@ Informative References
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
+   [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest]
+              "*** BROKEN REFERENCE ***".
+
    [I-D.herbert-host2netsig]
               Herbert, T., "Host to Network Signaling", Work in
               Progress, Internet-Draft, draft-herbert-host2netsig-00, 4
@@ -727,26 +729,14 @@ Informative References
    [SCONEPRO] "SCONEPRO Working Group Charter", 2 February 2024,
               <https://datatracker.ietf.org/group/sconepro/about/>.
 
-Appendix A.  Examples of Host-to-Network Metadata
+Appendix A.  Examples of Host-to-Network Metadata Encoding
 
 A.1.  Video Streaming
 
-   Streaming video contains the occasional key frame ("i-frame")
-   containing a full video frame.  These are necessary to rebuild
-   receiver state after loss of delta frames.  The key frames are
-   therefore more critical to deliver to the receiver than delta frames.
-
-   Streaming video also contains audio frames which can be encoded
-   separately and thus can be signaled separately.  Audio is more
-   critical than video for almost all applications, but its importance
-   (relative to other packets in the flow) is still an application
-   decision.  In the example below, the audio is more important than
-   video (importance=high, PT=keep, RU=reliable), video key frames have
-   middle importance (importance=low, PT=discard, RU=reliable), and both
-   types of video delta frames (P-frame and B-frame) have least
-   importance (importance=low, PT=discard, RU=unreliable).
-
    Video Streaming Metadata:
+
+   The use case requirements and the table values below explained in
+   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
 
         +===============+============+==============+============+
         |  Traffic type | Importance | PacketNature | PacketType |
@@ -765,15 +755,44 @@ A.1.  Video Streaming
 
            Table 2: Example Values for Video Streaming Metadata
 
-A.2.  Interactive Gaming or Audio/Video
+   The encoding of the metadata in CDDL for the traffic will look like:
+   Video I-frame:
 
-   Both gaming (video in both directions, audio in both directions,
-   input devices from client to server) and interactive audio/video
-   (VoIP, video conference) involves important traffic in both
-   directions -- thus is a slightly more complicated use-case than the
-   previous example.  Additionally, most Internet service providers
-   constrain upstream bandwidth so proper packet treatment is critical
-   in the upstream direction.
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Audio:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Video delta P-frame:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
+   ## Interactive Gaming or Audio/Video {#example-interactive-av}
+
+   The use case requirements and the table values below explained in
+   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
 
    Interactive A/V, downstream Metadata:
 
@@ -789,153 +808,50 @@ A.2.  Interactive Gaming or Audio/Video
 
          Table 3: Example Values for Interactive A/V, downstream
 
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature | PacketType |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
+   Encoding:
 
-          Table 4: Example Values for Interactive A/V, upstream
+   Video key frame:
 
-   Many interactive audio/video applications also support sharing the
-   presenter's screen, file, video, or pictures.  During this sharing
-   the presenter's video is less important but the screen or picture is
-   more important.  This change of imporance can be conveyed in metadata
-   to the network, as in the table below:
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": true
+     }
+   }
 
-   Comprehensive Interpretation:
+   Video delta frame:
 
-      +===================+============+==============+============+
-      |    Traffic type   | Importance | PacketNature | PacketType |
-      +===================+============+==============+============+
-      |  video key frame  |    low     |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      | video delta frame |    low     |   discard    | unreliable |
-      +-------------------+------------+--------------+------------+
-      |       audio       |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
-      |  picture sharing  |    high    |   realtime   |  reliable  |
-      +-------------------+------------+--------------+------------+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
 
-         Table 5: Example Values for Interactive A/V with picture
-                            sharing, upstream
+   Audio:
 
-   In many scenarios a game or VoIP application will want to signal
-   different metadata for the same type of packet in each direction.
-   For example, for a game, video in the server-to-client direction
-   might be more important than audio, whereas input devices (e.g.,
-   keystrokes) might be more important than audio.
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
 
-A.3.  Remote Desktop Virtualization
+A.2.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
-   Virtual Apps and Desktops - CVAD) application.  This is shown in two
-   tables, client-to-server traffic (Table 6) and server-to-client
-   traffic (Table 7).
+   Virtual Apps and Desktops - CVAD) application.
 
    Remote Desktop Virtualization Metadata:
 
-   +================+==========+==============+==========+=============+
-   |  Traffic type  |Importance| PacketNature |PacketType|   Comments  |
-   +================+==========+==============+==========+=============+
-   |  User typing   |   high   |   realtime   | reliable |             |
-   +----------------+----------+--------------+----------+-------------+
-   |  Mouse click/  |   high   |   realtime   | reliable |  The start  |
-   |  End Position  |          |              |          | and endpoint|
-   |                |          |              |          |    of the   |
-   |                |          |              |          |   pointer   |
-   |                |          |              |          | movement is |
-   |                |          |              |          |   vital to  |
-   |                |          |              |          | ensure user |
-   |                |          |              |          |  action is  |
-   |                |          |              |          |  completed  |
-   |                |          |              |          |  correctly. |
-   |                |          |              |          |   So, the   |
-   |                |          |              |          |  endpoints  |
-   |                |          |              |          |  have to be |
-   |                |          |              |          |   reliably  |
-   |                |          |              |          | transmitted |
-   |                |          |              |          |  with real- |
-   |                |          |              |          |     time    |
-   |                |          |              |          | priority. **|
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   high   |     keep     |unreliable|             |
-   |     audio      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-   | Authentication |   low    |   realtime   | reliable |             |
-   |    - Finger    |          |              |          |             |
-   |  print, smart  |          |              |          |             |
-   |      card      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   low    |     keep     |unreliable|  Video key  |
-   |   video key    |          |              |          | frames form |
-   |     frame      |          |              |          |   the base  |
-   |                |          |              |          | frames of a |
-   |                |          |              |          |  video upon |
-   |                |          |              |          |  which the  |
-   |                |          |              |          |   next 'n'  |
-   |                |          |              |          | timeframe of|
-   |                |          |              |          |    video    |
-   |                |          |              |          |  updates is |
-   |                |          |              |          | applied on. |
-   |                |          |              |          |    These    |
-   |                |          |              |          | frames, are |
-   |                |          |              |          |    hence,   |
-   |                |          |              |          | critical and|
-   |                |          |              |          |   without   |
-   |                |          |              |          |  them, the  |
-   |                |          |              |          | video would |
-   |                |          |              |          |    not be   |
-   |                |          |              |          |   coherent  |
-   |                |          |              |          |  until the  |
-   |                |          |              |          |     next    |
-   |                |          |              |          |   critical  |
-   |                |          |              |          |   frame is  |
-   |                |          |              |          |  received.  |
-   |                |          |              |          | Retransmits |
-   |                |          |              |          | of these are|
-   |                |          |              |          |  harmful to |
-   |                |          |              |          | the UX. *** |
-   +----------------+----------+--------------+----------+-------------+
-   | Mouse position |   low    |   discard    |unreliable|   When the  |
-   |    tracking    |          |              |          |  pointer is |
-   |                |          |              |          |  moved from |
-   |                |          |              |          | one point to|
-   |                |          |              |          | another, the|
-   |                |          |              |          | coordinates |
-   |                |          |              |          |    of the   |
-   |                |          |              |          |   pointers  |
-   |                |          |              |          | between the |
-   |                |          |              |          |  two points |
-   |                |          |              |          | can be lost |
-   |                |          |              |          | without much|
-   |                |          |              |          | of an impact|
-   |                |          |              |          | to the UX as|
-   |                |          |              |          | long as the |
-   |                |          |              |          |  start and  |
-   |                |          |              |          |   endpoint  |
-   |                |          |              |          |   reaches.  |
-   |                |          |              |          |  This would |
-   |                |          |              |          |  ensure the |
-   |                |          |              |          | user action |
-   |                |          |              |          |      is     |
-   |                |          |              |          |  completed, |
-   |                |          |              |          | even if the |
-   |                |          |              |          |  experience |
-   |                |          |              |          |    seems    |
-   |                |          |              |          |   glitchy.  |
-   +----------------+----------+--------------+----------+-------------+
-   |  Interactive   |   low    |   discard    |unreliable|             |
-   |  video delta   |          |              |          |             |
-   |     frame      |          |              |          |             |
-   +----------------+----------+--------------+----------+-------------+
-
-         Table 6: Example Values for Remote Desktop Virtualization
-                         Metadata, client to server
+   The use case requirements and the table values below explained in
+   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
 
    +===========+==========+==============+==========+==================+
    |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
@@ -1055,19 +971,65 @@ A.3.  Remote Desktop Virtualization
    |           |          |              |          |    elements.     |
    +-----------+----------+--------------+----------+------------------+
 
-         Table 7: Example Values for Remote Desktop Virtualization
+         Table 4: Example Values for Remote Desktop Virtualization
                          Metadata, server to client
 
-   *** A video key frame should be handled differently by the network
-   depending on a streaming application versus a remote desktop
-   application.  The video streaming application's primary and only
-   nature of traffic is video and audio.  In contrast, a remote desktop
-   application might be playing a video and its associated audio while
-   at the same time the user is editing a document.  The user's
-   keystrokes and those glyphs need to be prioritized over the video
-   lest the user think their inputs are being ignored (and type the same
-   characters again).  Hence, the values are different even for the same
-   nature of traffic but a different application.
+   Encoding:
+
+   Glyph critical:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": true,
+       "realtime": true
+     }
+   }
+
+   Glyph smoothing:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
+   Interactive Audio:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": false,
+       "prefer-keep": true
+     }
+   }
+
+   Haptic feedback:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": true,
+       "reliable": false,
+       "prefer-keep": false
+     }
+   }
+
+   File copy:
+
+   metadata = {
+     "metadata-type": 1,
+     "Application Metadata": {
+       "importance": false,
+       "reliable": true,
+       "realtime": false
+     }
+   }
 
 Appendix B.  Example of Network-to-Host Metadata for Video Streaming
 
