@@ -11,7 +11,7 @@
 <meta content="Tirumaleswar Reddy" name="author">
 <meta content="
        This document defines per-flow and per-packet metadata for both
-network to host and host to network signaling in CDDL which
+network-to-host and host-to-network signaling in Concise Data Definition Language (CDDL) which
 expresses both CBOR and JSON.  The common metadata definition allows interworking between
 signaling protocols with high fidelity. The metadata is also self-
 describing to improve interpretation by network elements and
@@ -1094,7 +1094,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document defines per-flow and per-packet metadata for both
-network to host and host to network signaling in CDDL which
+network-to-host and host-to-network signaling in Concise Data Definition Language (CDDL) which
 expresses both CBOR and JSON.  The common metadata definition allows interworking between
 signaling protocols with high fidelity. The metadata is also self-
 describing to improve interpretation by network elements and
@@ -1296,7 +1296,10 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
                 <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-interactive-gaming-or-audio" class="internal xref">Interactive Gaming or Audio/Video</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
+                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
 </li>
             </ul>
 </li>
@@ -1348,12 +1351,12 @@ document is a companion to host-to-network signaling the metadata itself, such a
       </ul>
 <p id="section-1-5"><span>[<a href="#I-D.herbert-host2netsig" class="cite xref">I-D.herbert-host2netsig</a>]</span> provides an analysis of most of those metadata signaling mechanisms.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This document does not assume nor preclude any companion signaling protocol.
-As such, the metadata in this document is defined to be independent of the
-signaling protocol. In doing so, we ensure that consistent
+As such, <strong>the metadata in this document is defined to be independent of the
+signaling protocol</strong> (<a href="#sec-meta" class="auto internal xref">Section 3</a>). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
 considerations.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">The metadata is described using <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
+<p id="section-1-7">The metadata is described using Concise Data Definition Language (CDDL) <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
 in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  Both
 the JSON and CBOR encodings are self-describing.  It is out of scope
 of this document to define how the proposed encoding will be mapped to
@@ -1372,6 +1375,8 @@ policy for nominal downlink bandwidth. Certain applications,
 such as most especially video streaming applications, can use
 that information to optimize their video streaming bandwidth to
 fit within that policy.<a href="#section-1-9" class="pilcrow">¶</a></p>
+<p id="section-1-10">To track metadata that are defined for host/network signalling,
+a new IANA registry is defined: "Flow Metadata Registry" <a href="#sec-fmr" class="auto internal xref">Section 10.2</a>.<a href="#section-1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1383,25 +1388,26 @@ fit within that policy.<a href="#section-1-9" class="pilcrow">¶</a></p>
 "<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-2-2">
-        <dt id="section-2-2.1">Reactive policy:</dt>
-        <dd style="margin-left: 1.5em" id="section-2-2.2">
-          <p id="section-2-2.2.1">Treatment given to a flow when an exceptional event occurs, such as
+<p id="section-2-2">This document uses the following terms:<a href="#section-2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-2-3">
+        <dt id="section-2-3.1">Reactive policy:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.2">
+          <p id="section-2-3.2.1">Treatment given to a flow when an exceptional event occurs, such as
 diminished throughput to the host caused by radio interference or weak
 radio signal, congestion on the network caused by other users or other
-applications on the same host.<a href="#section-2-2.2.1" class="pilcrow">¶</a></p>
+applications on the same host.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-2.3">Intentional policy:</dt>
-        <dd style="margin-left: 1.5em" id="section-2-2.4">
-          <p id="section-2-2.4.1">Configured bandwidth, pps, or similar throughput constraints applied
-to a flow, application, host, or subscriber.<a href="#section-2-2.4.1" class="pilcrow">¶</a></p>
+<dt id="section-2-3.3">Intentional policy:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.4">
+          <p id="section-2-3.4.1">Configured bandwidth, pps, or similar throughput constraints applied
+to a flow, application, host, or subscriber.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
 </section>
 </div>
-<div id="metadata-structure">
+<div id="sec-meta">
 <section id="section-3">
       <h2 id="name-metadata-structure">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-metadata-structure" class="section-name selfRef">Metadata Structure</a>
@@ -2119,9 +2125,15 @@ metadata = {
 }
 </pre><a href="#appendix-A.1-9" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-10">## Interactive Gaming or Audio/Video  {#example-interactive-av}<a href="#appendix-A.1-10" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-11">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.1-11" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-12">Interactive A/V, downstream Metadata:<a href="#appendix-A.1-12" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="example-interactive-av">
+<section id="appendix-A.2">
+        <h3 id="name-interactive-gaming-or-audio">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-interactive-gaming-or-audio" class="section-name selfRef">Interactive Gaming or Audio/Video</a>
+        </h3>
+<p id="appendix-A.2-1">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">Interactive A/V, downstream Metadata:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream">
 <table class="center" id="table-3">
           <caption>
@@ -2158,9 +2170,9 @@ metadata = {
           </tbody>
         </table>
 </div>
-<p id="appendix-A.1-14">Encoding:<a href="#appendix-A.1-14" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-15">Video key frame:<a href="#appendix-A.1-15" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-16">
+<p id="appendix-A.2-4">Encoding:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-5">Video key frame:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-6">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2170,10 +2182,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.1-16" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-6" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-17">Video delta frame:<a href="#appendix-A.1-17" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-18">
+<p id="appendix-A.2-7">Video delta frame:<a href="#appendix-A.2-7" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-8">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2183,10 +2195,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.1-18" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-8" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-19">Audio:<a href="#appendix-A.1-19" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-20">
+<p id="appendix-A.2-9">Audio:<a href="#appendix-A.2-9" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-10">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2196,19 +2208,19 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.1-20" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-10" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="example-rdt">
-<section id="appendix-A.2">
+<section id="appendix-A.3">
         <h3 id="name-remote-desktop-virtualizati">
-<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
         </h3>
-<p id="appendix-A.2-1">Example packet metadata for Desktop Virtualization (like Citrix
-Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-3">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.2-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-1">Example packet metadata for Desktop Virtualization (like Citrix
+Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-3">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.draft-rwbr-tsvwg-signaling-use-cases-latest" class="cite xref">I-D.draft-rwbr-tsvwg-signaling-use-cases-latest</a>]</span>.<a href="#appendix-A.3-3" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-s2c">
 <table class="center" id="table-4">
           <caption>
@@ -2277,9 +2289,9 @@ Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.2-1" class="p
           </tbody>
         </table>
 </div>
-<p id="appendix-A.2-5">Encoding:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-6">Glyph critical:<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-7">
+<p id="appendix-A.3-5">Encoding:<a href="#appendix-A.3-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-6">Glyph critical:<a href="#appendix-A.3-6" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.3-7">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2289,10 +2301,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.2-7" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-7" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-8">Glyph smoothing:<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-9">
+<p id="appendix-A.3-8">Glyph smoothing:<a href="#appendix-A.3-8" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.3-9">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2302,10 +2314,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.2-9" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-9" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-10">Interactive Audio:<a href="#appendix-A.2-10" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-11">
+<p id="appendix-A.3-10">Interactive Audio:<a href="#appendix-A.3-10" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.3-11">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2315,10 +2327,10 @@ metadata = {
     "prefer-keep": true
   }
 }
-</pre><a href="#appendix-A.2-11" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-11" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-12">Haptic feedback:<a href="#appendix-A.2-12" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-13">
+<p id="appendix-A.3-12">Haptic feedback:<a href="#appendix-A.3-12" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.3-13">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2328,10 +2340,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.2-13" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-13" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-14">File copy:<a href="#appendix-A.2-14" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-15">
+<p id="appendix-A.3-14">File copy:<a href="#appendix-A.3-14" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.3-15">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2341,7 +2353,7 @@ metadata = {
     "realtime": false
   }
 }
-</pre><a href="#appendix-A.2-15" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.3-15" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
