@@ -248,7 +248,7 @@ More details about each of these metadata are provided in {{sec-h2n}} and {{sec-
 Both client and network intended behaviors are specified for each
 metadata.
 
-# Host to Network Metadata {#sec-h2n}
+# Host-to-Network Metadata {#sec-h2n}
 
 Metadata is characterized into two different nature:
 
@@ -258,7 +258,7 @@ Network Metadata:
 Application Metadata:
 : This consists of metadata that specifies how the application treats that packet. The appplication metadata comprises of two components - Keep/Discard bit and Reliable/Unreliable bit.
 
-## Importance
+## Packet Importance ('Importance')
 
 The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
@@ -277,7 +277,7 @@ During a reactive policy event, a network element is encouraged to
 discard packets marked importance=false in favor of packets marked
 importance=true, for the same flow.
 
-## Packet Type - Reliable/Unreliable
+## Packet Type - Reliable/Unreliable ('PacketType')
 
 The "Reliable" metadata indicates if a packet is reliably transmitted by the host.
 
@@ -296,7 +296,7 @@ During a reactive policy event, dropping unreliable traffic is preferred over dr
 traffic. The reliable traffic will be re-transmitted by the sender so dropping such traffic
 only defers it until later, but this deferral can be useful.
 
-## Packet Nature
+## Packet Nature ('PacketNature')
 
 This metadata indicates discard preference for unreliable traffic and reliable traffic, as detailed below.
 
@@ -339,7 +339,7 @@ Realtime traffic prefers lower latency network paths and bulk traffic prefers hi
 
 # Network to Host Metadata {#sec-n2h}
 
-## Downlink Bitrate {#sec-dbr}
+## Downlink Bitrate ('DownlinkBitrate') {#sec-dbr}
 
 Monthly data quotas on cellular networks can be easily exceeded by video streaming, in particular, if the
 client chooses excessively high quality or routinely abandons watching videos that were
@@ -367,7 +367,7 @@ The host may also choose to signal the received bitrate to the remote peer. The 
 peer will adapt its transmission behavior to comply with the received bitrate.
 
 
-An example of the encoding is in {{examples-n2h}}.
+An example of the encoding is provided in {{examples-n2h}}.
 
 ## Prefer Alternate Path ('pref-alt-path')
 
