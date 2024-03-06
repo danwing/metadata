@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 5 September 2024                                   M. Boucadair
+Expires: 7 September 2024                                   M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                            4 March 2024
+                                                            6 March 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2024.
+   This Internet-Draft will expire on 7 September 2024.
 
 Copyright Notice
 
@@ -155,11 +155,16 @@ Table of Contents
    metadata signaling mechanisms.
 
    This document does not assume nor preclude any companion signaling
-   protocol.  As such, *the metadata in this document is defined to be
+   protocol.  Also, the document does not preclude API-based approaches
+   to control flows, packets, applications, etc. that are bound to a
+   given metadata and which will benefit from the differentiated
+   behavior.  As such, *the metadata in this document is defined to be
    independent of the signaling protocol* (Section 3).  In doing so, we
    ensure that consistent metadata definitions are used by the various
    signaling protocols.  Also, this approach allows to factorize key
-   considerations such as security and operational considerations.
+   considerations such as security and operational considerations.  This
+   approach also ease passing policies between controllers of domains
+   involved in packet delivery (e.g., RAN, Core, and Transport domains).
 
    The metadata is described using Concise Data Definition Language
    (CDDL) [CDDL] which can be expressed in both [JSON] and binary using
@@ -279,14 +284,12 @@ Table of Contents
 
    Network Metadata:  This consists of metadata that specifies how a
       network element should treat that packet.  The network metadata
-      comprises of the importance field and is specified in the MSB and
-      of size 1 bit.  This field indicates if the packet is more
-      important or less important.
+      comprises of the importance metadata.  This field indicates
+      whether a packet is more important or less important.
 
    Application Metadata:  This consists of metadata that specifies how
       the application treats that packet.  The appplication metadata
-      comprises of two components - Keep/Discard bit and Reliable/
-      Unreliable bit.
+      comprises of two components: Keep/Discard and Reliable/Unreliable.
 
 4.1.  Packet Importance ('Importance')
 
@@ -399,7 +402,7 @@ Table of Contents
    downloaded.  The network can assist the client by informing the
    client of the network's bandwidth policy.
 
-   If the video is encoded with variable bit rate, the bitrate cannot
+   If the video is encoded with variable bitrate, the bitrate cannot
    exceed the indicated bitrate.
 
    The nominal bitrate is calculated over each second, whereas the burst
@@ -410,11 +413,11 @@ Table of Contents
 
 5.1.1.  Units
 
-   Bit rate is expressed in Mbps and duration is in milliseconds.
+   Bitrate is expressed in Mbps and duration is in milliseconds.
 
 5.1.2.  Host Treatment
 
-   The host chooses a video streaming bit rate at or below the signaled
+   The host chooses a video streaming bitrate at or below the signaled
    rate.
 
    The host may also choose to signal the received bitrate to the remote
@@ -576,8 +579,16 @@ Table of Contents
 
                           Table 1: Initial Values
 
-   New values in the 6-249 range can be assigned using "Standards
-   Action" policy (Section 4.9 of [RFC8126]).
+   New values in the 6-99 range can be assigned using "Standards Action"
+   policy (Section 4.9 of [RFC8126]).
+
+   Values in the 100-149 range can be assigned using "Expert Review"
+   policy (Section 4.5 of [RFC8126]).
+
+   Values in the 150-249 range can be assigned using "First Come First
+   Served" (Section 4.4 of [RFC8126]).  This range can be, e.g., used by
+   other SDOs to register metadata that are specific to their domain and
+   which is not used outside that scope.
 
 Acknowledgments
 
@@ -643,7 +654,12 @@ Informative References
               explcit-signal-01>.
 
    [I-D.rwbr-tsvwg-signaling-use-cases]
-              "*** BROKEN REFERENCE ***".
+              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
+              "Signaling Use Cases for Collaborative Traffic
+              Differentiation", Work in Progress, Internet-Draft, draft-
+              rwbr-tsvwg-signaling-use-cases-01, 4 March 2024,
+              <https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-
+              signaling-use-cases-01>.
 
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
