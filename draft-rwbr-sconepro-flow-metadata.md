@@ -217,6 +217,7 @@ $$metadata-extensions //= (
 ; the host to seek for better paths.
 
 Bitrate =  {
+  scope: uint     ; indicates the scope the bitrate
   nominal: uint,  ; Mbps
   ? burst-d => burst-info
 }
@@ -350,6 +351,10 @@ bandwidth policy.
 
 If the video is encoded with variable bitrate, the bitrate cannot exceed the indicated
 bitrate.
+
+The scope indicates whether the bitrate applies to all flows bound to a host (0), a specific
+application (1), a traffic category (2), etc. "0" is default value. The absence of scope
+is similar to returning a scope set to "0".
 
 The nominal bitrate is calculated over each second, whereas the burst
 bitrate is calculated over the signaled interval (burst-duration).
@@ -611,7 +616,7 @@ Encoding:
 
 Glyph critical:
 
-~~~~~ cddl
+~~~~~ json
 metadata = {
   "metadata-type": 1,
   "Application Metadata": {
@@ -624,7 +629,7 @@ metadata = {
 
 Glyph smoothing:
 
-~~~~~ cddl
+~~~~~ json
 metadata = {
   "metadata-type": 1,
   "Application Metadata": {
@@ -637,7 +642,7 @@ metadata = {
 
 Interactive Audio:
 
-~~~~~ cddl
+~~~~~ json
 metadata = {
   "metadata-type": 1,
   "Application Metadata": {
@@ -650,7 +655,7 @@ metadata = {
 
 Haptic feedback:
 
-~~~~~ cddl
+~~~~~ json
 metadata = {
   "metadata-type": 1,
   "Application Metadata": {
@@ -663,7 +668,7 @@ metadata = {
 
 File copy:
 
-~~~~~ cddl
+~~~~~ json
 metadata = {
   "metadata-type": 1,
   "Application Metadata": {
@@ -681,11 +686,12 @@ this policy limit exists in cellular networks.
 
 The example shown in {{ex-video-bitrate}} indicates the burst bandwidth (2 Mbps), burst duration
 (3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
-user:
+user. The scope "1" indicates the bitrate is per-host.
 
-~~~~~
+~~~~~ json
 {
   "downlinkBitrate": {
+    "scope": 0,
     "nominal": 1024,
     "burst": 2048,
     "burstDuration": 3000
