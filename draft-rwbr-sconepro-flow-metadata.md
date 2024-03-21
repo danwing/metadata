@@ -352,8 +352,9 @@ bandwidth policy.
 If the video is encoded with variable bitrate, the bitrate cannot exceed the indicated
 bitrate.
 
-The scope indicates whether the bitrate applies to all flows bound to a host (1), a specific
-application (2), a traffic category (3), etc.
+The scope indicates whether the bitrate applies to all flows bound to a host (0), a specific
+application (1), a traffic category (2), etc. "0" is default value. The absence of scope
+is similar to returning a scope set to "0".
 
 The nominal bitrate is calculated over each second, whereas the burst
 bitrate is calculated over the signaled interval (burst-duration).
@@ -690,7 +691,7 @@ user. The scope "1" indicates the bitrate is per-host.
 ~~~~~ json
 {
   "downlinkBitrate": {
-    "scope": 0, 
+    "scope": 0,
     "nominal": 1024,
     "burst": 2048,
     "burstDuration": 3000
