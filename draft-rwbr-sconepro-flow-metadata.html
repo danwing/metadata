@@ -17,7 +17,7 @@ signaling protocols with high fidelity. The metadata is also self-
 describing to improve interpretation by network elements and
 endpoints while reducing the need for version negotiation. 
     " name="description">
-<meta content="xml2rfc 3.20.0" name="generator">
+<meta content="xml2rfc 3.20.1" name="generator">
 <meta content="user experience" name="keyword">
 <meta content="bandwidth" name="keyword">
 <meta content="priority" name="keyword">
@@ -34,7 +34,7 @@ endpoints while reducing the need for version negotiation.
 <meta content="QUIC" name="keyword">
 <meta content="draft-rwbr-sconepro-flow-metadata-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.20.0
+  xml2rfc 3.20.1
     Python 3.11.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -1050,7 +1050,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rajagopalan, et al.</td>
-<td class="center">Expires 5 September 2024</td>
+<td class="center">Expires 30 September 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1063,12 +1063,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-rwbr-sconepro-flow-metadata-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-03-04" class="published">4 March 2024</time>
+<time datetime="2024-03-29" class="published">29 March 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-09-05">5 September 2024</time></dd>
+<dd class="expires"><time datetime="2024-09-30">30 September 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1135,7 +1135,7 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 30 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1417,7 +1417,7 @@ to a flow, application, host, or subscriber.<a href="#section-2-3.4.1" class="pi
 <p id="section-3-1">The metadata is described in CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> format shown in <a href="#meta-cddl" class="auto internal xref">Figure 1</a>.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <span id="name-cddl-structure-of-the-metad"></span><div id="meta-cddl">
 <figure id="figure-1">
-        <div class="lang-cddl sourcecode" id="section-3-2.1">
+        <div class="breakable lang-cddl sourcecode" id="section-3-2.1">
 <pre>
 ; one or more metadata can be signaled.
 metadata = {
@@ -1448,18 +1448,21 @@ $$metadata-extensions //= (
 ; Returning a value set to 0 (or a very low value) should trigger
 ; the host to seek for better paths.
 
-Bitrate =  {
-  nominal: uint,  ; Mbps
-  ? burst-d =&gt; burst-info
-}
+bitrate =  [+ nrlp]
 
-burst-info = {
-  burst: uint,          ; Mbps
-  burstDuration: uint   ; milliseconds
+nrlp =  {
+  ? scope: unit,
+  ? tc: uint,
+  cir: uint,  ; Mbps
+  cbs: uint,  ; bytes
+  ? eir: uint,  ; Mbps
+  ? ebs: uint,  ; bytes
+  ? pir: uint,  ; Mbps
+  ? pbs: uint  ; bytes
 }
 
 $$metadata-extensions //= (
-   ? downlinkBitrate =&gt; Bitrate,
+   ? downlinkBitrate =&gt; nrlp,
 ; Indicates whether a flow is to be offloaded to alternate
 ; available paths.
    pref-alt-path: bool
@@ -1632,17 +1635,123 @@ downloaded. The network can assist the client by informing the client of the net
 bandwidth policy.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">If the video is encoded with variable bitrate, the bitrate cannot exceed the indicated
 bitrate.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">The nominal bitrate is calculated over each second, whereas the burst
-bitrate is calculated over the signaled interval (burst-duration).
-For either measurement, packets can arrive at the start of a second,
-as near as possible behind each other, and the remaining portion of
-that second could have no packets transmitted.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-5.1-3">
+          <dt id="section-5.1-3.1">Scope:</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.2">
+            <p id="section-5.1-3.2.1">Specifies whether the policy is per host, per subscriber, etc.<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.3"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.4">
+            <p id="section-5.1-3.4.1">The following values are supported:<a href="#section-5.1-3.4.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-3.4.2">
+<pre>
+*  "0": Subscriber
+*  "1": Host
+*  2-15: Unassigned values.
+</pre><a href="#section-5.1-3.4.2" class="pilcrow">¶</a>
+</div>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.5">TC:</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.6">
+            <p id="section-5.1-3.6.1">Specifies a traffic category to which this policy applies.<a href="#section-5.1-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.7"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.8">
+            <p id="section-5.1-3.8.1">The following values are supported:<a href="#section-5.1-3.8.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1-3.8.2">
+<pre>
+*  "0": All traffic. This is the default value.
+*  "1": Streaming
+*  "2": Realtime
+*  "3": Bulk trafic
+*  4-255: Unassigned values
+</pre><a href="#section-5.1-3.8.2" class="pilcrow">¶</a>
+</div>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.9">Committed Information Rate (CIR) (Mbps):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.10">
+            <p id="section-5.1-3.10.1">Specifies the maximum number of bits that a network can send during one
+second over an attachment circuit for a traffic category.<a href="#section-5.1-3.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.11"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.12">
+            <p id="section-5.1-3.12.1">This parameter is mandatory.<a href="#section-5.1-3.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.13">Committed Burst Size (CBS) (bytes):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.14">
+            <p id="section-5.1-3.14.1">Specifies the maximum burst size that can be transmitted at CIR.<a href="#section-5.1-3.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.15"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.16">
+            <p id="section-5.1-3.16.1"><span class="bcp14">MUST</span> be greated than zero.<a href="#section-5.1-3.16.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.17"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.18">
+            <p id="section-5.1-3.18.1">This parameter is mandatory.<a href="#section-5.1-3.18.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.19">Excess Information Rate (EIR) (Mbps):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.20">
+            <p id="section-5.1-3.20.1">Specifies the maximum number of bits that a network can send
+during one second for a traffic category that is out of profile.<a href="#section-5.1-3.20.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.21"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.22">
+            <p id="section-5.1-3.22.1">This parameter is optional.<a href="#section-5.1-3.22.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.23">Excess Burst Size (EBS) (bytes):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.24">
+            <p id="section-5.1-3.24.1">Indicates that maximum excess burst size that is allowed while not
+complying with the CIR.<a href="#section-5.1-3.24.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.25"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.26">
+            <p id="section-5.1-3.26.1"><span class="bcp14">MUST</span> be greater than zero, if present.<a href="#section-5.1-3.26.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.27"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.28">
+            <p id="section-5.1-3.28.1">This parameter is optional.<a href="#section-5.1-3.28.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.29">Peak Information Rate (PIR) (Mbps):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.30">
+            <p id="section-5.1-3.30.1">Traffic that exceeds the CIR and the CBS is metered to the PIR.<a href="#section-5.1-3.30.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.31"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.32">
+            <p id="section-5.1-3.32.1">This parameter is optional.<a href="#section-5.1-3.32.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.33">Peak Burst Size (PBS) (bytes):</dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.34">
+            <p id="section-5.1-3.34.1">Specifies the maximum burst size that can be transmitted at PIR.<a href="#section-5.1-3.34.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-5.1-3.35"></dt>
+          <dd style="margin-left: 1.5em" id="section-5.1-3.36">
+            <p id="section-5.1-3.36.1"><span class="bcp14">MUST</span> be greater than zero, if present.<a href="#section-5.1-3.36.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
 <div id="units">
 <section id="section-5.1.1">
           <h4 id="name-units">
 <a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-units" class="section-name selfRef">Units</a>
           </h4>
-<p id="section-5.1.1-1">Bitrate is expressed in Mbps and duration is in milliseconds.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-1">Bitrates are expressed in Mbps and burst in bytes.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="host-treatment">
@@ -1953,7 +2062,7 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
 <dd class="break"></dd>
 <dt id="I-D.rwbr-tsvwg-signaling-use-cases">[I-D.rwbr-tsvwg-signaling-use-cases]</dt>
         <dd>
-<span class="refAuthor">Rajagopalan, S.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Boucadair, M.</span>, and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Signaling Use Cases for Collaborative Traffic Differentiation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-rwbr-tsvwg-signaling-use-cases-00</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-00">https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-00</a>&gt;</span>. </dd>
+<span class="refAuthor">Rajagopalan, S.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Boucadair, M.</span>, and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Host to Network Signaling Use Cases for Collaborative Traffic Differentiation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-rwbr-tsvwg-signaling-use-cases-02</span>, <time datetime="2024-03-17" class="refDate">17 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-02">https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.wing-cidfi">[I-D.wing-cidfi]</dt>
         <dd>
@@ -2370,8 +2479,7 @@ metadata = {
       </h2>
 <p id="appendix-B-1">A network element can signal the maximum bandwidth allowed for video streaming. Typically,
 this policy limit exists in cellular networks.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 2</a> indicates the burst bandwidth (2 Mbps), burst duration
-(3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
+<p id="appendix-B-2">The example shown in <a href="#ex-video-bitrate" class="auto internal xref">Figure 2</a> indicates a CIR (1 Mbps) for the requesting
 user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <span id="name-example-of-network-to-host-m"></span><div id="ex-video-bitrate">
 <figure id="figure-2">
@@ -2379,9 +2487,7 @@ user:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <pre>
 {
   "downlinkBitrate": {
-    "nominal": 1024,
-    "burst": 2048,
-    "burstDuration": 3000
+    "cir": 1
   }
 }
 </pre>
