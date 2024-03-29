@@ -216,18 +216,21 @@ $$metadata-extensions //= (
 ; Returning a value set to 0 (or a very low value) should trigger
 ; the host to seek for better paths.
 
-Bitrate =  {
-  nominal: uint,  ; Mbps
-  ? burst-d => burst-info
-}
+bitrate =  [+ nrlp]
 
-burst-info = {
-  burst: uint,          ; Mbps
-  burstDuration: uint   ; milliseconds
+nrlp =  {
+  ? scope: unit,
+  ? tc: uint,
+  cir: uint,  ; Mbps
+  cbs: uint,  ; bytes
+  ? eir: uint,  ; Mbps
+  ? ebs: uint,  ; bytes
+  ? pir: uint,  ; Mbps
+  ? pbs: uint  ; bytes
 }
 
 $$metadata-extensions //= (
-   ? downlinkBitrate => Bitrate,
+   ? downlinkBitrate => nrlp,
 ; Indicates whether a flow is to be offloaded to alternate
 ; available paths.
    pref-alt-path: bool
@@ -351,15 +354,56 @@ bandwidth policy.
 If the video is encoded with variable bitrate, the bitrate cannot exceed the indicated
 bitrate.
 
-The nominal bitrate is calculated over each second, whereas the burst
-bitrate is calculated over the signaled interval (burst-duration).
-For either measurement, packets can arrive at the start of a second,
-as near as possible behind each other, and the remaining portion of
-that second could have no packets transmitted.
+Scope:
+: Specifies whether the policy is per host, per subscriber, etc.
+: The following values are supported:
+
+      *  "0": Subscriber
+      *  "1": Host
+      *  2-15: Unassigned values.
+
+TC:
+: Specifies a traffic category to which this policy applies.
+: The following values are supported:
+
+      *  "0": All traffic. This is the default value.
+      *  "1": Streaming
+      *  "2": Realtime
+      *  "3": Bulk trafic
+      *  4-255: Unassigned values
+
+Committed Information Rate (CIR) (Mbps):
+: Specifies the maximum number of bits that a network can send during one
+  second over an attachment circuit for a traffic category.
+: This parameter is mandatory.
+
+Committed Burst Size (CBS) (bytes):
+: Specifies the maximum burst size that can be transmitted at CIR.
+: MUST be greated than zero.
+: This parameter is mandatory.
+
+Excess Information Rate (EIR) (Mbps):
+: Specifies the maximum number of bits that a network can send
+  during one second for a traffic category that is out of profile.
+: This parameter is optional.
+
+Excess Burst Size (EBS) (bytes):
+: Indicates that maximum excess burst size that is allowed while not
+  complying with the CIR.
+: MUST be greater than zero, if present.
+: This parameter is optional.
+
+Peak Information Rate (PIR) (Mbps):
+: Traffic that exceeds the CIR and the CBS is metered to the PIR.
+: This parameter is optional.
+
+Peak Burst Size (PBS) (bytes):
+: Specifies the maximum burst size that can be transmitted at PIR.
+: MUST be greater than zero, if present.
 
 ### Units
 
-Bitrate is expressed in Mbps and duration is in milliseconds.
+Bitrates are expressed in Mbps and burst in bytes.
 
 ### Host Treatment
 
@@ -679,16 +723,13 @@ metadata = {
 A network element can signal the maximum bandwidth allowed for video streaming. Typically,
 this policy limit exists in cellular networks.
 
-The example shown in {{ex-video-bitrate}} indicates the burst bandwidth (2 Mbps), burst duration
-(3 seconds), and nominal (non-burst) bandwidth (1 Mbps) for the requesting
+The example shown in {{ex-video-bitrate}} indicates a CIR (1 Mbps) for the requesting
 user:
 
 ~~~~~
 {
   "downlinkBitrate": {
-    "nominal": 1024,
-    "burst": 2048,
-    "burstDuration": 3000
+    "cir": 1
   }
 }
 ~~~~~
