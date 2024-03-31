@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-03-28T01:14:17.423951+00:00",
+  "timestamp": "2024-03-31T01:20:53.939523+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -1448,26 +1448,68 @@
       "id": "PR_kwDOK0CwpM5qU30V",
       "title": "bitrate scope",
       "url": "https://github.com/danwing/metadata/pull/33",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "boucadair",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-03-21T08:08:04Z",
-      "updatedAt": "2024-03-21T08:16:09Z",
+      "updatedAt": "2024-03-29T08:52:12Z",
       "baseRepository": "danwing/metadata",
       "baseRefName": "main",
       "baseRefOid": "b445aa0bdf9179e53464de5800d4c1b027328cf2",
       "headRepository": "danwing/metadata",
       "headRefName": "boucadair-patch-12",
       "headRefOid": "cc05661d222f6f1cdc5abcaaf63cbd716acf8401",
-      "closedAt": null,
+      "closedAt": "2024-03-29T08:52:12Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOK0CwpM5rJZph",
+      "title": "Align the bitrate structure with the discovery spec",
+      "url": "https://github.com/danwing/metadata/pull/34",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-03-29T09:11:11Z",
+      "updatedAt": "2024-03-29T15:12:35Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "b445aa0bdf9179e53464de5800d4c1b027328cf2",
+      "headRepository": "danwing/metadata",
+      "headRefName": "be-consistent",
+      "headRefOid": "9481630042bdca9457be7c0f3e3d4b6caf2c7c13",
+      "closedAt": "2024-03-29T15:12:35Z",
+      "mergedAt": "2024-03-29T15:12:35Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "6a8049e4fcac0b837f341f04ec1b737a0abdb63b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM51WAxq",
+          "commit": {
+            "abbreviatedOid": "9481630"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-03-29T14:57:59Z",
+          "updatedAt": "2024-03-29T14:57:59Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
