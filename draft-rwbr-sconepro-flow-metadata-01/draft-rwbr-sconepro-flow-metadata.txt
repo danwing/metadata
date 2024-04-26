@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 5 September 2024                                   M. Boucadair
+Expires: 28 October 2024                                    M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                            4 March 2024
+                                                           26 April 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -18,12 +18,12 @@ Expires: 5 September 2024                                   M. Boucadair
 Abstract
 
    This document defines per-flow and per-packet metadata for both
-   network to host and host to network signaling in CDDL which expresses
-   both CBOR and JSON.  The common metadata definition allows
-   interworking between signaling protocols with high fidelity.  The
-   metadata is also self- describing to improve interpretation by
-   network elements and endpoints while reducing the need for version
-   negotiation.
+   network-to-host and host-to-network signaling in Concise Data
+   Definition Language (CDDL) which expresses both CBOR and JSON.  The
+   common metadata definition allows interworking between signaling
+   protocols with high fidelity.  The metadata is also self- describing
+   to improve interpretation by network elements and endpoints while
+   reducing the need for version negotiation.
 
 About This Document
 
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2024.
+   This Internet-Draft will expire on 28 October 2024.
 
 Copyright Notice
 
@@ -78,18 +78,18 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Metadata Structure
-   4.  Host to Network Metadata
-     4.1.  Importance
+   4.  Host-to-Network Metadata
+     4.1.  Packet Importance ('Importance')
        4.1.1.  Network Treatment
-     4.2.  Packet Type - Reliable/Unreliable
+     4.2.  Packet Type - Reliable/Unreliable ('PacketType')
        4.2.1.  Network Treatment
-     4.3.  Packet Nature
+     4.3.  Packet Nature ('PacketNature')
        4.3.1.  Unreliable Traffic
          4.3.1.1.  Network Treatment
        4.3.2.  Reliable Traffic
          4.3.2.1.  Network Treatment
    5.  Network to Host Metadata
-     5.1.  Downlink Bitrate
+     5.1.  Downlink Bitrate ('DownlinkBitrate')
        5.1.1.  Units
        5.1.2.  Host Treatment
      5.2.  Prefer Alternate Path ('pref-alt-path')
@@ -112,7 +112,8 @@ Table of Contents
      Informative References
    Appendix A.  Examples of Host-to-Network Metadata Encoding
      A.1.  Video Streaming
-     A.2.  Remote Desktop Virtualization
+     A.2.  Interactive Gaming or Audio/Video
+     A.3.  Remote Desktop Virtualization
    Appendix B.  Example of Network-to-Host Metadata for Video
            Streaming
    Authors' Addresses
@@ -154,17 +155,22 @@ Table of Contents
    metadata signaling mechanisms.
 
    This document does not assume nor preclude any companion signaling
-   protocol.  As such, the metadata in this document is defined to be
-   independent of the signaling protocol.  In doing so, we ensure that
-   consistent metadata definitions are used by the various signaling
-   protocols.  Also, this approach allows to factorize key
-   considerations such as security and operational considerations.
+   protocol.  Also, the document does not preclude API-based approaches
+   to control flows, packets, applications, etc. that are bound to a
+   given metadata and which will benefit from the differentiated
+   behavior.  As such, *the metadata in this document is defined to be
+   independent of the signaling protocol* (Section 3).  In doing so, we
+   ensure that consistent metadata definitions are used by the various
+   signaling protocols.  Also, this approach allows to factorize key
+   considerations such as security and operational considerations.  This
+   approach also ease passing policies between controllers of domains
+   involved in packet delivery (e.g., RAN, Core, and Transport domains).
 
-   The metadata is described using [CDDL] which can be expressed in both
-   [JSON] and binary using [CBOR].  Both the JSON and CBOR encodings are
-   self-describing.  It is out of scope of this document to define how
-   the proposed encoding will be mapped to a specific signaling
-   protocol.
+   The metadata is described using Concise Data Definition Language
+   (CDDL) [CDDL] which can be expressed in both [JSON] and binary using
+   [CBOR].  Both the JSON and CBOR encodings are self-describing.  It is
+   out of scope of this document to define how the proposed encoding
+   will be mapped to a specific signaling protocol.
 
    If the companion signaling protocol supports host-to-network
    metadata, individual packets within a flow can contain metadata
@@ -182,6 +188,9 @@ Table of Contents
    information to optimize their video streaming bandwidth to fit within
    that policy.
 
+   To track metadata that are defined for host/network signalling, a new
+   IANA registry is defined: "Flow Metadata Registry" Section 10.2.
+
 2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -189,6 +198,8 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+   This document uses the following terms:
 
    Reactive policy:  Treatment given to a flow when an exceptional event
       occurs, such as diminished throughput to the host caused by radio
@@ -231,18 +242,21 @@ Table of Contents
    ; Returning a value set to 0 (or a very low value) should trigger
    ; the host to seek for better paths.
 
-   Bitrate =  {
-     nominal: uint,  ; Mbps
-     ? burst-d => burst-info
-   }
+   bitrate =  [+ nrlp]
 
-   burst-info = {
-     burst: uint,          ; Mbps
-     burstDuration: uint   ; milliseconds
+   nrlp =  {
+     ? scope: unit,
+     ? tc: uint,
+     cir: uint,  ; Mbps
+     cbs: uint,  ; bytes
+     ? eir: uint,  ; Mbps
+     ? ebs: uint,  ; bytes
+     ? pir: uint,  ; Mbps
+     ? pbs: uint  ; bytes
    }
 
    $$metadata-extensions //= (
-      ? downlinkBitrate => Bitrate,
+      ? downlinkBitrate => nrlp,
    ; Indicates whether a flow is to be offloaded to alternate
    ; available paths.
       pref-alt-path: bool
@@ -267,22 +281,20 @@ Table of Contents
    and Section 5.  Both client and network intended behaviors are
    specified for each metadata.
 
-4.  Host to Network Metadata
+4.  Host-to-Network Metadata
 
    Metadata is characterized into two different nature:
 
    Network Metadata:  This consists of metadata that specifies how a
       network element should treat that packet.  The network metadata
-      comprises of the importance field and is specified in the MSB and
-      of size 1 bit.  This field indicates if the packet is more
-      important or less important.
+      comprises of the importance metadata.  This field indicates
+      whether a packet is more important or less important.
 
    Application Metadata:  This consists of metadata that specifies how
       the application treats that packet.  The appplication metadata
-      comprises of two components - Keep/Discard bit and Reliable/
-      Unreliable bit.
+      comprises of two components: Keep/Discard and Reliable/Unreliable.
 
-4.1.  Importance
+4.1.  Packet Importance ('Importance')
 
    The "Importance" metadata signifies if the packet is of more
    important (true) or less important (false) by the host, relative to
@@ -303,7 +315,7 @@ Table of Contents
    discard packets marked importance=false in favor of packets marked
    importance=true, for the same flow.
 
-4.2.  Packet Type - Reliable/Unreliable
+4.2.  Packet Type - Reliable/Unreliable ('PacketType')
 
    The "Reliable" metadata indicates if a packet is reliably transmitted
    by the host.
@@ -331,7 +343,7 @@ Table of Contents
    be re-transmitted by the sender so dropping such traffic only defers
    it until later, but this deferral can be useful.
 
-4.3.  Packet Nature
+4.3.  Packet Nature ('PacketNature')
 
    This metadata indicates discard preference for unreliable traffic and
    reliable traffic, as detailed below.
@@ -385,7 +397,7 @@ Table of Contents
 
 5.  Network to Host Metadata
 
-5.1.  Downlink Bitrate
+5.1.  Downlink Bitrate ('DownlinkBitrate')
 
    Monthly data quotas on cellular networks can be easily exceeded by
    video streaming, in particular, if the client chooses excessively
@@ -393,29 +405,78 @@ Table of Contents
    downloaded.  The network can assist the client by informing the
    client of the network's bandwidth policy.
 
-   If the video is encoded with variable bit rate, the bitrate cannot
+   If the video is encoded with variable bitrate, the bitrate cannot
    exceed the indicated bitrate.
 
-   The nominal bitrate is calculated over each second, whereas the burst
-   bitrate is calculated over the signaled interval (burst-duration).
-   For either measurement, packets can arrive at the start of a second,
-   as near as possible behind each other, and the remaining portion of
-   that second could have no packets transmitted.
+   Scope:  Specifies whether the policy is per host, per subscriber,
+      etc.
+
+      The following values are supported:
+
+      *  "0": Subscriber
+      *  "1": Host
+      *  2-15: Unassigned values.
+
+   TC:  Specifies a traffic category to which this policy applies.
+
+      The following values are supported:
+
+      *  "0": All traffic. This is the default value.
+      *  "1": Streaming
+      *  "2": Realtime
+      *  "3": Bulk trafic
+      *  4-255: Unassigned values
+
+   Committed Information Rate (CIR) (Mbps):  Specifies the maximum
+      number of bits that a network can send during one second over an
+      attachment circuit for a traffic category.
+
+      This parameter is mandatory.
+
+   Committed Burst Size (CBS) (bytes):  Specifies the maximum burst size
+      that can be transmitted at CIR.
+
+      MUST be greated than zero.
+
+      This parameter is mandatory.
+
+   Excess Information Rate (EIR) (Mbps):  Specifies the maximum number
+      of bits that a network can send during one second for a traffic
+      category that is out of profile.
+
+      This parameter is optional.
+
+   Excess Burst Size (EBS) (bytes):  Indicates that maximum excess burst
+      size that is allowed while not complying with the CIR.
+
+      MUST be greater than zero, if present.
+
+      This parameter is optional.
+
+   Peak Information Rate (PIR) (Mbps):  Traffic that exceeds the CIR and
+      the CBS is metered to the PIR.
+
+      This parameter is optional.
+
+   Peak Burst Size (PBS) (bytes):  Specifies the maximum burst size that
+      can be transmitted at PIR.
+
+      MUST be greater than zero, if present.
 
 5.1.1.  Units
 
-   Bit rate is expressed in Mbps and duration is in milliseconds.
+   Bitrates are expressed in Mbps and burst in bytes.
 
 5.1.2.  Host Treatment
 
-   The host chooses a video streaming bit rate at or below the signaled
+   The host chooses a video streaming bitrate at or below the signaled
    rate.
 
    The host may also choose to signal the received bitrate to the remote
    peer.  The remote peer will adapt its transmission behavior to comply
    with the received bitrate.
 
-   An example of the encoding is in Appendix B.
+   An example of the encoding is provided in Appendix B.
 
 5.2.  Prefer Alternate Path ('pref-alt-path')
 
@@ -563,11 +624,23 @@ Table of Contents
    |          |                 | path if      |               |       |
    |          |                 | available    |               |       |
    +----------+-----------------+--------------+---------------+-------+
+   | 250-255  |       Exp       | Reserved     | This-Document |  1.0  |
+   |          |                 | for private  |               |       |
+   |          |                 | use          |               |       |
+   +----------+-----------------+--------------+---------------+-------+
 
                           Table 1: Initial Values
 
-   New entries can be added to the registry using "Standards Action"
+   New values in the 6-99 range can be assigned using "Standards Action"
    policy (Section 4.9 of [RFC8126]).
+
+   Values in the 100-149 range can be assigned using "Expert Review"
+   policy (Section 4.5 of [RFC8126]).
+
+   Values in the 150-249 range can be assigned using "First Come First
+   Served" (Section 4.4 of [RFC8126]).  This range can be, e.g., used by
+   other SDOs to register metadata that are specific to their domain and
+   which is not used outside that scope.
 
 Acknowledgments
 
@@ -610,9 +683,6 @@ Informative References
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
-   [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest]
-              "*** BROKEN REFERENCE ***".
-
    [I-D.herbert-host2netsig]
               Herbert, T., "Host to Network Signaling", Work in
               Progress, Internet-Draft, draft-herbert-host2netsig-00, 4
@@ -634,6 +704,14 @@ Informative References
               signal-01, 7 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
+
+   [I-D.rwbr-tsvwg-signaling-use-cases]
+              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
+              "Host to Network Signaling Use Cases for Collaborative
+              Traffic Differentiation", Work in Progress, Internet-
+              Draft, draft-rwbr-tsvwg-signaling-use-cases-02, 17 March
+              2024, <https://datatracker.ietf.org/doc/html/draft-rwbr-
+              tsvwg-signaling-use-cases-02>.
 
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
@@ -736,7 +814,7 @@ A.1.  Video Streaming
    Video Streaming Metadata:
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
         +===============+============+==============+============+
         |  Traffic type | Importance | PacketNature | PacketType |
@@ -789,10 +867,10 @@ A.1.  Video Streaming
      }
    }
 
-   ## Interactive Gaming or Audio/Video {#example-interactive-av}
+A.2.  Interactive Gaming or Audio/Video
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    Interactive A/V, downstream Metadata:
 
@@ -843,7 +921,7 @@ A.1.  Video Streaming
      }
    }
 
-A.2.  Remote Desktop Virtualization
+A.3.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.
@@ -851,7 +929,7 @@ A.2.  Remote Desktop Virtualization
    Remote Desktop Virtualization Metadata:
 
    The use case requirements and the table values below explained in
-   detail in [I-D.draft-rwbr-tsvwg-signaling-use-cases-latest].
+   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
 
    +===========+==========+==============+==========+==================+
    |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
@@ -1036,15 +1114,12 @@ Appendix B.  Example of Network-to-Host Metadata for Video Streaming
    A network element can signal the maximum bandwidth allowed for video
    streaming.  Typically, this policy limit exists in cellular networks.
 
-   The example shown in Figure 2 indicates the burst bandwidth (2 Mbps),
-   burst duration (3 seconds), and nominal (non-burst) bandwidth (1
-   Mbps) for the requesting user:
+   The example shown in Figure 2 indicates a CIR (1 Mbps) for the
+   requesting user:
 
    {
      "downlinkBitrate": {
-       "nominal": 1024,
-       "burst": 2048,
-       "burstDuration": 3000
+       "cir": 1
      }
    }
 
