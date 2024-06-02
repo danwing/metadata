@@ -1296,10 +1296,13 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
                 <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-video-streaming" class="internal xref">Video Streaming</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
-                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-interactive-gaming-or-audio" class="internal xref">Interactive Gaming or Audio/Video</a></p>
+                <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-interactive-mediaexample-in" class="internal xref">Interactive Media{#example-interactive-av}</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
-                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
+                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-live-streaming" class="internal xref">Live Streaming</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.4">
+                <p id="section-toc.1-1.13.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-remote-desktop-virtualizati" class="internal xref">Remote Desktop Virtualization</a></p>
 </li>
             </ul>
 </li>
@@ -1321,7 +1324,7 @@ endpoints while reducing the need for version negotiation.<a href="#section-abst
 <p id="section-1-1">Historically, metadata is defined within each protocol. While this can
 be very efficient on the wire (e.g., DSCP consumes only 6 bits) it
 suffers from inability to authorize or authenticate the metadata
-signaling. But the more signifcant problem is inability to interwork
+signaling. But the more significant problem is inability to interwork
 between signaling protocols because each have different definitions.
 Such interworking is often needed when the metadata signaling protocol
 for packets leaving a network differs from the metadata signaling
@@ -1329,10 +1332,9 @@ protocol entering a different network. For example, important packets
 leaving a server and its network might be marked with DSCP (as the
 sending host is known and trusted) but the receiving network doesn't
 trust the DSCP bits in received packets because there is no
-authorization or authentication for differented treatment.<a href="#section-1-1" class="pilcrow">¶</a></p>
+authorization or authentication for differential treatment.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">By using the same metadata, both networks can communicate how packets
-should be treated and use their own signaling mechanism with their
-network elements (e.g., routers, <span>[<a href="#MASQUE" class="cite xref">MASQUE</a>]</span> proxies).<a href="#section-1-2" class="pilcrow">¶</a></p>
+should be treated (e.g., routers, <span>[<a href="#MASQUE" class="cite xref">MASQUE</a>]</span> proxies).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1357,7 +1359,7 @@ will benefit from the differentiated behavior. As such, <strong>the metadata in 
 signaling protocol</strong> (<a href="#sec-meta" class="auto internal xref">Section 3</a>). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
-considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, and Transport domains).<a href="#section-1-6" class="pilcrow">¶</a></p>
+considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, network slicing, and Transport domains).<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">The metadata is described using Concise Data Definition Language (CDDL) <span>[<a href="#CDDL" class="cite xref">CDDL</a>]</span> which can be expressed
 in both <span>[<a href="#JSON" class="cite xref">JSON</a>]</span> and binary using <span>[<a href="#CBOR" class="cite xref">CBOR</a>]</span>.  Both
 the JSON and CBOR encodings are self-describing.  It is out of scope
@@ -1366,8 +1368,8 @@ a specific signaling protocol.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">If the companion signaling protocol supports host-to-network metadata,
 individual packets within a flow can contain metadata describing their
 drop preference or their reliability. The network elements aware of
-this metadata can apply preferential or deferential treatment to those
-packets during a 'reactive traffic policy' event. It is also assumed
+this metadata can apply preferential or differential treatment to those
+packets, within the same flow, during a 'reactive traffic policy' event. It is also assumed
 that such network elements are provisioned with local policy that
 guides their behavior jointly with a signaled metadata. Examples of
 metadata signaling for video streaming and for remote desktop are
@@ -1512,7 +1514,7 @@ metadata.<a href="#section-3-5" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-4.1-1">The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
-same flow.  Importance belongs to Network Metadata.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+same flow. Importance belongs to Network Metadata.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1-2">An application would mark a packet as important when it needs the
 network to treat the packet with greater preference compared to the
 unmarked packets or to packets marked important=false (of the same
@@ -2002,7 +2004,7 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-11-1">To be completed.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">Thanks to Luis Miguel Contreras for his review and comments.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-12">
@@ -2048,6 +2050,10 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Bormann, C.</span> and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR)"</span>, <span class="seriesInfo">STD 94</span>, <span class="seriesInfo">RFC 8949</span>, <span class="seriesInfo">DOI 10.17487/RFC8949</span>, <time datetime="2020-12" class="refDate">December 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8949">https://www.rfc-editor.org/rfc/rfc8949</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.-kwbdgrr-tsvwg-net-collab-rqmts">[I-D.-kwbdgrr-tsvwg-net-collab-rqmts]</dt>
+        <dd>
+<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.herbert-host2netsig">[I-D.herbert-host2netsig]</dt>
         <dd>
 <span class="refAuthor">Herbert, T.</span>, <span class="refTitle">"Host to Network Signaling"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-herbert-host2netsig-00</span>, <time datetime="2023-10-04" class="refDate">4 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00">https://datatracker.ietf.org/doc/html/draft-herbert-host2netsig-00</a>&gt;</span>. </dd>
@@ -2060,9 +2066,9 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
         <dd>
 <span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Wing, D.</span>, and <span class="refAuthor">M. Boucadair</span>, <span class="refTitle">"An Approach for Encrypted Transport Protocol Path Explicit Signals"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-reddy-tsvwg-explcit-signal-01</span>, <time datetime="2023-07-07" class="refDate">7 July 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01">https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-explcit-signal-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.rwbr-tsvwg-signaling-use-cases">[I-D.rwbr-tsvwg-signaling-use-cases]</dt>
+<dt id="I-D.rwbr-sconepro-flow-metadata">[I-D.rwbr-sconepro-flow-metadata]</dt>
         <dd>
-<span class="refAuthor">Rajagopalan, S.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Boucadair, M.</span>, and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Host to Network Signaling Use Cases for Collaborative Traffic Differentiation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-rwbr-tsvwg-signaling-use-cases-02</span>, <time datetime="2024-03-17" class="refDate">17 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-02">https://datatracker.ietf.org/doc/html/draft-rwbr-tsvwg-signaling-use-cases-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Rajagopalan, S.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Boucadair, M.</span>, and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Flow Metadata for Collaborative Host/Network Signaling"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-rwbr-sconepro-flow-metadata-01</span>, <time datetime="2024-04-26" class="refDate">26 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-rwbr-sconepro-flow-metadata-01">https://datatracker.ietf.org/doc/html/draft-rwbr-sconepro-flow-metadata-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.wing-cidfi">[I-D.wing-cidfi]</dt>
         <dd>
@@ -2155,7 +2161,10 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
 <a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-video-streaming" class="section-name selfRef">Video Streaming</a>
         </h3>
 <p id="appendix-A.1-1">Video Streaming Metadata:<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.1-2">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.rwbr-tsvwg-signaling-use-cases" class="cite xref">I-D.rwbr-tsvwg-signaling-use-cases</a>]</span>.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">The use case requirements for the below table is explained in detail in <span>[<a href="#I-D.-kwbdgrr-tsvwg-net-collab-rqmts" class="cite xref">I-D.-kwbdgrr-tsvwg-net-collab-rqmts</a>]</span>. The audio is more important than video (importance=high, PT=keep, RU=reliable), video key frames
+have middle importance (importance=low, PT=discard, RU=reliable), and both types
+of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3">The metadata for the use case is defined as follows:<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-video-st"></span><div id="_table-video-streaming">
 <table class="center" id="table-2">
           <caption>
@@ -2198,9 +2207,9 @@ This registry is inspired by the "Performance Metrics Registry" created by <span
           </tbody>
         </table>
 </div>
-<p id="appendix-A.1-4">The encoding of the metadata in CDDL for the traffic will look like:
-Video I-frame:<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-5">
+<p id="appendix-A.1-5">The encoding of the metadata in CDDL for the traffic will look like:
+Video I-frame:<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-6">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2210,10 +2219,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.1-5" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.1-6" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-6">Audio:<a href="#appendix-A.1-6" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-7">
+<p id="appendix-A.1-7">Audio:<a href="#appendix-A.1-7" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-8">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2223,10 +2232,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.1-7" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.1-8" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.1-8">Video delta P-frame:<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.1-9">
+<p id="appendix-A.1-9">Video delta P-frame:<a href="#appendix-A.1-9" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.1-10">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2236,16 +2245,16 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.1-9" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.1-10" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
-<div id="example-interactive-av">
+<div id="interactive-mediaexample-interactive-av">
 <section id="appendix-A.2">
-        <h3 id="name-interactive-gaming-or-audio">
-<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-interactive-gaming-or-audio" class="section-name selfRef">Interactive Gaming or Audio/Video</a>
+        <h3 id="name-interactive-mediaexample-in">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-interactive-mediaexample-in" class="section-name selfRef">Interactive Media{#example-interactive-av}</a>
         </h3>
-<p id="appendix-A.2-1">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.rwbr-tsvwg-signaling-use-cases" class="cite xref">I-D.rwbr-tsvwg-signaling-use-cases</a>]</span>.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-1">Based on metadata types listed in the <span>[<a href="#I-D.rwbr-sconepro-flow-metadata" class="cite xref">I-D.rwbr-sconepro-flow-metadata</a>]</span>, the host to network metadata parameters for interactive media type is given below.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.2-2">Interactive A/V, downstream Metadata:<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-interact"></span><div id="_table-interactive-av-downstream">
 <table class="center" id="table-3">
@@ -2283,9 +2292,103 @@ metadata = {
           </tbody>
         </table>
 </div>
-<p id="appendix-A.2-4">Encoding:<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-5">Video key frame:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-6">
+<span id="name-example-values-for-interacti"></span><div id="_table-video-av-upstream">
+<table class="center" id="table-4">
+          <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-example-values-for-interacti" class="selfRef">Example Values for Interactive A/V, upstream</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-5">Many interactive audio/video applications also support sharing the presenter's
+screen, file, video, or pictures.  During this sharing the presenter's video
+is less important but the screen or picture is more important.  This change
+of imporance can be conveyed in metadata to the network, as in the table
+below:<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-6">Interactive A/V, upstream Metadata:<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-interactiv"></span><div id="_table-video-av-sharing">
+<table class="center" id="table-5">
+          <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-example-values-for-interactiv" class="selfRef">Example Values for Interactive A/V with picture sharing, upstream</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">picture sharing</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.2-8">In many scenarios a game or VoIP application will want to signal different
+metadata for the same type of packet in each direction.  For example, for
+a game, video in the server-to-client direction might be more important
+than audio, whereas input devices (e.g., keystrokes) might be more important
+than audio.<a href="#appendix-A.2-8" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-A.2-9.1">
+            <p id="appendix-A.2-9.1.1">Todo: finish the encoding section for more metadata represented above.<a href="#appendix-A.2-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="appendix-A.2-10">Encoding:<a href="#appendix-A.2-10" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-11">Video key frame:<a href="#appendix-A.2-11" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-12">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2295,10 +2398,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.2-6" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-12" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-7">Video delta frame:<a href="#appendix-A.2-7" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-8">
+<p id="appendix-A.2-13">Video delta frame:<a href="#appendix-A.2-13" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-14">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2308,10 +2411,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.2-8" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-14" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.2-9">Audio:<a href="#appendix-A.2-9" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.2-10">
+<p id="appendix-A.2-15">Audio:<a href="#appendix-A.2-15" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.2-16">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2321,23 +2424,105 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.2-10" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.2-16" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="example-ls">
+<section id="appendix-A.3">
+        <h3 id="name-live-streaming">
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-live-streaming" class="section-name selfRef">Live Streaming</a>
+        </h3>
+<p id="appendix-A.3-1">Based on metadata types listed in the <span>[<a href="#I-D.rwbr-sconepro-flow-metadata" class="cite xref">I-D.rwbr-sconepro-flow-metadata</a>]</span>, the host to network metadata parameters for interactive media type is given below.<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">Metadata for live-streaming that prefers video over audio: (eg. Superbowl game coverage)<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-live-str"></span><div id="_table-video-livestream">
+<table class="center" id="table-6">
+          <caption>
+<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#name-example-values-for-live-str" class="selfRef">Example Values for live streaming of video preferred event</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+<p id="appendix-A.3-4">Metadata for live-streaming that prefers audio over video: (eg. Music Concert)<a href="#appendix-A.3-4" class="pilcrow">¶</a></p>
+<span id="name-example-values-for-live-stre"></span><div id="_table-audio-livestream">
+<table class="center" id="table-7">
+          <caption>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-example-values-for-live-stre" class="selfRef">Example Values for live streaming of audio preferred event</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-center" rowspan="1" colspan="1">Traffic type</th>
+              <th class="text-center" rowspan="1" colspan="1">Importance</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketNature</th>
+              <th class="text-center" rowspan="1" colspan="1">PacketType</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video key frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">video delta frame</td>
+              <td class="text-center" rowspan="1" colspan="1">low</td>
+              <td class="text-center" rowspan="1" colspan="1">discard</td>
+              <td class="text-center" rowspan="1" colspan="1">unreliable</td>
+            </tr>
+            <tr>
+              <td class="text-center" rowspan="1" colspan="1">audio</td>
+              <td class="text-center" rowspan="1" colspan="1">high</td>
+              <td class="text-center" rowspan="1" colspan="1">realtime</td>
+              <td class="text-center" rowspan="1" colspan="1">reliable</td>
+            </tr>
+          </tbody>
+        </table>
 </div>
 </section>
 </div>
 <div id="example-rdt">
-<section id="appendix-A.3">
+<section id="appendix-A.4">
         <h3 id="name-remote-desktop-virtualizati">
-<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-remote-desktop-virtualizati" class="section-name selfRef">Remote Desktop Virtualization</a>
         </h3>
-<p id="appendix-A.3-1">Example packet metadata for Desktop Virtualization (like Citrix
-Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.3-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
-<p id="appendix-A.3-3">The use case requirements and the table values below explained in detail in <span>[<a href="#I-D.rwbr-tsvwg-signaling-use-cases" class="cite xref">I-D.rwbr-tsvwg-signaling-use-cases</a>]</span>.<a href="#appendix-A.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-1">Example packet metadata for Desktop Virtualization (like Citrix
+Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-2">Remote Desktop Virtualization Metadata:<a href="#appendix-A.4-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-3">The use case requirements for the below table is explained in detail in <span>[<a href="#I-D.-kwbdgrr-tsvwg-net-collab-rqmts" class="cite xref">I-D.-kwbdgrr-tsvwg-net-collab-rqmts</a>]</span>. The metadata for the use case is defined as follows:<a href="#appendix-A.4-3" class="pilcrow">¶</a></p>
 <span id="name-example-values-for-remote-d"></span><div id="_table-desktop-virtualization-s2c">
-<table class="center" id="table-4">
+<table class="center" id="table-8">
           <caption>
-<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#table-8" class="selfRef">Table 8</a>:
 <a href="#name-example-values-for-remote-d" class="selfRef">Example Values for Remote Desktop Virtualization Metadata, server to client</a>
           </caption>
 <thead>
@@ -2402,9 +2587,9 @@ Virtual Apps and Desktops - CVAD) application.<a href="#appendix-A.3-1" class="p
           </tbody>
         </table>
 </div>
-<p id="appendix-A.3-5">Encoding:<a href="#appendix-A.3-5" class="pilcrow">¶</a></p>
-<p id="appendix-A.3-6">Glyph critical:<a href="#appendix-A.3-6" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.3-7">
+<p id="appendix-A.4-5">Encoding:<a href="#appendix-A.4-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-6">Glyph critical:<a href="#appendix-A.4-6" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.4-7">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2414,10 +2599,10 @@ metadata = {
     "realtime": true
   }
 }
-</pre><a href="#appendix-A.3-7" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.4-7" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.3-8">Glyph smoothing:<a href="#appendix-A.3-8" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.3-9">
+<p id="appendix-A.4-8">Glyph smoothing:<a href="#appendix-A.4-8" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.4-9">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2427,10 +2612,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.3-9" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.4-9" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.3-10">Interactive Audio:<a href="#appendix-A.3-10" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.3-11">
+<p id="appendix-A.4-10">Interactive Audio:<a href="#appendix-A.4-10" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.4-11">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2440,10 +2625,10 @@ metadata = {
     "prefer-keep": true
   }
 }
-</pre><a href="#appendix-A.3-11" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.4-11" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.3-12">Haptic feedback:<a href="#appendix-A.3-12" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.3-13">
+<p id="appendix-A.4-12">Haptic feedback:<a href="#appendix-A.4-12" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.4-13">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2453,10 +2638,10 @@ metadata = {
     "prefer-keep": false
   }
 }
-</pre><a href="#appendix-A.3-13" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.4-13" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A.3-14">File copy:<a href="#appendix-A.3-14" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="appendix-A.3-15">
+<p id="appendix-A.4-14">File copy:<a href="#appendix-A.4-14" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="appendix-A.4-15">
 <pre>
 metadata = {
   "metadata-type": 1,
@@ -2466,7 +2651,7 @@ metadata = {
     "realtime": false
   }
 }
-</pre><a href="#appendix-A.3-15" class="pilcrow">¶</a>
+</pre><a href="#appendix-A.4-15" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
