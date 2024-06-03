@@ -175,7 +175,8 @@ Reactive policy:
 : Treatment given to a flow when an exceptional event occurs, such as
 diminished throughput to the host caused by radio interference or weak
 radio signal, congestion on the network caused by other users or other
-applications on the same host.
+applications on the same host, denial of service attacks, etc. Characterizing such exceptional events
+is deployment-specific.
 
 Intentional policy:
 : Configured bandwidth, pps, or similar throughput constraints applied
