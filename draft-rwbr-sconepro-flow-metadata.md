@@ -694,7 +694,7 @@ Virtual Apps and Desktops - CVAD) application.
 
 Remote Desktop Virtualization Metadata:
 
-The use case requirements for the below table is explained in detail in {{?I-D.-kwbdgrr-tsvwg-net-collab-rqmts}}. The metadata for the use case is defined as follows:
+The use case requirements for the below table is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The metadata for the use case is defined as follows:
 
 | Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
