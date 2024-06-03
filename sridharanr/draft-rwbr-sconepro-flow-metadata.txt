@@ -685,9 +685,6 @@ Informative References
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/rfc/rfc8949>.
 
-   [I-D.-kwbdgrr-tsvwg-net-collab-rqmts]
-              "*** BROKEN REFERENCE ***".
-
    [I-D.herbert-host2netsig]
               Herbert, T., "Host to Network Signaling", Work in
               Progress, Internet-Draft, draft-herbert-host2netsig-00, 4
@@ -1022,7 +1019,7 @@ A.4.  Remote Desktop Virtualization
    Remote Desktop Virtualization Metadata:
 
    The use case requirements for the below table is explained in detail
-   in [I-D.-kwbdgrr-tsvwg-net-collab-rqmts].  The metadata for the use
+   in [I-D.kwbdgrr-tsvwg-net-collab-rqmts].  The metadata for the use
    case is defined as follows:
 
    +===========+==========+==============+==========+==================+
