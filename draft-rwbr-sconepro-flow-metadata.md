@@ -525,7 +525,7 @@ Thanks to Luis Miguel Contreras for his review and comments.
 
 Video Streaming Metadata:
 
-The use case requirements for the below table is explained in detail in {{?I-D.-kwbdgrr-tsvwg-net-collab-rqmts}}. The audio is more important than video (importance=high, PT=keep, RU=reliable), video key frames
+The use case requirements for {{table-video-streaming}} is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The audio is more important than video (importance=high, PT=keep, RU=reliable), video key frames
 have middle importance (importance=low, PT=discard, RU=reliable), and both types
 of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).
 
