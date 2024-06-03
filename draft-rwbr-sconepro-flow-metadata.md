@@ -127,7 +127,7 @@ will benefit from the differentiated behavior. As such, **the metadata in this d
 signaling protocol** ({{sec-meta}}). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
-considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, network slicing, and Transport domains).
+considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, network slicing {{?RFC9543}}, and Transport domains).
 
 The metadata is described using Concise Data Definition Language (CDDL) {{!CDDL=RFC8610}} which can be expressed
 in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
