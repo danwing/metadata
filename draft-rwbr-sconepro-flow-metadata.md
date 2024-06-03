@@ -581,7 +581,7 @@ metadata = {
 
 ## Interactive Media{#example-interactive-av}
 
-Based on metadata types listed in the {{?I-D.rwbr-sconepro-flow-metadata}}, the host to network metadata parameters for interactive media type is given below.
+Based on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.
 
 Interactive A/V, downstream Metadata:
 
