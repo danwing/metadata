@@ -135,6 +135,11 @@ Table of Contents
    because there is no authorization or authentication for differential
    treatment.
 
+   This document does not assume nor require that all on-path network
+   elements must understand the meaning associated with signaled
+   metadata.  Only a few network nodes would need to be upgraded to
+   support the metadata signaling.
+
    By using the same metadata, both networks can communicate how packets
    should be treated and use their own signaling mechanism with their
    network elements (e.g., routers or proxies).  Readers should refer to
