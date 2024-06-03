@@ -97,7 +97,7 @@ endpoints while reducing the need for version negotiation.
 Historically, metadata is defined within each protocol. While this can
 be very efficient on the wire (e.g., DSCP consumes only 6 bits) it
 suffers from inability to authorize or authenticate the metadata
-signaling. But the more signifcant problem is inability to interwork
+signaling. But the more significant problem is inability to interwork
 between signaling protocols because each have different definitions.
 Such interworking is often needed when the metadata signaling protocol
 for packets leaving a network differs from the metadata signaling
@@ -105,13 +105,13 @@ protocol entering a different network. For example, important packets
 leaving a server and its network might be marked with DSCP (as the
 sending host is known and trusted) but the receiving network doesn't
 trust the DSCP bits in received packets because there is no
-authorization or authentication for differented treatment.
+authorization or authentication for differential treatment.
 
 By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
 network elements (e.g., routers or proxies). Readers should refer to
 {{Section 7.2 of ?I-D.rwbr-tsvwg-signaling-use-cases}} for a discussion about why application- and protocol-specific signaling channels are
-suboptimal.
+
 
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
@@ -130,7 +130,7 @@ will benefit from the differentiated behavior. As such, **the metadata in this d
 signaling protocol** ({{sec-meta}}). In doing so, we ensure that consistent
 metadata definitions are used by the various signaling protocols. Also,
 this approach allows to factorize key considerations such as security and operational
-considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, and Transport domains).
+considerations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, network slicing {{?RFC9543}}, and Transport domains).
 
 The metadata is described using Concise Data Definition Language (CDDL) {{!CDDL=RFC8610}} which can be expressed
 in both {{?JSON=RFC8259}} and binary using {{?CBOR=RFC8949}}.  Both
@@ -152,8 +152,8 @@ distinct flows or applications**.
 If the companion signaling protocol supports host-to-network metadata,
 individual packets within a flow can contain metadata describing their
 drop preference or their reliability. The network elements aware of
-this metadata can apply preferential or deferential treatment to those
-packets during a 'reactive traffic policy' event. It is also assumed
+this metadata can apply preferential or differential treatment to those
+packets, within the same flow, during a 'reactive traffic policy' event. It is also assumed
 that such network elements are provisioned with local policy that
 guides their behavior jointly with a signaled metadata. Examples of
 metadata signaling for video streaming and for remote desktop are
@@ -178,7 +178,8 @@ Reactive policy:
 : Treatment given to a flow when an exceptional event occurs, such as
 diminished throughput to the host caused by radio interference or weak
 radio signal, congestion on the network caused by other users or other
-applications on the same host.
+applications on the same host, denial of service attacks, etc. Characterizing such exceptional events
+is deployment-specific.
 
 Intentional policy:
 : Configured bandwidth, pps, or similar throughput constraints applied
@@ -269,7 +270,7 @@ Application Metadata:
 
 The "Importance" metadata signifies if the packet is of more important (true) or
 less important (false) by the host, relative to other packets in the
-same flow.  Importance belongs to Network Metadata.
+same flow. Importance belongs to Network Metadata.
 
 An application would mark a packet as important when it needs the
 network to treat the packet with greater preference compared to the
@@ -518,7 +519,7 @@ Values in the 150-249 range can be assigned using "First Come First Served" ({{S
 # Acknowledgments
 {:numbered="false"}
 
-To be completed.
+Thanks to Luis Miguel Contreras for his review and comments.
 
 --- back
 
@@ -528,7 +529,11 @@ To be completed.
 
 Video Streaming Metadata:
 
-The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
+The use case requirements for {{table-video-streaming}} is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The audio is more important than video (importance=high, PT=keep, RU=reliable), video key frames
+have middle importance (importance=low, PT=discard, RU=reliable), and both types
+of video delta frames (P-frame and B-frame) have least importance (importance=low, PT=discard, RU=unreliable).
+
+The metadata for the use case is defined as follows:
 
 | Traffic type                             | Importance | PacketNature      | PacketType           |
 |:----------------------------------------:|:----------:|:-----------------:|:--------------------:|
@@ -578,9 +583,9 @@ metadata = {
 }
 ~~~~~
 
-## Interactive Gaming or Audio/Video  {#example-interactive-av}
+## Interactive Media{#example-interactive-av}
 
-The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
+Based on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.
 
 Interactive A/V, downstream Metadata:
 
@@ -590,6 +595,38 @@ Interactive A/V, downstream Metadata:
 | video delta frame | low        | discard           | unreliable           |
 | audio             | high       | realtime          | reliable             |
 {: #table-interactive-av-downstream title="Example Values for Interactive A/V, downstream"}
+
+| Traffic type      | Importance | PacketNature      | PacketType           |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | realtime          | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | realtime          | reliable             |
+{: #table-video-av-upstream title="Example Values for Interactive A/V, upstream"}
+
+Many interactive audio/video applications also support sharing the presenter's
+screen, file, video, or pictures.  During this sharing the presenter's video
+is less important but the screen or picture is more important.  This change
+of imporance can be conveyed in metadata to the network, as in the table
+below:
+
+Interactive A/V, upstream Metadata:
+
+| Traffic type      | Importance | PacketNature      | PacketType           |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | realtime          | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | realtime          | reliable             |
+| picture sharing   | high       | realtime          | reliable             |
+{: #table-video-av-sharing title="Example Values for Interactive A/V with picture sharing, upstream"}
+
+In many scenarios a game or VoIP application will want to signal different
+metadata for the same type of packet in each direction.  For example, for
+a game, video in the server-to-client direction might be more important
+than audio, whereas input devices (e.g., keystrokes) might be more important
+than audio.
+
+>Todo: finish the encoding section for more metadata represented above.
+
 
 Encoding:
 
@@ -632,6 +669,28 @@ metadata = {
 }
 ~~~~~
 
+## Live Streaming {#example-ls}
+
+Based on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.
+
+Metadata for live-streaming that prefers video over audio: (eg. Superbowl game coverage)
+
+| Traffic type      | Importance | PacketNature      | PacketType           |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | high        | realtime          | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | low       | discard          | unreliable             |
+{: #table-video-livestream title="Example Values for live streaming of video preferred event"}
+
+Metadata for live-streaming that prefers audio over video: (eg. Music Concert)
+
+| Traffic type      | Importance | PacketNature      | PacketType           |
+|:-----------------:|:----------:|:-----------------:|:--------------------:|
+| video key frame   | low        | realtime          | reliable             |
+| video delta frame | low        | discard           | unreliable           |
+| audio             | high       | realtime          | reliable             |
+{: #table-audio-livestream title="Example Values for live streaming of audio preferred event"}
+
 ## Remote Desktop Virtualization {#example-rdt}
 
 Example packet metadata for Desktop Virtualization (like Citrix
@@ -639,7 +698,7 @@ Virtual Apps and Desktops - CVAD) application.
 
 Remote Desktop Virtualization Metadata:
 
-The use case requirements and the table values below explained in detail in {{?I-D.rwbr-tsvwg-signaling-use-cases}}.
+The use case requirements for the below table is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The metadata for the use case is defined as follows:
 
 | Traffic type               | Importance | PacketNature    | PacketType          | Comments  |
 |:--------------------------:|:----------:|:---------------:|:-------------------:|:---------:|
