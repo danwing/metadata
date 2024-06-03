@@ -136,7 +136,10 @@ Table of Contents
    treatment.
 
    By using the same metadata, both networks can communicate how packets
-   should be treated (e.g., routers, [MASQUE] proxies).
+   should be treated and use their own signaling mechanism with their
+   network elements (e.g., routers or proxies).  Readers should refer to
+   Section 7.2 of [I-D.rwbr-tsvwg-signaling-use-cases] for a discussion
+   about why application- and protocol-specific signaling channels are
 
    Both the above use cases are improved by metadata described in this
    document.  This document is a companion to host-to-network signaling
@@ -712,6 +715,14 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
 
+   [I-D.rwbr-tsvwg-signaling-use-cases]
+              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
+              "Host to Network Signaling Use Cases for Collaborative
+              Traffic Differentiation", Work in Progress, Internet-
+              Draft, draft-rwbr-tsvwg-signaling-use-cases-02, 17 March
+              2024, <https://datatracker.ietf.org/doc/html/draft-rwbr-
+              tsvwg-signaling-use-cases-02>.
+
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
               CID Flow Indicator (CIDFI)", Work in Progress, Internet-
@@ -729,12 +740,6 @@ Informative References
               Datagram Extension to QUIC", RFC 9221,
               DOI 10.17487/RFC9221, March 2022,
               <https://www.rfc-editor.org/rfc/rfc9221>.
-
-   [MASQUE]   Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
-              Proxying Using HTTP", Work in Progress, Internet-Draft,
-              draft-ietf-masque-quic-proxy-02, 21 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-masque-
-              quic-proxy-02>.
 
    [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
