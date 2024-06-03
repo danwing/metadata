@@ -667,7 +667,7 @@ metadata = {
 
 ## Live Streaming {#example-ls}
 
-Based on metadata types listed in the {{?I-D.rwbr-sconepro-flow-metadata}}, the host to network metadata parameters for interactive media type is given below.
+Based on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.
 
 Metadata for live-streaming that prefers video over audio: (eg. Superbowl game coverage)
 
