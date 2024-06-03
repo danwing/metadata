@@ -107,6 +107,10 @@ sending host is known and trusted) but the receiving network doesn't
 trust the DSCP bits in received packets because there is no
 authorization or authentication for differented treatment.
 
+This document does not assume nor require that all on-path network elements must
+understand the meaning associated with signaled metadata. Only a few network nodes
+would need to be upgraded to support the metadata signaling.
+
 By using the same metadata, both networks can communicate how packets
 should be treated and use their own signaling mechanism with their
 network elements (e.g., routers, {{?MASQUE=I-D.ietf-masque-quic-proxy}} proxies).
