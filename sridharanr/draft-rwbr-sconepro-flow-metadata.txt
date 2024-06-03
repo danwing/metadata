@@ -713,14 +713,6 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
 
-   [I-D.rwbr-sconepro-flow-metadata]
-              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
-              "Flow Metadata for Collaborative Host/Network Signaling",
-              Work in Progress, Internet-Draft, draft-rwbr-sconepro-
-              flow-metadata-01, 26 April 2024,
-              <https://datatracker.ietf.org/doc/html/draft-rwbr-
-              sconepro-flow-metadata-01>.
-
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
               CID Flow Indicator (CIDFI)", Work in Progress, Internet-
@@ -987,9 +979,8 @@ A.2.  Interactive Media{#example-interactive-av}
 
 A.3.  Live Streaming
 
-   Based on metadata types listed in the
-   [I-D.rwbr-sconepro-flow-metadata], the host to network metadata
-   parameters for interactive media type is given below.
+   Based on metadata types listed in this document, the host to network
+   metadata parameters for interactive media type is given below.
 
    Metadata for live-streaming that prefers video over audio: (eg.
    Superbowl game coverage)
