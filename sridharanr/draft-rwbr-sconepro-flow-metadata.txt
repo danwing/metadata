@@ -702,6 +702,9 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-
               kaippallimalil-tsvwg-media-hdr-wireless-04>.
 
+   [I-D.kwbdgrr-tsvwg-net-collab-rqmts]
+              "*** BROKEN REFERENCE ***".
+
    [I-D.reddy-tsvwg-explcit-signal]
               Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
               Encrypted Transport Protocol Path Explicit Signals", Work
@@ -824,13 +827,12 @@ A.1.  Video Streaming
 
    Video Streaming Metadata:
 
-   The use case requirements for the below table is explained in detail
-   in [I-D.-kwbdgrr-tsvwg-net-collab-rqmts].  The audio is more
-   important than video (importance=high, PT=keep, RU=reliable), video
-   key frames have middle importance (importance=low, PT=discard,
-   RU=reliable), and both types of video delta frames (P-frame and
-   B-frame) have least importance (importance=low, PT=discard,
-   RU=unreliable).
+   The use case requirements for Table 2 is explained in detail in
+   [I-D.kwbdgrr-tsvwg-net-collab-rqmts].  The audio is more important
+   than video (importance=high, PT=keep, RU=reliable), video key frames
+   have middle importance (importance=low, PT=discard, RU=reliable), and
+   both types of video delta frames (P-frame and B-frame) have least
+   importance (importance=low, PT=discard, RU=unreliable).
 
    The metadata for the use case is defined as follows:
 
