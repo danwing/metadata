@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 4 December 2024                                    M. Boucadair
+Expires: 5 December 2024                                    M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                             2 June 2024
+                                                             3 June 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 December 2024.
+   This Internet-Draft will expire on 5 December 2024.
 
 Copyright Notice
 
@@ -164,8 +164,8 @@ Table of Contents
    signaling protocols.  Also, this approach allows to factorize key
    considerations such as security and operational considerations.  This
    approach also ease passing policies between controllers of domains
-   involved in packet delivery (e.g., RAN, Core, network slicing, and
-   Transport domains).
+   involved in packet delivery (e.g., RAN, Core, network slicing
+   [RFC9543], and Transport domains).
 
    The metadata is described using Concise Data Definition Language
    (CDDL) [CDDL] which can be expressed in both [JSON] and binary using
@@ -803,6 +803,12 @@ Informative References
    [RFC9293]  Eddy, W., Ed., "Transmission Control Protocol (TCP)",
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9293>.
+
+   [RFC9543]  Farrel, A., Ed., Drake, J., Ed., Rokui, R., Homma, S.,
+              Makhijani, K., Contreras, L., and J. Tantsura, "A
+              Framework for Network Slices in Networks Built from IETF
+              Technologies", RFC 9543, DOI 10.17487/RFC9543, March 2024,
+              <https://www.rfc-editor.org/rfc/rfc9543>.
 
    [RTP]      Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
