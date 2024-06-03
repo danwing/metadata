@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 30 September 2024                                  M. Boucadair
+Expires: 5 December 2024                                    M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                           29 March 2024
+                                                             3 June 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 September 2024.
+   This Internet-Draft will expire on 5 December 2024.
 
 Copyright Notice
 
@@ -112,8 +112,9 @@ Table of Contents
      Informative References
    Appendix A.  Examples of Host-to-Network Metadata Encoding
      A.1.  Video Streaming
-     A.2.  Interactive Gaming or Audio/Video
-     A.3.  Remote Desktop Virtualization
+     A.2.  Interactive Media{#example-interactive-av}
+     A.3.  Live Streaming
+     A.4.  Remote Desktop Virtualization
    Appendix B.  Example of Network-to-Host Metadata for Video
            Streaming
    Authors' Addresses
@@ -123,20 +124,19 @@ Table of Contents
    Historically, metadata is defined within each protocol.  While this
    can be very efficient on the wire (e.g., DSCP consumes only 6 bits)
    it suffers from inability to authorize or authenticate the metadata
-   signaling.  But the more signifcant problem is inability to interwork
-   between signaling protocols because each have different definitions.
-   Such interworking is often needed when the metadata signaling
-   protocol for packets leaving a network differs from the metadata
-   signaling protocol entering a different network.  For example,
-   important packets leaving a server and its network might be marked
-   with DSCP (as the sending host is known and trusted) but the
+   signaling.  But the more significant problem is inability to
+   interwork between signaling protocols because each have different
+   definitions.  Such interworking is often needed when the metadata
+   signaling protocol for packets leaving a network differs from the
+   metadata signaling protocol entering a different network.  For
+   example, important packets leaving a server and its network might be
+   marked with DSCP (as the sending host is known and trusted) but the
    receiving network doesn't trust the DSCP bits in received packets
-   because there is no authorization or authentication for differented
+   because there is no authorization or authentication for differential
    treatment.
 
    By using the same metadata, both networks can communicate how packets
-   should be treated and use their own signaling mechanism with their
-   network elements (e.g., routers, [MASQUE] proxies).
+   should be treated (e.g., routers, [MASQUE] proxies).
 
    Both the above use cases are improved by metadata described in this
    document.  This document is a companion to host-to-network signaling
@@ -164,7 +164,8 @@ Table of Contents
    signaling protocols.  Also, this approach allows to factorize key
    considerations such as security and operational considerations.  This
    approach also ease passing policies between controllers of domains
-   involved in packet delivery (e.g., RAN, Core, and Transport domains).
+   involved in packet delivery (e.g., RAN, Core, network slicing
+   [RFC9543], and Transport domains).
 
    The metadata is described using Concise Data Definition Language
    (CDDL) [CDDL] which can be expressed in both [JSON] and binary using
@@ -175,12 +176,13 @@ Table of Contents
    If the companion signaling protocol supports host-to-network
    metadata, individual packets within a flow can contain metadata
    describing their drop preference or their reliability.  The network
-   elements aware of this metadata can apply preferential or deferential
-   treatment to those packets during a 'reactive traffic policy' event.
-   It is also assumed that such network elements are provisioned with
-   local policy that guides their behavior jointly with a signaled
-   metadata.  Examples of metadata signaling for video streaming and for
-   remote desktop are provided in Appendix A.
+   elements aware of this metadata can apply preferential or
+   differential treatment to those packets, within the same flow, during
+   a 'reactive traffic policy' event.  It is also assumed that such
+   network elements are provisioned with local policy that guides their
+   behavior jointly with a signaled metadata.  Examples of metadata
+   signaling for video streaming and for remote desktop are provided in
+   Appendix A.
 
    For network-to-host metadata, a host can be informed of network
    policy for nominal downlink bandwidth.  Certain applications, such as
@@ -644,7 +646,7 @@ Table of Contents
 
 Acknowledgments
 
-   To be completed.
+   Thanks to Luis Miguel Contreras for his review and comments.
 
 References
 
@@ -697,6 +699,9 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-
               kaippallimalil-tsvwg-media-hdr-wireless-04>.
 
+   [I-D.kwbdgrr-tsvwg-net-collab-rqmts]
+              "*** BROKEN REFERENCE ***".
+
    [I-D.reddy-tsvwg-explcit-signal]
               Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
               Encrypted Transport Protocol Path Explicit Signals", Work
@@ -704,14 +709,6 @@ Informative References
               signal-01, 7 July 2023,
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
-
-   [I-D.rwbr-tsvwg-signaling-use-cases]
-              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
-              "Host to Network Signaling Use Cases for Collaborative
-              Traffic Differentiation", Work in Progress, Internet-
-              Draft, draft-rwbr-tsvwg-signaling-use-cases-02, 17 March
-              2024, <https://datatracker.ietf.org/doc/html/draft-rwbr-
-              tsvwg-signaling-use-cases-02>.
 
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
@@ -733,9 +730,9 @@ Informative References
 
    [MASQUE]   Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
               Proxying Using HTTP", Work in Progress, Internet-Draft,
-              draft-ietf-masque-quic-proxy-01, 12 February 2024,
+              draft-ietf-masque-quic-proxy-02, 21 May 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-masque-
-              quic-proxy-01>.
+              quic-proxy-02>.
 
    [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
@@ -799,6 +796,12 @@ Informative References
               STD 7, RFC 9293, DOI 10.17487/RFC9293, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9293>.
 
+   [RFC9543]  Farrel, A., Ed., Drake, J., Ed., Rokui, R., Homma, S.,
+              Makhijani, K., Contreras, L., and J. Tantsura, "A
+              Framework for Network Slices in Networks Built from IETF
+              Technologies", RFC 9543, DOI 10.17487/RFC9543, March 2024,
+              <https://www.rfc-editor.org/rfc/rfc9543>.
+
    [RTP]      Schulzrinne, H., Casner, S., Frederick, R., and V.
               Jacobson, "RTP: A Transport Protocol for Real-Time
               Applications", STD 64, RFC 3550, DOI 10.17487/RFC3550,
@@ -813,8 +816,14 @@ A.1.  Video Streaming
 
    Video Streaming Metadata:
 
-   The use case requirements and the table values below explained in
-   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
+   The use case requirements for Table 2 is explained in detail in
+   [I-D.kwbdgrr-tsvwg-net-collab-rqmts].  The audio is more important
+   than video (importance=high, PT=keep, RU=reliable), video key frames
+   have middle importance (importance=low, PT=discard, RU=reliable), and
+   both types of video delta frames (P-frame and B-frame) have least
+   importance (importance=low, PT=discard, RU=unreliable).
+
+   The metadata for the use case is defined as follows:
 
         +===============+============+==============+============+
         |  Traffic type | Importance | PacketNature | PacketType |
@@ -867,10 +876,10 @@ A.1.  Video Streaming
      }
    }
 
-A.2.  Interactive Gaming or Audio/Video
+A.2.  Interactive Media{#example-interactive-av}
 
-   The use case requirements and the table values below explained in
-   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
+   Based on metadata types listed in this document, the host to network
+   metadata parameters for interactive media type is given below.
 
    Interactive A/V, downstream Metadata:
 
@@ -885,6 +894,50 @@ A.2.  Interactive Gaming or Audio/Video
       +-------------------+------------+--------------+------------+
 
          Table 3: Example Values for Interactive A/V, downstream
+
+      +===================+============+==============+============+
+      |    Traffic type   | Importance | PacketNature | PacketType |
+      +===================+============+==============+============+
+      |  video key frame  |    low     |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      | video delta frame |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+      |       audio       |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+
+          Table 4: Example Values for Interactive A/V, upstream
+
+   Many interactive audio/video applications also support sharing the
+   presenter's screen, file, video, or pictures.  During this sharing
+   the presenter's video is less important but the screen or picture is
+   more important.  This change of imporance can be conveyed in metadata
+   to the network, as in the table below:
+
+   Interactive A/V, upstream Metadata:
+
+      +===================+============+==============+============+
+      |    Traffic type   | Importance | PacketNature | PacketType |
+      +===================+============+==============+============+
+      |  video key frame  |    low     |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      | video delta frame |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+      |       audio       |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      |  picture sharing  |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+
+         Table 5: Example Values for Interactive A/V with picture
+                            sharing, upstream
+
+   In many scenarios a game or VoIP application will want to signal
+   different metadata for the same type of packet in each direction.
+   For example, for a game, video in the server-to-client direction
+   might be more important than audio, whereas input devices (e.g.,
+   keystrokes) might be more important than audio.
+
+      Todo: finish the encoding section for more metadata represented
+      above.
 
    Encoding:
 
@@ -921,15 +974,53 @@ A.2.  Interactive Gaming or Audio/Video
      }
    }
 
-A.3.  Remote Desktop Virtualization
+A.3.  Live Streaming
+
+   Based on metadata types listed in this document, the host to network
+   metadata parameters for interactive media type is given below.
+
+   Metadata for live-streaming that prefers video over audio: (eg.
+   Superbowl game coverage)
+
+      +===================+============+==============+============+
+      |    Traffic type   | Importance | PacketNature | PacketType |
+      +===================+============+==============+============+
+      |  video key frame  |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      | video delta frame |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+      |       audio       |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+
+           Table 6: Example Values for live streaming of video
+                             preferred event
+
+   Metadata for live-streaming that prefers audio over video: (eg.
+   Music Concert)
+
+      +===================+============+==============+============+
+      |    Traffic type   | Importance | PacketNature | PacketType |
+      +===================+============+==============+============+
+      |  video key frame  |    low     |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+      | video delta frame |    low     |   discard    | unreliable |
+      +-------------------+------------+--------------+------------+
+      |       audio       |    high    |   realtime   |  reliable  |
+      +-------------------+------------+--------------+------------+
+
+           Table 7: Example Values for live streaming of audio
+                             preferred event
+
+A.4.  Remote Desktop Virtualization
 
    Example packet metadata for Desktop Virtualization (like Citrix
    Virtual Apps and Desktops - CVAD) application.
 
    Remote Desktop Virtualization Metadata:
 
-   The use case requirements and the table values below explained in
-   detail in [I-D.rwbr-tsvwg-signaling-use-cases].
+   The use case requirements for the below table is explained in detail
+   in [I-D.kwbdgrr-tsvwg-net-collab-rqmts].  The metadata for the use
+   case is defined as follows:
 
    +===========+==========+==============+==========+==================+
    |  Traffic  |Importance| PacketNature |PacketType|     Comments     |
@@ -1049,7 +1140,7 @@ A.3.  Remote Desktop Virtualization
    |           |          |              |          |    elements.     |
    +-----------+----------+--------------+----------+------------------+
 
-         Table 4: Example Values for Remote Desktop Virtualization
+         Table 8: Example Values for Remote Desktop Virtualization
                          Metadata, server to client
 
    Encoding:
