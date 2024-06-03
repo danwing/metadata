@@ -108,7 +108,10 @@ trust the DSCP bits in received packets because there is no
 authorization or authentication for differential treatment.
 
 By using the same metadata, both networks can communicate how packets
-should be treated (e.g., routers, {{?MASQUE=I-D.ietf-masque-quic-proxy}} proxies).
+should be treated and use their own signaling mechanism with their
+network elements (e.g., routers or proxies). Readers should refer to
+{{Section 7.2 of ?I-D.rwbr-tsvwg-signaling-use-cases}} for a discussion about why application- and protocol-specific signaling channels are
+
 
 Both the above use cases are improved by metadata described in this document. This
 document is a companion to host-to-network signaling the metadata itself, such as:
