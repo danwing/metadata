@@ -460,15 +460,7 @@ TBC.
 
 # Security Considerations
 
-Metadata increases the information available to attackers to
-distinguish important packets from less-important packets, which the
-attacker might use to attack such packets (e.g., prevent their
-delivery) or attempt to decrypt those packets. It is RECOMMENDED to
-encrypt or obfuscate the metadata information so it is only available
-to hosts and to authorized network elements.  The method of
-encryption or obfuscation is not described in this document but
-rather in other documents describing how this metadata is encoded
-and exchanged amongst hosts and network elements.
+Metadata increases the information available to attackers to distinguish important packets from less-important packets, which the attacker might use to attack such packets (e.g., prevent their delivery) or attempt to decrypt those packets. It is RECOMMENDED to encrypt or obfuscate the metadata information so it is only available to hosts and to authorized network elements, while maintaining minimal resource consumption. The method of encryption or obfuscation is not described in this document but rather in other documents describing how this metadata is encoded and exchanged amongst hosts and network elements.
 
 # IANA Considerations
 
