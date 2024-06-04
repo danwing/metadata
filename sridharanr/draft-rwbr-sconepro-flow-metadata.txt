@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 5 December 2024                                    M. Boucadair
+Expires: 6 December 2024                                    M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                             3 June 2024
+                                                             4 June 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 6 December 2024.
 
 Copyright Notice
 
@@ -135,8 +135,16 @@ Table of Contents
    because there is no authorization or authentication for differential
    treatment.
 
+   This document does not assume nor require that all on-path network
+   elements must understand the meaning associated with signaled
+   metadata.  Only a few network nodes would need to be upgraded to
+   support the metadata signaling.
+
    By using the same metadata, both networks can communicate how packets
-   should be treated (e.g., routers, [MASQUE] proxies).
+   should be treated and use their own signaling mechanism with their
+   network elements (e.g., routers or proxies).  Readers should refer to
+   Section 7.2 of [I-D.rwbr-tsvwg-signaling-use-cases] for a discussion
+   about why application- and protocol-specific signaling channels are
 
    Both the above use cases are improved by metadata described in this
    document.  This document is a companion to host-to-network signaling
@@ -206,7 +214,9 @@ Table of Contents
    Reactive policy:  Treatment given to a flow when an exceptional event
       occurs, such as diminished throughput to the host caused by radio
       interference or weak radio signal, congestion on the network
-      caused by other users or other applications on the same host.
+      caused by other users or other applications on the same host,
+      denial of service attacks, etc.  Characterizing such exceptional
+      events is deployment-specific.
 
    Intentional policy:  Configured bandwidth, pps, or similar throughput
       constraints applied to a flow, application, host, or subscriber.
@@ -710,6 +720,14 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-reddy-tsvwg-
               explcit-signal-01>.
 
+   [I-D.rwbr-tsvwg-signaling-use-cases]
+              Rajagopalan, S., Wing, D., Boucadair, M., and T. Reddy.K,
+              "Host to Network Signaling Use Cases for Collaborative
+              Traffic Differentiation", Work in Progress, Internet-
+              Draft, draft-rwbr-tsvwg-signaling-use-cases-02, 17 March
+              2024, <https://datatracker.ietf.org/doc/html/draft-rwbr-
+              tsvwg-signaling-use-cases-02>.
+
    [I-D.wing-cidfi]
               Wing, D., Reddy.K, T., and M. Boucadair, "Framework for
               CID Flow Indicator (CIDFI)", Work in Progress, Internet-
@@ -727,12 +745,6 @@ Informative References
               Datagram Extension to QUIC", RFC 9221,
               DOI 10.17487/RFC9221, March 2022,
               <https://www.rfc-editor.org/rfc/rfc9221>.
-
-   [MASQUE]   Pauly, T., Rosenberg, E., and D. Schinazi, "QUIC-Aware
-              Proxying Using HTTP", Work in Progress, Internet-Draft,
-              draft-ietf-masque-quic-proxy-02, 21 May 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-masque-
-              quic-proxy-02>.
 
    [QUIC]     Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
               Multiplexed and Secure Transport", RFC 9000,
