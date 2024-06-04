@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-02T01:26:16.494816+00:00",
+  "timestamp": "2024-06-04T01:22:09.373095+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -203,6 +203,22 @@
           "updatedAt": "2024-02-15T17:12:55Z"
         }
       ]
+    },
+    {
+      "number": 35,
+      "id": "I_kwDOK0CwpM6K3Zzm",
+      "title": "Is the metadata compatible with mechanism like L4S? How to control the interplay of both? - from Luis Murillo",
+      "url": "https://github.com/danwing/metadata/issues/35",
+      "state": "OPEN",
+      "author": "sridharangirish91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-02T17:30:16Z",
+      "updatedAt": "2024-06-02T17:34:01Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -1507,6 +1523,244 @@
           "body": "",
           "createdAt": "2024-03-29T14:57:59Z",
           "updatedAt": "2024-03-29T14:57:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOK0CwpM5xOocD",
+      "title": "Changes incorporating Luis' comments. adding more metadata definitions.",
+      "url": "https://github.com/danwing/metadata/pull/36",
+      "state": "MERGED",
+      "author": "sridharangirish91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-02T18:10:27Z",
+      "updatedAt": "2024-06-03T11:04:24Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "6a8049e4fcac0b837f341f04ec1b737a0abdb63b",
+      "headRepository": "danwing/metadata",
+      "headRefName": "sridharanr",
+      "headRefOid": "94f48d4dcf3eebccad2e1f624e5f9c7ce56ca6c5",
+      "closedAt": "2024-06-03T11:04:24Z",
+      "mergedAt": "2024-06-03T11:04:24Z",
+      "mergedBy": "sridharangirish91",
+      "mergeCommit": {
+        "oid": "a0e6780784053af4c348606e3f4367c33ff0be32"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM58vlX6",
+          "commit": {
+            "abbreviatedOid": "f0c53d6"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2024-06-03T05:57:51Z",
+          "updatedAt": "2024-06-03T06:01:55Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\nconsiderations. This approach also ease passing policies between controllers of domains involved in packet delivery (e.g., RAN, Core, network slicing {{?RFC9543}}, and Transport domains).\r\n```",
+              "createdAt": "2024-06-03T05:57:51Z",
+              "updatedAt": "2024-06-03T06:01:55Z"
+            },
+            {
+              "originalPosition": 66,
+              "body": "```suggestion\r\nThe use case requirements for {{table-video-streaming}} is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The audio is more important than video (importance=high, PT=keep, RU=reliable), video key frames\r\n```",
+              "createdAt": "2024-06-03T06:00:02Z",
+              "updatedAt": "2024-06-03T06:01:55Z"
+            },
+            {
+              "originalPosition": 82,
+              "body": "```suggestion\r\nBased on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.\r\n```",
+              "createdAt": "2024-06-03T06:00:39Z",
+              "updatedAt": "2024-06-03T06:01:55Z"
+            },
+            {
+              "originalPosition": 131,
+              "body": "```suggestion\r\nBased on metadata types listed in this document, the host to network metadata parameters for interactive media type is given below.\r\n```",
+              "createdAt": "2024-06-03T06:01:26Z",
+              "updatedAt": "2024-06-03T06:01:55Z"
+            },
+            {
+              "originalPosition": 159,
+              "body": "```suggestion\r\nThe use case requirements for the below table is explained in detail in {{?I-D.kwbdgrr-tsvwg-net-collab-rqmts}}. The metadata for the use case is defined as follows:\r\n```",
+              "createdAt": "2024-06-03T06:01:48Z",
+              "updatedAt": "2024-06-03T06:01:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOK0CwpM58wOrV",
+          "commit": {
+            "abbreviatedOid": "94f48d4"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T07:42:13Z",
+          "updatedAt": "2024-06-03T07:42:13Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOK0CwpM5xQuTj",
+      "title": "not all network nodes should interpret metadata",
+      "url": "https://github.com/danwing/metadata/pull/37",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-03T07:51:42Z",
+      "updatedAt": "2024-06-03T15:00:35Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "6a8049e4fcac0b837f341f04ec1b737a0abdb63b",
+      "headRepository": "danwing/metadata",
+      "headRefName": "metadata-awareness",
+      "headRefOid": "d6b5f6214960052707946bfe744cab09bbe4ff55",
+      "closedAt": "2024-06-03T15:00:34Z",
+      "mergedAt": "2024-06-03T15:00:34Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "e185b731c5bf358f7ab86846e29b58fa6b9a536b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM58yICl",
+          "commit": {
+            "abbreviatedOid": "d6b5f62"
+          },
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T11:04:07Z",
+          "updatedAt": "2024-06-03T11:04:07Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOK0CwpM580bBB",
+          "commit": {
+            "abbreviatedOid": "d6b5f62"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:54:15Z",
+          "updatedAt": "2024-06-03T14:54:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOK0CwpM5xQwj3",
+      "title": "per-application/transport metadata is suoboptimal",
+      "url": "https://github.com/danwing/metadata/pull/38",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-03T07:57:14Z",
+      "updatedAt": "2024-06-03T15:00:19Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "4c6f74b18501c2b5ed5163d1052ed388f95b49ab",
+      "headRepository": "danwing/metadata",
+      "headRefName": "per-app-sign-suboptimal",
+      "headRefOid": "e80f238f7ad59f4666698d08e064c9f98663d9fb",
+      "closedAt": "2024-06-03T15:00:19Z",
+      "mergedAt": "2024-06-03T15:00:19Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "0faf66b585e42d11938ba9bedc7bfa3a0f8a7e52"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM580bhc",
+          "commit": {
+            "abbreviatedOid": "8861106"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:55:05Z",
+          "updatedAt": "2024-06-03T14:55:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOK0CwpM5xQx2g",
+      "title": "exceptional events",
+      "url": "https://github.com/danwing/metadata/pull/39",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-03T08:00:12Z",
+      "updatedAt": "2024-06-03T14:59:09Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "6a8049e4fcac0b837f341f04ec1b737a0abdb63b",
+      "headRepository": "danwing/metadata",
+      "headRefName": "exceptional-event",
+      "headRefOid": "fc18d383645ad0acba5dd20b5babab561e17ed30",
+      "closedAt": "2024-06-03T14:59:08Z",
+      "mergedAt": "2024-06-03T14:59:08Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "4c6f74b18501c2b5ed5163d1052ed388f95b49ab"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM58yFyL",
+          "commit": {
+            "abbreviatedOid": "fc18d38"
+          },
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T10:59:38Z",
+          "updatedAt": "2024-06-03T10:59:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOK0CwpM580bT6",
+          "commit": {
+            "abbreviatedOid": "fc18d38"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-03T14:54:44Z",
+          "updatedAt": "2024-06-03T14:54:44Z",
           "comments": []
         }
       ]
