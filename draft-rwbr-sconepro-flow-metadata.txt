@@ -5,11 +5,11 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 5 December 2024                                    M. Boucadair
+Expires: 6 December 2024                                    M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                             3 June 2024
+                                                             4 June 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 December 2024.
+   This Internet-Draft will expire on 6 December 2024.
 
 Copyright Notice
 
@@ -557,10 +557,11 @@ Table of Contents
    attacker might use to attack such packets (e.g., prevent their
    delivery) or attempt to decrypt those packets.  It is RECOMMENDED to
    encrypt or obfuscate the metadata information so it is only available
-   to hosts and to authorized network elements.  The method of
-   encryption or obfuscation is not described in this document but
-   rather in other documents describing how this metadata is encoded and
-   exchanged amongst hosts and network elements.
+   to hosts and to authorized network elements, while maintaining
+   minimal resource consumption.  The method of encryption or
+   obfuscation is not described in this document but rather in other
+   documents describing how this metadata is encoded and exchanged
+   amongst hosts and network elements.
 
 10.  IANA Considerations
 
