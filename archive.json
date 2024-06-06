@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-04T01:22:09.373095+00:00",
+  "timestamp": "2024-06-06T01:21:35.378253+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -1761,6 +1761,48 @@
           "body": "",
           "createdAt": "2024-06-03T14:54:44Z",
           "updatedAt": "2024-06-03T14:54:44Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDOK0CwpM5xb6gR",
+      "title": "adding more language to security consideration",
+      "url": "https://github.com/danwing/metadata/pull/40",
+      "state": "MERGED",
+      "author": "sridharangirish91",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-04T14:29:34Z",
+      "updatedAt": "2024-06-04T16:27:27Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "e185b731c5bf358f7ab86846e29b58fa6b9a536b",
+      "headRepository": "danwing/metadata",
+      "headRefName": "sridharanr",
+      "headRefOid": "f7523913bef0d45497cc8b25e92cd994be9cb79c",
+      "closedAt": "2024-06-04T16:27:27Z",
+      "mergedAt": "2024-06-04T16:27:27Z",
+      "mergedBy": "sridharangirish91",
+      "mergeCommit": {
+        "oid": "5cb2a4faec169c96c7d1958135f987945b397b87"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM58--Rw",
+          "commit": {
+            "abbreviatedOid": "f752391"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-04T16:24:35Z",
+          "updatedAt": "2024-06-04T16:24:35Z",
           "comments": []
         }
       ]
