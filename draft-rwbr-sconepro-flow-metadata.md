@@ -516,10 +516,13 @@ Values in the 100-149 range can be assigned using "Expert Review" policy ({{Sect
 Values in the 150-249 range can be assigned using "First Come First Served" ({{Section 4.4 of !RFC8126}}). This range can be, e.g., used by other SDOs to register metadata that are specific to their domain and which is not used outside that scope.
 
 
+{::comment}
+
 # Acknowledgments
 {:numbered="false"}
 
-Thanks to Luis Miguel Contreras for his review and comments.
+{:/comment}
+
 
 --- back
 
