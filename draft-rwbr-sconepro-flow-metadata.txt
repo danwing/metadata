@@ -5,11 +5,13 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 6 December 2024                                    M. Boucadair
+Expires: 23 December 2024                                   M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                             4 June 2024
+                                                        L. M. C. Murillo
+                                                              Telefonica
+                                                            21 June 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -57,7 +59,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 December 2024.
+   This Internet-Draft will expire on 23 December 2024.
 
 Copyright Notice
 
@@ -112,7 +114,7 @@ Table of Contents
      Informative References
    Appendix A.  Examples of Host-to-Network Metadata Encoding
      A.1.  Video Streaming
-     A.2.  Interactive Media{#example-interactive-av}
+     A.2.  Interactive Media
      A.3.  Live Streaming
      A.4.  Remote Desktop Virtualization
    Appendix B.  Example of Network-to-Host Metadata for Video
@@ -711,7 +713,13 @@ Informative References
               kaippallimalil-tsvwg-media-hdr-wireless-04>.
 
    [I-D.kwbdgrr-tsvwg-net-collab-rqmts]
-              "*** BROKEN REFERENCE ***".
+              Kaippallimalil, J., Wing, D., Gundavelli, S., Rajagopalan,
+              S., Dawkins, S., Boucadair, M., and T. Reddy.K,
+              "Requirements for Network Collaboration Signaling", Work
+              in Progress, Internet-Draft, draft-kwbdgrr-tsvwg-net-
+              collab-rqmts-01, 7 June 2024,
+              <https://datatracker.ietf.org/doc/html/draft-kwbdgrr-
+              tsvwg-net-collab-rqmts-01>.
 
    [I-D.reddy-tsvwg-explcit-signal]
               Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
@@ -889,7 +897,7 @@ A.1.  Video Streaming
      }
    }
 
-A.2.  Interactive Media{#example-interactive-av}
+A.2.  Interactive Media
 
    Based on metadata types listed in this document, the host to network
    metadata parameters for interactive media type is given below.
@@ -1253,3 +1261,9 @@ Authors' Addresses
    Nokia
    India
    Email: kondtir@gmail.com
+
+
+   Luis Miguel Contreras Murillo
+   Telefonica
+   Spain
+   Email: luismiguel.contrerasmurillo@telefonica.com
