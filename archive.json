@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-06-20T01:21:43.496795+00:00",
+  "timestamp": "2024-06-23T01:33:49.995712+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -1803,6 +1803,105 @@
           "body": "",
           "createdAt": "2024-06-04T16:24:35Z",
           "updatedAt": "2024-06-04T16:24:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOK0CwpM5zLpo6",
+      "title": "Luis as co-author",
+      "url": "https://github.com/danwing/metadata/pull/41",
+      "state": "MERGED",
+      "author": "boucadair",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-21T12:51:04Z",
+      "updatedAt": "2024-06-21T18:34:36Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "5cb2a4faec169c96c7d1958135f987945b397b87",
+      "headRepository": "danwing/metadata",
+      "headRefName": "boucadair-patch-13",
+      "headRefOid": "17770644314678324bbea6e8cc9b0610c32c192d",
+      "closedAt": "2024-06-21T17:17:38Z",
+      "mergedAt": "2024-06-21T17:17:38Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "1bbf3303036b7aa3973f98a0ce2b997996a84a9b"
+      },
+      "comments": [
+        {
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Med, can you remove Luis from the acknowledgement section after adding him as co-author? ",
+          "createdAt": "2024-06-21T18:24:51Z",
+          "updatedAt": "2024-06-21T18:24:51Z"
+        },
+        {
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "body": "I issued https://github.com/danwing/metadata/pull/42",
+          "createdAt": "2024-06-21T18:34:35Z",
+          "updatedAt": "2024-06-21T18:34:35Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5_Ijrg",
+          "commit": {
+            "abbreviatedOid": "1777064"
+          },
+          "author": "danwing",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-21T15:47:49Z",
+          "updatedAt": "2024-06-21T15:47:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "PR_kwDOK0CwpM5zNopz",
+      "title": "remove Luis from acknowledgements, as now co-author",
+      "url": "https://github.com/danwing/metadata/pull/42",
+      "state": "MERGED",
+      "author": "danwing",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-06-21T18:33:17Z",
+      "updatedAt": "2024-06-21T19:11:26Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "1bbf3303036b7aa3973f98a0ce2b997996a84a9b",
+      "headRepository": "danwing/metadata",
+      "headRefName": "update_acks",
+      "headRefOid": "52298dc4e690df2d5a616ba019a69590c28331d2",
+      "closedAt": "2024-06-21T19:11:26Z",
+      "mergedAt": "2024-06-21T19:11:26Z",
+      "mergedBy": "danwing",
+      "mergeCommit": {
+        "oid": "d9e9c89cb806638087edb581af2701ec086602ed"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM5_JxjG",
+          "commit": {
+            "abbreviatedOid": "52298dc"
+          },
+          "author": "sridharangirish91",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-06-21T19:06:06Z",
+          "updatedAt": "2024-06-21T19:06:06Z",
           "comments": []
         }
       ]
