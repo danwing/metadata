@@ -68,7 +68,7 @@ author:
     country: India
     email: kondtir@gmail.com
  -
-    fullname: Luis Miguel Contreras Murillo
+    fullname: Luis M. Contreras
     organization: Telefonica
     country: Spain
     email: luismiguel.contrerasmurillo@telefonica.com
