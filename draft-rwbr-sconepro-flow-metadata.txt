@@ -5,13 +5,13 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 23 December 2024                                   M. Boucadair
+Expires: 4 January 2025                                     M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
-                                                        L. M. C. Murillo
+                                                         L. M. Contreras
                                                               Telefonica
-                                                            21 June 2024
+                                                             3 July 2024
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -59,7 +59,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2024.
+   This Internet-Draft will expire on 4 January 2025.
 
 Copyright Notice
 
@@ -1258,7 +1258,7 @@ Authors' Addresses
    Email: kondtir@gmail.com
 
 
-   Luis Miguel Contreras Murillo
+   Luis M. Contreras
    Telefonica
    Spain
    Email: luismiguel.contrerasmurillo@telefonica.com
