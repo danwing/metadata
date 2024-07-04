@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-02T01:24:11.482588+00:00",
+  "timestamp": "2024-07-04T01:24:04.581312+00:00",
   "repo": "danwing/metadata",
   "labels": [
     {
@@ -1902,6 +1902,48 @@
           "body": "",
           "createdAt": "2024-06-21T19:06:06Z",
           "updatedAt": "2024-06-21T19:06:06Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "PR_kwDOK0CwpM50ShGa",
+      "title": "Update draft-rwbr-sconepro-flow-metadata.md",
+      "url": "https://github.com/danwing/metadata/pull/43",
+      "state": "MERGED",
+      "author": "luismcontreras",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Modifying the way in which my name is presented, for alignment with how it appears in other drafts (cosmetic change)",
+      "createdAt": "2024-07-03T07:49:17Z",
+      "updatedAt": "2024-07-03T14:42:53Z",
+      "baseRepository": "danwing/metadata",
+      "baseRefName": "main",
+      "baseRefOid": "d9e9c89cb806638087edb581af2701ec086602ed",
+      "headRepository": "luismcontreras/metadata",
+      "headRefName": "patch-1",
+      "headRefOid": "3d785ec6b2d115af3f76951ad396dd04e142cacb",
+      "closedAt": "2024-07-03T14:42:53Z",
+      "mergedAt": "2024-07-03T14:42:53Z",
+      "mergedBy": "boucadair",
+      "mergeCommit": {
+        "oid": "998b26284f3e6599fc85a897537e282fac6aab38"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOK0CwpM6Aib-x",
+          "commit": {
+            "abbreviatedOid": "3d785ec"
+          },
+          "author": "boucadair",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-07-03T13:49:15Z",
+          "updatedAt": "2024-07-03T13:49:15Z",
           "comments": []
         }
       ]
