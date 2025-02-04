@@ -5,13 +5,13 @@
 Network Working Group                                     S. Rajagopalan
 Internet-Draft                                                   D. Wing
 Intended status: Standards Track                    Cloud Software Group
-Expires: 4 January 2025                                     M. Boucadair
+Expires: 8 August 2025                                      M. Boucadair
                                                                   Orange
                                                                 T. Reddy
                                                                    Nokia
                                                          L. M. Contreras
                                                               Telefonica
-                                                             3 July 2024
+                                                         4 February 2025
 
 
          Flow Metadata for Collaborative Host/Network Signaling
@@ -59,11 +59,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 January 2025.
+   This Internet-Draft will expire on 8 August 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -703,18 +703,17 @@ Table of Contents
               Kaippallimalil, J., Gundavelli, S., and S. Dawkins, "Media
               Handling Considerations for Wireless Networks", Work in
               Progress, Internet-Draft, draft-kaippallimalil-tsvwg-
-              media-hdr-wireless-04, 14 February 2024,
+              media-hdr-wireless-05, 10 August 2024,
               <https://datatracker.ietf.org/doc/html/draft-
-              kaippallimalil-tsvwg-media-hdr-wireless-04>.
+              kaippallimalil-tsvwg-media-hdr-wireless-05>.
 
    [I-D.kwbdgrr-tsvwg-net-collab-rqmts]
               Kaippallimalil, J., Wing, D., Gundavelli, S., Rajagopalan,
-              S., Dawkins, S., Boucadair, M., and T. Reddy.K,
-              "Requirements for Network Collaboration Signaling", Work
-              in Progress, Internet-Draft, draft-kwbdgrr-tsvwg-net-
-              collab-rqmts-01, 7 June 2024,
-              <https://datatracker.ietf.org/doc/html/draft-kwbdgrr-
-              tsvwg-net-collab-rqmts-01>.
+              S., Dawkins, S., and M. Boucadair, "Requirements for Host-
+              to-Network Collaboration Signaling", Work in Progress,
+              Internet-Draft, draft-kwbdgrr-tsvwg-net-collab-rqmts-04,
+              14 October 2024, <https://datatracker.ietf.org/doc/html/
+              draft-kwbdgrr-tsvwg-net-collab-rqmts-04>.
 
    [I-D.reddy-tsvwg-explcit-signal]
               Reddy.K, T., Wing, D., and M. Boucadair, "An Approach for
